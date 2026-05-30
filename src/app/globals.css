@@ -1,0 +1,411 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ABD Sourcing Bangladesh — one visual vocabulary.
+   Brand = Rich Forest Green, warm paper neutral, restrained sand/gold accent.
+   All colors authored as OKLCH semantic vars; mapped through @theme inline. */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Type — Hanken Grotesk everywhere; Fraunces reserved for hero display only. */
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-ink: var(--accent-ink);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* One base radius; sm/md/lg/xl derived as multipliers — never hardcode. */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2.1);
+  --radius-3xl: calc(var(--radius) * 2.8);
+
+  /* Named shadow + easing tokens — reused, never reinvented per section. */
+  --shadow-soft: 0 1px 2px oklch(0.232 0.017 163 / 0.06), 0 8px 24px -12px oklch(0.232 0.017 163 / 0.12);
+  --shadow-lift: 0 2px 4px oklch(0.232 0.017 163 / 0.08), 0 18px 40px -16px oklch(0.232 0.017 163 / 0.22);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  --background: oklch(0.985 0.004 91.4); /* #FBFAF7 warm paper */
+  --foreground: oklch(0.232 0.017 163.0); /* #16201B deep green-ink */
+
+  --card: oklch(1 0 0); /* #FFFFFF */
+  --card-foreground: oklch(0.232 0.017 163.0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.232 0.017 163.0);
+
+  --primary: oklch(0.400 0.066 167.0); /* #1C5340 forest green */
+  --primary-foreground: oklch(0.973 0.005 95.1); /* #F7F6F2 */
+
+  --secondary: oklch(0.938 0.010 140.5); /* #E7ECE6 */
+  --secondary-foreground: oklch(0.400 0.066 167.0);
+
+  --muted: oklch(0.955 0.006 137.8); /* #EEF1ED */
+  --muted-foreground: oklch(0.477 0.019 148.1); /* #566057 legible */
+
+  --accent: oklch(0.728 0.138 89.7); /* #C9A227 sand/gold — used sparingly */
+  --accent-foreground: oklch(0.232 0.017 163.0);
+  --accent-ink: oklch(0.540 0.120 80.0); /* AA-contrast gold for eyebrow text on light */
+
+  --destructive: oklch(0.540 0.147 28.5); /* soft red — form errors only */
+  --destructive-foreground: oklch(0.985 0.004 91.4);
+
+  --border: oklch(0.920 0.010 131.4); /* #E2E6DF */
+  --input: oklch(0.920 0.010 131.4);
+  --ring: oklch(0.400 0.066 167.0); /* = --primary */
+
+  --chart-1: oklch(0.400 0.066 167.0);
+  --chart-2: oklch(0.560 0.080 165.0);
+  --chart-3: oklch(0.728 0.138 89.7);
+  --chart-4: oklch(0.670 0.060 160.0);
+  --chart-5: oklch(0.477 0.019 148.1);
+
+  /* Glassmorphism surface tokens. */
+  --glass-bg: oklch(1 0 0 / 0.62);
+  --glass-border: oklch(1 0 0 / 0.7);
+  --glass-blur: 14px;
+}
+
+/* Dark theme — deep green-black. Shipped now though not surfaced in the UI yet. */
+.dark {
+  --background: oklch(0.184 0.011 163.5); /* #0E1411 */
+  --foreground: oklch(0.949 0.007 124.5); /* #EDEFEA */
+
+  --card: oklch(0.232 0.017 163.0); /* #16201B */
+  --card-foreground: oklch(0.949 0.007 124.5);
+  --popover: oklch(0.232 0.017 163.0);
+  --popover-foreground: oklch(0.949 0.007 124.5);
+
+  --primary: oklch(0.670 0.101 166.1); /* #4FA987 brighter green for dark bg */
+  --primary-foreground: oklch(0.184 0.011 163.5);
+
+  --secondary: oklch(0.296 0.021 159.2); /* #243029 */
+  --secondary-foreground: oklch(0.949 0.007 124.5);
+
+  --muted: oklch(0.272 0.020 163.0); /* #1E2A24 */
+  --muted-foreground: oklch(0.741 0.019 155.7); /* #A2AFA6 */
+
+  --accent: oklch(0.777 0.137 90.3); /* #D8B23E */
+  --accent-foreground: oklch(0.184 0.011 163.5);
+  --accent-ink: oklch(0.800 0.130 88.0); /* bright on dark bg */
+
+  --destructive: oklch(0.663 0.150 27.7); /* #E06A5E */
+  --destructive-foreground: oklch(0.184 0.011 163.5);
+
+  --border: oklch(0.318 0.021 166.9); /* #283630 */
+  --input: oklch(0.318 0.021 166.9);
+  --ring: oklch(0.670 0.101 166.1);
+
+  --chart-1: oklch(0.670 0.101 166.1);
+  --chart-2: oklch(0.560 0.080 165.0);
+  --chart-3: oklch(0.777 0.137 90.3);
+  --chart-4: oklch(0.741 0.019 155.7);
+  --chart-5: oklch(0.949 0.007 124.5);
+
+  --glass-bg: oklch(0.232 0.017 163 / 0.55);
+  --glass-border: oklch(1 0 0 / 0.1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv01";
+  }
+  /* Headings: tighter rhythm per brand spec (line-height 1.18, tracking -0.01em). */
+  h1, h2, h3, h4 {
+    @apply font-heading font-semibold;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  /* Accessibility: a single, visible focus ring on every keyboard-focused control. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  /* No dead clicks: every anchor gives a tactile tap cue. */
+  @media (prefers-reduced-motion: no-preference) {
+    a { transition: opacity 0.12s var(--ease-out-soft); }
+    a:active { opacity: 0.7; }
+  }
+}
+
+/* Display family helper — hero wordmark/headline only. */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   Motion layer — one intent cue at a time.
+   EVERY animation ships with its prefers-reduced-motion guard.
+   ============================================================ */
+
+/* Restrained hero aurora — soft brand wash behind the headline. */
+.hero-aurora {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 130%;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 55% at 18% 12%, oklch(0.400 0.066 167 / 0.16), transparent 70%),
+    radial-gradient(38% 50% at 88% 8%, oklch(0.728 0.138 89.7 / 0.12), transparent 70%),
+    radial-gradient(45% 60% at 60% 0%, oklch(0.560 0.080 165 / 0.10), transparent 72%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-aurora {
+    background-size: 160% 160%;
+    animation: aurora-drift 22s var(--ease-out-soft) infinite alternate;
+  }
+}
+@keyframes aurora-drift {
+  0% { background-position: 0% 0%, 100% 0%, 50% 0%; }
+  100% { background-position: 10% 8%, 88% 6%, 56% 4%; }
+}
+
+/* Press feedback for buttons — applied globally to [data-slot="button"]. */
+@media (prefers-reduced-motion: no-preference) {
+  .press-fx { transition: transform 0.12s var(--ease-out-soft); }
+  .press-fx:active:not([aria-haspopup]) { transform: translateY(0.5px) scale(0.985); }
+}
+
+/* Card hover-lift. */
+@media (prefers-reduced-motion: no-preference) {
+  .interact { transition: transform 0.3s var(--ease-out-soft), box-shadow 0.3s var(--ease-out-soft); }
+  .interact:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+}
+
+/* Reveal-on-scroll — JS adds .is-visible when in view; IntersectionObserver
+   fallback and no-JS both leave content fully visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .reveal {
+    transition: opacity 0.6s var(--ease-out-soft), transform 0.6s var(--ease-out-soft);
+  }
+}
+
+/* Top route-change progress bar. */
+.nav-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 100;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nav-progress[data-state="loading"] { animation: nav-progress-grow 1.4s var(--ease-out-soft) forwards; }
+  .nav-progress[data-state="done"] { animation: nav-progress-finish 0.3s var(--ease-out-soft) forwards; }
+}
+/* Reduced motion: bar simply appears full then hides — no animated growth. */
+@media (prefers-reduced-motion: reduce) {
+  .nav-progress[data-state="loading"] { transform: scaleX(1); opacity: 0.8; }
+  .nav-progress[data-state="done"] { opacity: 0; }
+}
+@keyframes nav-progress-grow {
+  0% { transform: scaleX(0); opacity: 1; }
+  60% { transform: scaleX(0.75); }
+  100% { transform: scaleX(0.9); opacity: 1; }
+}
+@keyframes nav-progress-finish {
+  0% { transform: scaleX(0.9); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+/* Image zoom on card hover (gallery + featured shots). */
+@media (prefers-reduced-motion: no-preference) {
+  .img-zoom { transition: transform 0.5s var(--ease-out-soft); }
+  .group:hover .img-zoom { transform: scale(1.05); }
+}
+
+/* Global safety net: honor reduced motion everywhere, even for stray
+   Tailwind hover transitions that lack an explicit guard. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Surfaces & gradients — gradient + glassmorphism vocabulary.
+   ============================================================ */
+
+/* Site-wide ambient gradient backdrop — gives glass something to blur over.
+   Kept low-alpha so text contrast is never compromised. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 48% at 10% -4%, oklch(0.400 0.066 167 / 0.08), transparent 60%),
+    radial-gradient(50% 42% at 102% 6%, oklch(0.728 0.138 89.7 / 0.07), transparent 60%),
+    radial-gradient(62% 60% at 50% 108%, oklch(0.560 0.080 165 / 0.06), transparent 70%);
+}
+
+/* Frosted glass surface — translucent, blurred, hairline border. */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+}
+/* Graceful fallback where backdrop-filter is unsupported. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--card);
+  }
+}
+
+/* Glass tuned for placement over dark (forest) gradients. */
+.glass-on-dark {
+  background: oklch(1 0 0 / 0.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid oklch(1 0 0 / 0.18);
+}
+
+/* Brand gradient fills. */
+.bg-brand-gradient {
+  background:
+    radial-gradient(120% 120% at 0% 0%, oklch(0.46 0.072 168), transparent 55%),
+    linear-gradient(135deg, oklch(0.400 0.066 167), oklch(0.232 0.017 163) 92%);
+}
+.bg-soft-gradient {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--muted) 70%, transparent), transparent 70%);
+}
+
+/* Gradient text — forest → gold. Use on short accents only, never body copy. */
+.text-gradient {
+  background-image: linear-gradient(100deg, var(--primary) 10%, oklch(0.62 0.11 120) 55%, var(--accent) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .text-gradient {
+  background-image: linear-gradient(100deg, oklch(0.78 0.11 150), var(--accent));
+}
+
+/* Gradient hairline ring for featured/highlighted cards. */
+.ring-gradient {
+  position: relative;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+}
+.ring-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, oklch(0.400 0.066 167 / 0.5), oklch(0.728 0.138 89.7 / 0.45));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Print — hide chrome, force light, kill gradients/shadows/blur.
+   ============================================================ */
+@media print {
+  body::before { display: none !important; }
+  header,
+  footer,
+  .nav-progress,
+  .hero-aurora,
+  [aria-label="Breadcrumb"] {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  /* Flatten every decorative surface to plain ink-on-paper. */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .glass,
+  .glass-on-dark,
+  .ring-gradient,
+  .bg-brand-gradient,
+  .bg-soft-gradient,
+  [class*="bg-muted"],
+  [class*="bg-primary"],
+  [class*="bg-accent"] {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ddd !important;
+  }
+  .ring-gradient::after { display: none !important; }
+  .text-gradient {
+    background: none !important;
+    -webkit-text-fill-color: #111 !important;
+    color: #111 !important;
+  }
+  a {
+    color: #111 !important;
+    text-decoration: underline;
+  }
+  main {
+    padding: 0 !important;
+  }
+}

@@ -1,0 +1,25 @@
+# Build Journey — ABD Sourcing Bangladesh
+
+A running log of structural decisions. One line per working chunk.
+
+## 2026-05-27
+- STEP 1 done: extracted 71 product photos + 10 logos + 5 factory logos + 5 office shots from `ABD Profile_15-05-26.pdf` via PyMuPDF (deduped by pixel hash, dropped <300px and 3 swatch grids).
+- Scaffolded Next.js 16.2.6 (App Router, TS, Tailwind v4, src dir) + shadcn/ui (base-nova / base-ui), `trailingSlash: true`.
+- Authored OKLCH semantic tokens (forest green + warm paper + sand/gold) with light + `.dark`, one `--radius` scale, Hanken Grotesk (body) + Fraunces (display) via next/font.
+- All facts live in typed arrays under `src/content/` with explicit stable slugs; counts computed via `.length`.
+- Route skeleton: 12 static + 18 dynamic `[slug]` (services×6, products×5, factories×6) via `generateStaticParams`; shared sticky header/footer chrome, breadcrumbs + BreadcrumbList JSON-LD, Organization/LocalBusiness JSON-LD, `sitemap.ts`, `robots.ts`.
+- Verified: `next build` clean, `eslint` clean, 308 redirect no-slash → trailing-slash, all canonical URLs 200, sitemap enumerates every route.
+- STEP 2 done: motion layer in `globals.css` — animated hero aurora, `.press-fx` (on every `[data-slot=button]`), `.interact` card hover-lift, `.img-zoom`, anchor active tap-cue, `.reveal`, and the route-change `.nav-progress` bar — each paired with a `prefers-reduced-motion` guard, plus a global reduced-motion safety reset.
+- Motion components: `Reveal` (IntersectionObserver, no-JS/reduced-motion safe) and `NavProgress` (route-change). Card hover-lift centralized from inline Tailwind to the guarded `.interact` utility across all index pages.
+- shadcn primitives added (base-nova / base-ui): card, badge, input, select, textarea, dialog, sheet, breadcrumb, skeleton, label; button kept with custom `xl` size + `press-fx`. Mobile nav upgraded to a focus-trapped Sheet (closes on link click — no setState-in-effect).
+- Verified: `next build` + `eslint` clean; mobile Sheet, hover-lift, reveal, and aurora confirmed in-browser.
+- STEP 3 done: all routes fully populated from content arrays. Completed the cross-link triangle via `src/lib/relations.ts` — product category pages now list "Sourced through these factories" + "Related services"; factory pages list "How we support this factory"; service pages list "Factories involved". Adopted the Badge primitive for sub-item / category tags. Added `Reveal` scroll motion to the services/products/factories index grids and the category gallery. `next build` + `eslint` clean (excluded `.remember`/`.venv` from lint).
+- STEP 4 done: inquiry Server Action (zod-validated → Resend, prefilled mailto fallback when no key) + engaging 3-step glass form (stepper, per-step client validation, optimistic submit, success/error/fallback states). Recipient = shakhawat@abodesourcingbd.com (override via INQUIRY_TO_EMAILS).
+- Design overhaul (user-directed): gradient + glassmorphism vocabulary — ambient backdrop, .glass / .glass-on-dark / .ring-gradient, brand gradient fills, .text-gradient, all as named utilities. Applied to header, hero (gradient headline), glass stat tiles, cards, CTA band, why-choose-us, export markets, contact form.
+- Modern SVG logomark (forest badge + needle-point "A" + gold thread) wired into chrome; favicon (icon.svg), apple-icon, opengraph-image + twitter-image (1200×630), web manifest.
+- SEO: per-page keywords + OG on every route, robots directives, richer root metadata.
+- Export markets rebuilt as glass cards with real country flags (country-flag-icons). Footer credit: "Made with ♥ by Public Pulse Agency". Added verified Sprayway + Nimbus buyer logos.
+- Refinements: hero H1 changed to the company name "ABD SOURCING BANGLADESH" (uppercase, gradient accent) with the tagline as a sub-headline. Contact form simplified from a 3-step wizard back to a single clean professional glass form (all fields one screen, designed inline validation, optimistic submit, success/error/mailto-fallback states).
+- STEP 5 done: @media print styles (hide chrome, force light, kill gradients/shadows/blur). A11y: introduced --accent-ink (AA-contrast gold ~4.9:1) for eyebrow text on light surfaces — fixes all color-contrast fails; fixed logo accessible-name mismatch (removed aria-label, sr-only "homepage"). Verified unique <title> on all 11 sampled routes, alt on every image, sitemap covers all routes.
+- Lighthouse (mobile, prod build): Home P94/A100/BP100/SEO100; Contact P91/A100/BP100/SEO100. TBT 0ms, CLS 0 on both. Build + lint clean.
+- cPanel deployment retarget: switched to static export (output:"export" + unoptimized images), produces /out for upload to public_html. Server Action replaced by public/api/inquiry.php — PHP mailer hits the Resend REST API server-side so the API key never reaches the browser. .htaccess added (gzip, long-cache, security headers). docs/DEPLOYMENT.md written. Removed unused resend + zod npm deps. Build emits all 35 routes + sitemap + manifest + icons + PHP + .htaccess into out/ (~15 MB); lint clean; static-serve smoke test passes.
