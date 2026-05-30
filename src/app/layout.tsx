@@ -5,6 +5,7 @@ import { site } from "@/content/site";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NavProgress } from "@/components/nav-progress";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // One primary family — Hanken Grotesk — for everything. Self-hosted, no layout shift.
 const hanken = Hanken_Grotesk({
@@ -87,6 +88,7 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        <SpeedInsights />
       </body>
     </html>
   );
