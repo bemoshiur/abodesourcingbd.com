@@ -6,6 +6,12 @@ import { NextResponse } from "next/server";
  * (Vercel project env var); it never reaches the browser. When the key is
  * missing the endpoint returns a prefilled `mailto:` so the form never
  * dead-ends.
+ *
+ * Required Vercel (Production) environment variables — env vars are baked in
+ * at build time, so changing them requires a redeploy to take effect:
+ *   - RESEND_API_KEY     — Resend API key (without it, the form falls back to mailto)
+ *   - INQUIRY_FROM_EMAIL — verified sender, e.g. "ABD Sourcing Bangladesh <noreply@mail.abodesourcingbd.com>"
+ *   - INQUIRY_TO_EMAILS  — comma-separated recipients
  */
 
 export const runtime = "nodejs"; // we use Node fetch + standard env access
