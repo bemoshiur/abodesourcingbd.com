@@ -17,7 +17,7 @@ export function SiteFooter() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div>
-              <Logo imgClassName="h-14" />
+              <Logo markClassName="size-12" />
               <p className="mt-4 max-w-xs text-sm text-muted-foreground">
                 {site.oneLiner}
               </p>

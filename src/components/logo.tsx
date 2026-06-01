@@ -4,49 +4,67 @@ import { cn } from "@/lib/utils";
 import { site } from "@/content/site";
 
 /**
- * Brand lockup — the silver "A" mark + "ABD SOURCING BANGLADESH" wordmark,
- * extracted as transparent vector art from the source Illustrator file.
- * Metallic art reads sharpest on a dark backdrop, so the default `tone`
- * wraps it in a subtle dark tile (right for the light header); pass
- * `tone="bare"` on dark surfaces (footer/CTA) to drop the tile.
- * Sized via `imgClassName` (height-driven; width follows the ~1.6:1 aspect).
+ * Brand lockup — the silver "A" monogram (transparent vector art extracted
+ * from the source Illustrator file) on a small dark tile, paired with the
+ * "ABD Sourcing / Bangladesh" wordmark as live text. The horizontal layout
+ * fills the header naturally and keeps the wordmark crisp at every size.
+ * The mark sits on its own dark tile so the metallic art always reads.
+ * `tone="invert"` switches the wordmark to light for dark surfaces.
  */
 export function Logo({
   className,
-  imgClassName = "h-9",
-  tone = "tile",
+  markClassName = "size-9",
+  tone = "default",
 }: {
   className?: string;
-  /** Tailwind height utility for the logo image; width follows aspect ratio. */
-  imgClassName?: string;
-  /** "tile" = dark rounded backdrop (light surfaces); "bare" = transparent (dark surfaces). */
-  tone?: "tile" | "bare";
+  /** Tailwind size utility for the square mark tile. */
+  markClassName?: string;
+  /** "default" = dark wordmark (light surfaces); "invert" = light wordmark (dark surfaces). */
+  tone?: "default" | "invert";
 }) {
+  const invert = tone === "invert";
   return (
     <Link
       href="/"
       aria-label={`${site.name} — homepage`}
       className={cn(
-        "group/logo inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "group/logo inline-flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
     >
       <span
         className={cn(
-          "inline-flex items-center justify-center transition-transform duration-300 group-hover/logo:-translate-y-px",
-          tone === "tile" &&
-            "rounded-lg bg-[#2e3236] px-2.5 py-1.5 ring-1 ring-white/10",
+          "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#2e3236] p-1.5 ring-1 ring-white/10 transition-transform duration-300 group-hover/logo:-translate-y-px",
+          markClassName,
         )}
       >
         <Image
-          src="/logos/abd-logo-clear-2x.png"
+          src="/logos/abd-mark.png"
           alt={site.name}
-          width={1200}
-          height={737}
+          width={400}
+          height={345}
           priority
-          className={cn("w-auto", imgClassName)}
-          sizes="(max-width: 640px) 170px, 260px"
+          className="h-full w-full object-contain"
+          sizes="48px"
         />
+      </span>
+      <span className="flex flex-col leading-none">
+        <span
+          className={cn(
+            "font-display text-[0.98rem] font-semibold uppercase tracking-tight",
+            invert ? "text-primary-foreground" : "text-foreground",
+          )}
+        >
+          ABD Sourcing
+        </span>
+        <span
+          className={cn(
+            "mt-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em]",
+            invert ? "text-primary-foreground/70" : "text-muted-foreground",
+          )}
+        >
+          Bangladesh
+        </span>
       </span>
     </Link>
   );
