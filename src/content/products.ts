@@ -100,6 +100,9 @@ export const productShots: ProductShot[] = [
   ...shots("asquith-fox", "Asquith & Fox", "knitwear",
     "Asquith & Fox men's short-sleeve tipped polo shirt in 100% combed cotton, 200 GSM single lacoste",
     ["asquith-fox-ss-polo-3.jpg", "asquith-fox-ss-polo-4.jpg"], "asquith-fox-ss-polo-3.jpg"),
+  ...shots("asquith-fox", "Asquith & Fox", "knitwear",
+    "Ladies racerback vest tops in moisture-managing single jersey knit",
+    ["asquith-fox-tank-purple.jpg", "asquith-fox-tank-pink.jpg"]),
   ...shots("sprayway", "Sprayway", "knitwear",
     "Sprayway men's, ladies and kids tee shirt and ladies vest in 70% polyester / 30% rayon, 160 GSM",
     ["sprayway-tee-vest-2.jpg", "sprayway-tee-vest-3.jpg", "sprayway-tee-vest-4.jpg", "sprayway-tee-vest-5.jpg"], "sprayway-tee-vest-2.jpg"),
@@ -124,8 +127,8 @@ export const productShots: ProductShot[] = [
 
   // Woven Wear
   ...shots("asquith-fox", "Asquith & Fox", "woven-wear",
-    "Asquith & Fox men's and ladies chinos in 100% combed cotton 275 GSM and 98% cotton 2% spandex",
-    ["asquith-fox-chinos-2.jpg", "asquith-fox-chinos-3.jpg", "asquith-fox-chinos-4.jpg", "asquith-fox-chinos-5.jpg"], "asquith-fox-chinos-3.jpg"),
+    "Asquith & Fox men's chinos and shorts in 100% combed cotton 275 GSM and 98% cotton 2% spandex",
+    ["asquith-fox-chinos-2.jpg", "asquith-fox-chinos-3.jpg"], "asquith-fox-chinos-3.jpg"),
 
   // Activewear & Performance Wear
   ...shots("tridri", "TRIDRI", "activewear-performance-wear",

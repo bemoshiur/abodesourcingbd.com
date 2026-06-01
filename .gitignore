@@ -44,3 +44,7 @@ next-env.d.ts
 /.venv/
 /.remember/
 /.playwright-mcp/
+
+# Logo source & working files (generated web assets live in public/ + src/app/)
+/ABD logo.ai
+/abd-logo-silver.png

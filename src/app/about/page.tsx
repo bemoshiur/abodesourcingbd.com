@@ -26,7 +26,7 @@ export default function AboutPage() {
       <Breadcrumbs items={[{ label: "About", href: "/about/" }]} />
       <PageHeader
         eyebrow="Who we are"
-        title="A Bangladesh buying office built on trust"
+        title="A Bangladesh-based Apparel Buying and Sourcing Office"
         intro={site.oneLiner}
       />
 

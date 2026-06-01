@@ -17,7 +17,7 @@ export function SiteFooter() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div>
-              <Logo />
+              <Logo imgClassName="h-14" />
               <p className="mt-4 max-w-xs text-sm text-muted-foreground">
                 {site.oneLiner}
               </p>
@@ -59,20 +59,28 @@ export function SiteFooter() {
                 </span>
               </p>
               <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <a
-                  href={`tel:${site.phones[0].replace(/\s/g, "")}`}
-                  className="inline-flex items-center gap-2 hover:text-foreground"
-                >
-                  <Icon name="Phone" className="size-4 text-primary" />
-                  <span className="tabular-nums">{site.phones[0]}</span>
-                </a>
-                <a
-                  href={`mailto:${site.emails[0]}`}
-                  className="inline-flex items-center gap-2 hover:text-foreground"
-                >
-                  <Icon name="Mail" className="size-4 text-primary" />
-                  {site.emails[0]}
-                </a>
+                {site.phones.map((phone) => (
+                  <a
+                    key={phone}
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    className="inline-flex items-center gap-2 hover:text-foreground"
+                  >
+                    <Icon name="Phone" className="size-4 text-primary" />
+                    <span className="tabular-nums">{phone}</span>
+                  </a>
+                ))}
+              </p>
+              <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                {site.emails.map((email) => (
+                  <a
+                    key={email}
+                    href={`mailto:${email}`}
+                    className="inline-flex items-center gap-2 hover:text-foreground"
+                  >
+                    <Icon name="Mail" className="size-4 text-primary" />
+                    {email}
+                  </a>
+                ))}
               </p>
             </div>
             <div className="space-y-1 text-xs sm:text-right">

@@ -22,8 +22,8 @@ const orgJsonLd = {
   url: site.url,
   logo: `${site.url}/logos/abd-logo.png`,
   description: site.oneLiner,
-  email: site.emails[0],
-  telephone: site.phones[0],
+  email: site.emails,
+  telephone: site.phones,
   address: {
     "@type": "PostalAddress",
     streetAddress: `${site.address.line1}, ${site.address.line2}`,
@@ -120,8 +120,8 @@ export default function HomePage() {
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border">
             <Image
-              src="/office/dhaka-office-3.jpg"
-              alt="ABD Sourcing Bangladesh office in Uttara, Dhaka — meeting and sampling area"
+              src="/office/dhaka-office-2.jpg"
+              alt="ABD Sourcing Bangladesh showroom in Uttara, Dhaka — garment sample display"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover"
