@@ -8,7 +8,7 @@ const stats = [
   { value: factories.length, label: "Partner factories" },
   { value: exportMarkets.length, label: "Export markets" },
   { value: products.length, label: "Product categories" },
-  { value: buyers.length, label: "Running buyers" },
+  { value: buyers.length, label: "Running brands" },
   { value: certifications.length, label: "Certifications" },
 ];
 
