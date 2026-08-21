@@ -5,7 +5,6 @@ import { JsonLd } from "@/components/jsonld";
 import { StatsStrip } from "@/components/stats-strip";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { Reveal } from "@/components/reveal";
-import { LogoWall } from "@/components/logo-wall";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
@@ -13,7 +12,6 @@ import { site, mission } from "@/content/site";
 import { services } from "@/content/services";
 import { products, featuredShots } from "@/content/products";
 import { factories } from "@/content/factories";
-import { buyers } from "@/content/buyers";
 
 const orgJsonLd = {
   "@context": "https://schema.org",
@@ -219,19 +217,6 @@ export default function HomePage() {
             ))}
           </Reveal>
         </div>
-      </section>
-
-      {/* Buyers logo wall teaser */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <SectionHeading
-          eyebrow="Trusted by"
-          title="Brands in production with ABD"
-          href="/buyers/"
-          cta="All buyers"
-        />
-        <Reveal className="mt-8">
-          <LogoWall buyers={buyers} />
-        </Reveal>
       </section>
 
       {/* Factories + Compliance teasers */}

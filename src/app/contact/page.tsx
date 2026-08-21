@@ -5,7 +5,7 @@ import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
 import { InquiryForm } from "@/components/inquiry-form";
 import { WhyChooseUs } from "@/components/why-choose-us";
-import { site, partners } from "@/content/site";
+import { site } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact & Request a Quote",
@@ -90,18 +90,6 @@ export default function ContactPage() {
                 </a>
               ))}
             </div>
-          </div>
-
-          <div className="rounded-xl border border-border bg-card p-6">
-            <h2 className="font-display text-lg font-semibold">Partners</h2>
-            <ul className="mt-3 space-y-3">
-              {partners.map((p) => (
-                <li key={p.email} className="text-sm">
-                  <span className="font-medium text-foreground">{p.name}</span>
-                  <span className="block text-muted-foreground">{p.role}</span>
-                </li>
-              ))}
-            </ul>
           </div>
 
           <p className="rounded-lg border border-border bg-muted/40 p-4 text-xs text-muted-foreground">

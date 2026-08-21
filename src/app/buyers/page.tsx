@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/page-header";
-import { LogoWall } from "@/components/logo-wall";
 import { Badge } from "@/components/ui/badge";
 import { buyers } from "@/content/buyers";
 import { getCategory } from "@/content/products";
@@ -30,11 +29,8 @@ export default function BuyersPage() {
       />
 
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        {/* Logo wall — every buyer, real logo or wordmark tile */}
-        <LogoWall buyers={buyers} />
-
         {/* Per-brand tags */}
-        <h2 className="mt-16 font-display text-2xl font-semibold">All brands</h2>
+        <h2 className="font-display text-2xl font-semibold">All brands</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {buyers.map((b) => {
             const cats = b.categories
