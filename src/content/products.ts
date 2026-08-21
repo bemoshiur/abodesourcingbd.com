@@ -19,10 +19,8 @@ export interface ProductCategory {
 export interface ProductShot {
   /** Path under /public/products. */
   src: string;
-  brandSlug: string;
-  brandName: string;
   category: ProductSlug;
-  /** Descriptive alt: brand + style + fabric (SEO + a11y). */
+  /** Descriptive alt: style + fabric (SEO + a11y). Buyer names are never published. */
   alt: string;
   /** Highlighted on the Home running-product strip. */
   featured?: boolean;
@@ -76,10 +74,8 @@ export const products: ProductCategory[] = [
   },
 ];
 
-// --- Running-product shots, grouped by brand and mapped to a category. ---
+// --- Running-product shots, grouped by style and mapped to a category. ---
 function shots(
-  brandSlug: string,
-  brandName: string,
   category: ProductSlug,
   alt: string,
   files: string[],
@@ -87,8 +83,6 @@ function shots(
 ): ProductShot[] {
   return files.map((f) => ({
     src: `/products/${f}`,
-    brandSlug,
-    brandName,
     category,
     alt,
     ...(f === featuredFile ? { featured: true } : {}),
@@ -97,77 +91,77 @@ function shots(
 
 export const productShots: ProductShot[] = [
   // Knitwear
-  ...shots("asquith-fox", "Asquith & Fox", "knitwear",
-    "Asquith & Fox men's short-sleeve tipped polo shirt in 100% combed cotton, 200 GSM single lacoste",
-    ["asquith-fox-ss-polo-3.jpg", "asquith-fox-ss-polo-4.jpg"], "asquith-fox-ss-polo-3.jpg"),
-  ...shots("sprayway", "Sprayway", "knitwear",
-    "Sprayway men's, ladies and kids tee shirt and ladies vest in 70% polyester / 30% rayon, 160 GSM",
-    ["sprayway-tee-vest-2.jpg", "sprayway-tee-vest-3.jpg", "sprayway-tee-vest-4.jpg", "sprayway-tee-vest-5.jpg"], "sprayway-tee-vest-2.jpg"),
-  ...shots("sebago", "SEBAGO", "knitwear",
-    "SEBAGO men's tee, long-sleeve stripe polo and hoodie in cotton single jersey and piqué",
-    ["sebago-tee-polo-hood-2.jpg", "sebago-tee-polo-hood-3.jpg", "sebago-tee-polo-hood-4.jpg"]),
-  ...shots("nimbus", "Nimbus", "knitwear",
-    "Nimbus men's and ladies hoodie and polo in 80% organic cotton blend and 100% recycled piqué",
-    ["nimbus-hood-polo-2.jpg", "nimbus-hood-polo-3.jpg", "nimbus-hood-polo-4.jpg"]),
-  ...shots("nimbus", "Nimbus", "knitwear",
-    "Nimbus men's and ladies t-shirt in 100% organic cotton, 160 GSM",
-    ["nimbus-tshirt-2.jpg", "nimbus-tshirt-3.jpg", "nimbus-tshirt-4.jpg"], "nimbus-tshirt-2.jpg"),
-  ...shots("nimbus", "Nimbus / RONHILL", "knitwear",
-    "Nimbus and RONHILL men's and ladies knit shirt in 95% organic cotton 5% spandex, 220 GSM single lacoste",
-    ["nimbus-ronhill-knit-shirt-2.jpg", "nimbus-ronhill-knit-shirt-3.jpg", "nimbus-ronhill-knit-shirt-4.jpg"]),
-  ...shots("alligo", "ALLIGO", "knitwear",
-    "ALLIGO men's contrast polo and tee in 100% cotton piqué 220 GSM and 90% cotton 10% viscose 170 GSM",
-    ["alligo-polo-tee-2.jpg", "alligo-polo-tee-3.jpg", "alligo-polo-tee-4.jpg"], "alligo-polo-tee-3.jpg"),
-  ...shots("lddv", "Le Don De Vie", "knitwear",
-    "Le Don De Vie ladies long- and short-sleeve tee shirt in 78% rayon / 22% polyester single jersey, 160 GSM",
-    ["lddv-tee-shirt-2.jpg", "lddv-tee-shirt-3.jpg", "lddv-tee-shirt-4.jpg", "lddv-tee-shirt-5.jpg"], "lddv-tee-shirt-3.jpg"),
+  ...shots("knitwear",
+    "Men's short-sleeve tipped polo shirt in 100% combed cotton, 200 GSM single lacoste",
+    ["knitwear-tipped-polo-01.jpg", "knitwear-tipped-polo-02.jpg"], "knitwear-tipped-polo-01.jpg"),
+  ...shots("knitwear",
+    "Men's, ladies and kids tee shirt and ladies vest in 70% polyester / 30% rayon, 160 GSM",
+    ["knitwear-tee-vest-01.jpg", "knitwear-tee-vest-02.jpg", "knitwear-tee-vest-03.jpg", "knitwear-tee-vest-04.jpg"], "knitwear-tee-vest-01.jpg"),
+  ...shots("knitwear",
+    "Men's tee, long-sleeve stripe polo and hoodie in cotton single jersey and piqué",
+    ["knitwear-tee-polo-hoodie-01.jpg", "knitwear-tee-polo-hoodie-02.jpg", "knitwear-tee-polo-hoodie-03.jpg"]),
+  ...shots("knitwear",
+    "Men's and ladies hoodie and polo in 80% organic cotton blend and 100% recycled piqué",
+    ["knitwear-hoodie-polo-01.jpg", "knitwear-hoodie-polo-02.jpg", "knitwear-hoodie-polo-03.jpg"]),
+  ...shots("knitwear",
+    "Men's and ladies t-shirt in 100% organic cotton, 160 GSM",
+    ["knitwear-tshirt-01.jpg", "knitwear-tshirt-02.jpg", "knitwear-tshirt-03.jpg"], "knitwear-tshirt-01.jpg"),
+  ...shots("knitwear",
+    "Men's and ladies knit shirt in 95% organic cotton 5% spandex, 220 GSM single lacoste",
+    ["knitwear-knit-shirt-01.jpg", "knitwear-knit-shirt-02.jpg", "knitwear-knit-shirt-03.jpg"]),
+  ...shots("knitwear",
+    "Men's contrast polo and tee in 100% cotton piqué 220 GSM and 90% cotton 10% viscose 170 GSM",
+    ["knitwear-contrast-polo-tee-01.jpg", "knitwear-contrast-polo-tee-02.jpg", "knitwear-contrast-polo-tee-03.jpg"], "knitwear-contrast-polo-tee-02.jpg"),
+  ...shots("knitwear",
+    "Ladies long- and short-sleeve tee shirt in 78% rayon / 22% polyester single jersey, 160 GSM",
+    ["knitwear-ladies-tee-01.jpg", "knitwear-ladies-tee-02.jpg", "knitwear-ladies-tee-03.jpg", "knitwear-ladies-tee-04.jpg"], "knitwear-ladies-tee-02.jpg"),
 
   // Woven Wear
-  ...shots("asquith-fox", "Asquith & Fox", "woven-wear",
-    "Asquith & Fox men's chinos and shorts in 100% combed cotton 275 GSM and 98% cotton 2% spandex",
-    ["asquith-fox-chinos-2.jpg", "asquith-fox-chinos-3.jpg"], "asquith-fox-chinos-3.jpg"),
+  ...shots("woven-wear",
+    "Men's chinos and shorts in 100% combed cotton 275 GSM and 98% cotton 2% spandex",
+    ["woven-chinos-shorts-01.jpg", "woven-chinos-shorts-02.jpg"], "woven-chinos-shorts-02.jpg"),
 
   // Activewear & Performance Wear
-  ...shots("tridri", "TRIDRI", "activewear-performance-wear",
-    "TRIDRI men's and ladies performance tee and polo (long- and short-sleeve) in 100% recycled polyester, 135 GSM interlock",
-    ["tridri-tee-polo-2.jpg", "tridri-tee-polo-3.jpg", "tridri-tee-polo-4.jpg", "tridri-tee-polo-5.jpg"], "tridri-tee-polo-2.jpg"),
-  ...shots("tridri", "TRIDRI", "activewear-performance-wear",
-    "TRIDRI women's performance leggings and shorts in 90% recycled polyester / 10% elastane, 260–300 GSM",
-    ["tridri-leggings-shorts-2.jpg", "tridri-leggings-shorts-3.jpg"]),
-  ...shots("tridri", "TRIDRI", "activewear-performance-wear",
-    "TRIDRI ladies racerback performance vest tops in moisture-managing recycled polyester",
-    ["tridri-tank-purple.jpg", "tridri-tank-pink.jpg"]),
-  ...shots("swedemount", "Swedemount X-Trail", "activewear-performance-wear",
-    "Swedemount X-Trail men's tee and ladies/men's singlet in 83% recycled polyester, 150 GSM",
-    ["swedemount-xtrail-tee-singlet-2.jpg", "swedemount-xtrail-tee-singlet-3.jpg", "swedemount-xtrail-tee-singlet-4.jpg", "swedemount-xtrail-tee-singlet-5.jpg", "swedemount-xtrail-tee-singlet-6.jpg", "swedemount-xtrail-tee-singlet-7.jpg"], "swedemount-xtrail-tee-singlet-4.jpg"),
-  ...shots("lddv", "Le Don De Vie", "activewear-performance-wear",
-    "Le Don De Vie ladies pant, shorts and crew neck in 55% rayon / 39% polyester / 6% elastane interlock, 250 GSM",
-    ["lddv-pant-shorts-crew-2.jpg", "lddv-pant-shorts-crew-3.jpg", "lddv-pant-shorts-crew-4.jpg", "lddv-pant-shorts-crew-5.jpg"]),
-  ...shots("lddv", "Le Don De Vie", "activewear-performance-wear",
-    "Le Don De Vie ladies pant, shorts and crew neck set in 55% rayon / 39% polyester / 6% elastane interlock, 250 GSM",
-    ["lddv-pant-shorts-crew-b-2.jpg", "lddv-pant-shorts-crew-b-3.jpg", "lddv-pant-shorts-crew-b-4.jpg", "lddv-pant-shorts-crew-b-5.jpg"]),
+  ...shots("activewear-performance-wear",
+    "Men's and ladies performance tee and polo (long- and short-sleeve) in 100% recycled polyester, 135 GSM interlock",
+    ["activewear-performance-tee-polo-01.jpg", "activewear-performance-tee-polo-02.jpg", "activewear-performance-tee-polo-03.jpg", "activewear-performance-tee-polo-04.jpg"], "activewear-performance-tee-polo-01.jpg"),
+  ...shots("activewear-performance-wear",
+    "Women's performance leggings and shorts in 90% recycled polyester / 10% elastane, 260–300 GSM",
+    ["activewear-leggings-shorts-01.jpg", "activewear-leggings-shorts-02.jpg"]),
+  ...shots("activewear-performance-wear",
+    "Ladies racerback performance vest tops in moisture-managing recycled polyester",
+    ["activewear-racerback-vest-01.jpg", "activewear-racerback-vest-02.jpg"]),
+  ...shots("activewear-performance-wear",
+    "Men's tee and ladies/men's singlet in 83% recycled polyester, 150 GSM",
+    ["activewear-tee-singlet-01.jpg", "activewear-tee-singlet-02.jpg", "activewear-tee-singlet-03.jpg", "activewear-tee-singlet-04.jpg", "activewear-tee-singlet-05.jpg", "activewear-tee-singlet-06.jpg"], "activewear-tee-singlet-03.jpg"),
+  ...shots("activewear-performance-wear",
+    "Ladies pant, shorts and crew neck in 55% rayon / 39% polyester / 6% elastane interlock, 250 GSM",
+    ["activewear-pant-shorts-crew-01.jpg", "activewear-pant-shorts-crew-02.jpg", "activewear-pant-shorts-crew-03.jpg", "activewear-pant-shorts-crew-04.jpg"]),
+  ...shots("activewear-performance-wear",
+    "Ladies pant, shorts and crew neck set in 55% rayon / 39% polyester / 6% elastane interlock, 250 GSM",
+    ["activewear-pant-shorts-crew-set-01.jpg", "activewear-pant-shorts-crew-set-02.jpg", "activewear-pant-shorts-crew-set-03.jpg", "activewear-pant-shorts-crew-set-04.jpg"]),
 
   // Outerwear
-  ...shots("swedemount", "Swedemount", "outerwear",
-    "Swedemount men's and ladies micro fleece jacket in 100% polyester micro fleece, 165 GSM",
-    ["swedemount-micro-fleece-jacket-2.jpg", "swedemount-micro-fleece-jacket-3.jpg", "swedemount-micro-fleece-jacket-4.jpg", "swedemount-micro-fleece-jacket-5.jpg"], "swedemount-micro-fleece-jacket-4.jpg"),
-  ...shots("l-shop", "L-Shop", "outerwear",
-    "L-Shop men's fleece hoodie and crew in 80% cotton / 20% polyester fleece, 300 GSM",
-    ["l-shop-fleece-hoodie-2.jpg", "l-shop-fleece-hoodie-3.jpg", "l-shop-fleece-hoodie-4.jpg", "l-shop-fleece-hoodie-5.jpg"]),
-  ...shots("alligo", "ALLIGO", "outerwear",
-    "ALLIGO softshell and high-visibility hoodie in 100% polyester, 195 GSM",
-    ["alligo-softshell-hoodie-2.jpg", "alligo-softshell-hoodie-3.jpg", "alligo-softshell-hoodie-4.jpg"]),
+  ...shots("outerwear",
+    "Men's and ladies micro fleece jacket in 100% polyester micro fleece, 165 GSM",
+    ["outerwear-micro-fleece-jacket-01.jpg", "outerwear-micro-fleece-jacket-02.jpg", "outerwear-micro-fleece-jacket-03.jpg", "outerwear-micro-fleece-jacket-04.jpg"], "outerwear-micro-fleece-jacket-03.jpg"),
+  ...shots("outerwear",
+    "Men's fleece hoodie and crew in 80% cotton / 20% polyester fleece, 300 GSM",
+    ["outerwear-fleece-hoodie-01.jpg", "outerwear-fleece-hoodie-02.jpg", "outerwear-fleece-hoodie-03.jpg", "outerwear-fleece-hoodie-04.jpg"]),
+  ...shots("outerwear",
+    "Softshell and high-visibility hoodie in 100% polyester, 195 GSM",
+    ["outerwear-softshell-hoodie-01.jpg", "outerwear-softshell-hoodie-02.jpg", "outerwear-softshell-hoodie-03.jpg"]),
 
   // Workwear
-  ...shots("alligo", "ALLIGO", "workwear",
-    "ALLIGO workwear contrast hoodie, full-zip and crew neck in 70% cotton / 30% polyester fleece, 300 GSM",
-    ["alligo-hood-zip-crew-2.jpg", "alligo-hood-zip-crew-3.jpg", "alligo-hood-zip-crew-4.jpg"], "alligo-hood-zip-crew-2.jpg"),
-  ...shots("alligo", "ALLIGO", "workwear",
-    "ALLIGO workwear contrast hoodie, full-zip and crew neck set in 70% cotton / 30% polyester fleece, 300 GSM",
-    ["alligo-hood-zip-crew-b-2.jpg", "alligo-hood-zip-crew-b-3.jpg", "alligo-hood-zip-crew-b-4.jpg", "alligo-hood-zip-crew-b-5.jpg"]),
-  ...shots("appear-json", "Appear / Json", "workwear",
-    "Appear / Json men's workwear jacket and polo — 100% polyester woven shell and 95% cotton 5% spandex piqué",
-    ["appear-json-workwear-polo-2.jpg", "appear-json-workwear-polo-3.jpg", "appear-json-workwear-polo-4.jpg", "appear-json-workwear-polo-5.jpg"], "appear-json-workwear-polo-2.jpg"),
+  ...shots("workwear",
+    "Workwear contrast hoodie, full-zip and crew neck in 70% cotton / 30% polyester fleece, 300 GSM",
+    ["workwear-hoodie-zip-crew-01.jpg", "workwear-hoodie-zip-crew-02.jpg", "workwear-hoodie-zip-crew-03.jpg"], "workwear-hoodie-zip-crew-01.jpg"),
+  ...shots("workwear",
+    "Workwear contrast hoodie, full-zip and crew neck set in 70% cotton / 30% polyester fleece, 300 GSM",
+    ["workwear-hoodie-zip-crew-set-01.jpg", "workwear-hoodie-zip-crew-set-02.jpg", "workwear-hoodie-zip-crew-set-03.jpg", "workwear-hoodie-zip-crew-set-04.jpg"]),
+  ...shots("workwear",
+    "Men's workwear jacket and polo — 100% polyester woven shell and 95% cotton 5% spandex piqué",
+    ["workwear-jacket-polo-01.jpg", "workwear-jacket-polo-02.jpg", "workwear-jacket-polo-03.jpg", "workwear-jacket-polo-04.jpg"], "workwear-jacket-polo-01.jpg"),
 ];
 
 export function getCategory(slug: string): ProductCategory | undefined {

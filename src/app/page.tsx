@@ -210,9 +210,6 @@ export default function HomePage() {
                     className="object-cover img-zoom"
                   />
                 </div>
-                <figcaption className="px-3 py-2.5 text-xs font-medium text-muted-foreground">
-                  {shot.brandName}
-                </figcaption>
               </figure>
             ))}
           </Reveal>

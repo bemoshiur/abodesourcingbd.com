@@ -11,13 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
-import {
-  products,
-  getCategory,
-  shotsForCategory,
-  type ProductShot,
-} from "@/content/products";
-import { buyersForCategory } from "@/content/buyers";
+import { products, getCategory, shotsForCategory } from "@/content/products";
 import { servicesForCategory, factoriesForCategory } from "@/lib/relations";
 import { site } from "@/content/site";
 
@@ -64,17 +58,8 @@ export default async function ProductCategoryPage({
   if (!cat) notFound();
 
   const shots = shotsForCategory(cat.slug);
-  const buyers = buyersForCategory(cat.slug);
   const relatedServices = servicesForCategory(cat.slug);
   const relatedFactories = factoriesForCategory(cat.slug);
-
-  // Group the running-product gallery by brand.
-  const byBrand = new Map<string, ProductShot[]>();
-  for (const s of shots) {
-    const arr = byBrand.get(s.brandName) ?? [];
-    arr.push(s);
-    byBrand.set(s.brandName, arr);
-  }
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -106,7 +91,7 @@ export default async function ProductCategoryPage({
       </PageHeader>
 
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        {/* Brand-grouped gallery */}
+        {/* Running-product gallery */}
         <section>
           <h2 className="font-display text-2xl font-semibold">Running products</h2>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -114,56 +99,22 @@ export default async function ProductCategoryPage({
             recently in production for this category.
           </p>
 
-          <Reveal as="div" className="mt-8 space-y-12">
-            {[...byBrand.entries()].map(([brand, brandShots]) => (
-              <div key={brand}>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-foreground">
-                  {brand}
-                </h3>
-                <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                  {brandShots.map((shot) => (
-                    <figure
-                      key={shot.src}
-                      className="group overflow-hidden rounded-xl glass"
-                    >
-                      <div className="relative aspect-square overflow-hidden">
-                        <Image
-                          src={shot.src}
-                          alt={shot.alt}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-cover img-zoom"
-                        />
-                      </div>
-                    </figure>
-                  ))}
+          <Reveal as="div" className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {shots.map((shot) => (
+              <figure key={shot.src} className="group overflow-hidden rounded-xl glass">
+                <div className="relative aspect-square overflow-hidden">
+                  <Image
+                    src={shot.src}
+                    alt={shot.alt}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover img-zoom"
+                  />
                 </div>
-              </div>
+              </figure>
             ))}
           </Reveal>
         </section>
-
-        {/* Relevant buyers */}
-        {buyers.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="font-display text-xl font-semibold">Buyers in this category</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {buyers.map((b) => (
-                <li key={b.slug}>
-                  <Link
-                    href="/buyers/"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                  >
-                    {b.name}
-                    {b.country && (
-                      <span className="text-xs text-muted-foreground">· {b.country}</span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
 
         {/* Sourced through these factories */}
         {relatedFactories.length > 0 && (
