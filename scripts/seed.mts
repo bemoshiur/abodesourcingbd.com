@@ -5,7 +5,7 @@
  *
  *   npm run seed              # everything
  *   npm run seed -- base      # categories, services, factories, site settings, certifications
- *   npm run seed -- products  # products + photos from Website_images/ (needs .work/research/catalog.json)
+ *   npm run seed -- products  # products + photos from Website_images/ (needs scripts/data/catalog.json)
  *   npm run seed -- seo       # page titles/descriptions/FAQs (needs .work/research/seo-content.json)
  *
  * Requires DATABASE_URL, PAYLOAD_SECRET and BLOB_READ_WRITE_TOKEN in .env.local.
@@ -98,7 +98,10 @@ async function ensurePublicMedia(payload: PayloadClient, publicPath: string, alt
 export async function optimiseImage(file: string): Promise<Buffer> {
   return sharp(file)
     .rotate()
-    .resize({ width: 2000, height: 2000, fit: "inside", withoutEnlargement: true })
+    // A few source PNGs have a transparent background — flatten onto white so every
+    // product tile matches (transparent WebP would show the card colour through).
+    .flatten({ background: "#ffffff" })
+    .resize({ width: 1800, height: 1800, fit: "inside", withoutEnlargement: true })
     .webp({ quality: 84 })
     .toBuffer();
 }
@@ -221,7 +224,7 @@ async function seedBase(payload: PayloadClient) {
 }
 
 // ---------------------------------------------------------------------------
-// products: from .work/research/catalog.json + Website_images/
+// products: from scripts/data/catalog.json + Website_images/
 // ---------------------------------------------------------------------------
 interface CatalogProduct {
   category: string;
@@ -239,9 +242,9 @@ interface CatalogProduct {
 }
 
 async function seedProducts(payload: PayloadClient) {
-  const catalogPath = path.join(WORK_DIR, "catalog.final.json");
+  const catalogPath = path.join(ROOT, "scripts", "data", "catalog.json");
   if (!fs.existsSync(catalogPath)) {
-    console.log("\n[products] catalog.final.json not found — skipping");
+    console.log("\n[products] scripts/data/catalog.json not found — skipping");
     return;
   }
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8")) as CatalogProduct[];
@@ -278,12 +281,8 @@ async function seedProducts(payload: PayloadClient) {
         console.warn(`  ! missing image ${img.file}`);
         continue;
       }
-      const base = path
-        .basename(img.file, path.extname(img.file))
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
-      const filename = `${p.category}-${p.styleNumber ?? "style"}-${base}.webp`;
+      const styleSlug = (p.styleNumber ?? "style").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const filename = `${p.category}-${styleSlug}${i > 0 ? `-${i + 1}` : ""}.webp`;
       const alt =
         img.alt || `${name}${p.styleNumber ? ` (style ${p.styleNumber})` : ""} — ${img.role ?? (i === 0 ? "front" : "view")} view`;
       const mediaId = await ensureMedia(payload, filename, await optimiseImage(abs), "image/webp", alt);

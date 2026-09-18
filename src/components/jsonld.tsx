@@ -1,10 +1,12 @@
-/** Server-rendered JSON-LD <script>. Keep all structured data flowing through here. */
+/**
+ * Server-rendered JSON-LD <script>. All structured data flows through here.
+ * "<" is escaped so CMS-editable text can never close the script tag.
+ */
 export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
   return (
     <script
       type="application/ld+json"
-      // Content is built from typed arrays, never user input.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
     />
   );
 }

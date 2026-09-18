@@ -1,0 +1,1215 @@
+[
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2600",
+  "name": "Ladies Vest",
+  "composition": "100% Recycled Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2600.PNG",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2600"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2601",
+  "name": "Ladies Vest",
+  "composition": "100% Recycled Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2601.png",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2601"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2602",
+  "name": "Ladies Vest",
+  "composition": "100% Recycled Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2602.png",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2602"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2603",
+  "name": "Men’s Performance Tee",
+  "composition": "50% Recycled Polyester, 50% Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2603.png",
+    "role": "front",
+    "alt": "Men’s Performance Tee — style ABD-2603"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2604",
+  "name": "Men’s Performance Long-Sleeve Tee",
+  "composition": "50% Recycled Polyester, 50% Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2604.png.PNG",
+    "role": "front",
+    "alt": "Men’s Performance Long-Sleeve Tee — style ABD-2604"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2605",
+  "name": "Men’s Performance Polo",
+  "composition": "100% Recycled Polyester",
+  "gsm": "175 GSM",
+  "fabricConstruction": "Piqué",
+  "otherSpecs": {
+   "Dyeing": "Cationic dye"
+  },
+  "featured": true,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2605.PNG",
+    "role": "front",
+    "alt": "Men’s Performance Polo — style ABD-2605"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2606",
+  "name": "Men’s Space-Dyed Tee",
+  "composition": "93% Polyester, 7% Spandex",
+  "gsm": "180 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2606.png",
+    "role": "front",
+    "alt": "Men’s Space-Dyed Tee — style ABD-2606"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2607",
+  "name": "Men’s Space-Dyed Quarter-Zip",
+  "composition": "93% Polyester, 7% Spandex",
+  "gsm": "180 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2607.png",
+    "role": "front",
+    "alt": "Men’s Space-Dyed Quarter-Zip — style ABD-2607"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2608",
+  "name": "Men’s Quarter-Zip",
+  "composition": "50% Recycled Polyester, 50% Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2608.PNG",
+    "role": "front",
+    "alt": "Men’s Quarter-Zip — style ABD-2608"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2609",
+  "name": "Men’s Performance Tee",
+  "composition": "93% Recycled Polyester, 7% Spandex",
+  "gsm": "140 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2609.png",
+    "role": "front",
+    "alt": "Men’s Performance Tee — style ABD-2609"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2610",
+  "name": "Ladies Legging Shorts",
+  "composition": "90% Polyester, 10% Spandex",
+  "gsm": "260 GSM",
+  "fabricConstruction": "Jersey",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2610.PNG",
+    "role": "front",
+    "alt": "Ladies Legging Shorts — style ABD-2610"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2611",
+  "name": "Ladies Leggings",
+  "composition": "90% Polyester, 10% Spandex",
+  "gsm": "260 GSM",
+  "fabricConstruction": "Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2611.jpeg",
+    "role": "front",
+    "alt": "Ladies Leggings — style ABD-2611"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2612",
+  "name": "Ladies Leggings",
+  "composition": "90% Polyester, 10% Spandex",
+  "gsm": "260 GSM",
+  "fabricConstruction": "Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2612.jpeg",
+    "role": "back",
+    "alt": "Ladies Leggings — style ABD-2612"
+   }
+  ]
+ },
+ {
+  "category": "activewear-performance-wear",
+  "styleNumber": "ABD-2613",
+  "name": "Men’s Performance Contrast Tee",
+  "composition": "50% Recycled Polyester, 50% Polyester",
+  "gsm": "135 GSM",
+  "fabricConstruction": "Interlock",
+  "otherSpecs": {
+   "Additional fabric": "Melange Single Jersey 140 GSM"
+  },
+  "featured": false,
+  "images": [
+   {
+    "file": "Active and Performace Wear/2613.PNG",
+    "role": "front",
+    "alt": "Men’s Performance Contrast Tee — style ABD-2613"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2100",
+  "name": "Men’s Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2100.png",
+    "role": "front",
+    "alt": "Men’s Short-Sleeve Polo — style ABD-2100"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2101",
+  "name": "Men’s Tipped Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2101.png",
+    "role": "front",
+    "alt": "Men’s Tipped Short-Sleeve Polo — style ABD-2101"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2102",
+  "name": "Men’s Contrast Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2102.jpeg",
+    "role": "front",
+    "alt": "Men’s Contrast Short-Sleeve Polo — style ABD-2102"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2103",
+  "name": "Men’s Long-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2103.png",
+    "role": "front",
+    "alt": "Men’s Long-Sleeve Polo — style ABD-2103"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2104",
+  "name": "Men’s Poly Blend Polo",
+  "composition": "65% Polyester, 35% Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2104.png",
+    "role": "front",
+    "alt": "Men’s Poly Blend Polo — style ABD-2104"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2105",
+  "name": "Ladies Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2105.png",
+    "role": "front",
+    "alt": "Ladies Short-Sleeve Polo — style ABD-2105"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2106",
+  "name": "Ladies Tipped Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2106.jpeg",
+    "role": "front",
+    "alt": "Ladies Tipped Short-Sleeve Polo — style ABD-2106"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2107",
+  "name": "Ladies Contrast Short-Sleeve Polo",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2107.jpeg",
+    "role": "front",
+    "alt": "Ladies Contrast Short-Sleeve Polo — style ABD-2107"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2108",
+  "name": "Men’s Contrast Polo",
+  "composition": "65% BCI Cotton, 35% Recycled Polyester",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2108.PNG",
+    "role": "front",
+    "alt": "Men’s Contrast Polo — style ABD-2108"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2109",
+  "name": "Men’s Premium Polo",
+  "composition": "95% Organic Cotton, 5% Spandex",
+  "gsm": "220 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2109.PNG",
+    "role": "front",
+    "alt": "Men’s Premium Polo — style ABD-2109"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2110",
+  "name": "Men’s Short-Sleeve Polo with Decorated Piping",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2110.png",
+    "role": "front",
+    "alt": "Men’s Short-Sleeve Polo with Decorated Piping — style ABD-2110"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2112",
+  "name": "Stand-Collar Polo Shirt",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2112.png",
+    "role": "front",
+    "alt": "Stand-Collar Polo Shirt — style ABD-2112"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2113",
+  "name": "Stand-Collar Polo Shirt (Style 2)",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2113.png",
+    "role": "front",
+    "alt": "Stand-Collar Polo Shirt (Style 2) — style ABD-2113"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2114",
+  "name": "Men’s Short-Sleeve Polo (Washed)",
+  "composition": "100% Combed Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2114.png",
+    "role": "front",
+    "alt": "Men’s Short-Sleeve Polo (Washed) — style ABD-2114"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2115",
+  "name": "Ladies Long-Sleeve Polo (Yarn-Dyed)",
+  "composition": "100% Combed Cotton",
+  "gsm": "240 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2115.png",
+    "role": "front",
+    "alt": "Ladies Long-Sleeve Polo (Yarn-Dyed) — style ABD-2115"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2116",
+  "name": "Ladies Polo Dress (Yarn-Dyed)",
+  "composition": "100% Combed Cotton",
+  "gsm": "240 GSM",
+  "fabricConstruction": "Single Lacoste",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2116.png",
+    "role": "front",
+    "alt": "Ladies Polo Dress (Yarn-Dyed) — style ABD-2116"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2117",
+  "name": "Men’s Premium Knit Shirt",
+  "composition": "95% Organic Cotton, 5% Spandex",
+  "gsm": "220 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2117.PNG",
+    "role": "front",
+    "alt": "Men’s Premium Knit Shirt — style ABD-2117"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2118",
+  "name": "Men’s Tee",
+  "composition": "70% Polyester, 30% Rayon",
+  "gsm": "160 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2118.png",
+    "role": "front",
+    "alt": "Men’s Tee — style ABD-2118"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2119",
+  "name": "Men’s Long-Sleeve Tee",
+  "composition": "70% Polyester, 30% Rayon",
+  "gsm": "160 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2119.png",
+    "role": "front",
+    "alt": "Men’s Long-Sleeve Tee — style ABD-2119"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2120",
+  "name": "Ladies Tee",
+  "composition": "70% Polyester, 30% Rayon",
+  "gsm": "160 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2120.png",
+    "role": "front",
+    "alt": "Ladies Tee — style ABD-2120"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2121",
+  "name": "Ladies Vest",
+  "composition": "70% Polyester, 30% Rayon",
+  "gsm": "160 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2121.png",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2121"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2122",
+  "name": "Ladies Tee",
+  "composition": "78% Rayon, 22% Polyester",
+  "gsm": "190 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2122.png",
+    "role": "front",
+    "alt": "Ladies Tee — style ABD-2122"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2123",
+  "name": "Ladies Vest",
+  "composition": "78% Rayon, 22% Polyester",
+  "gsm": "190 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2123.png",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2123"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2124",
+  "name": "Ladies Long-Sleeve Tee",
+  "composition": "78% Rayon, 22% Polyester",
+  "gsm": "190 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2124.png",
+    "role": "front",
+    "alt": "Ladies Long-Sleeve Tee — style ABD-2124"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2125",
+  "name": "Ladies Vest",
+  "composition": "78% Rayon, 22% Polyester",
+  "gsm": "190 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2125.png",
+    "role": "front",
+    "alt": "Ladies Vest — style ABD-2125"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2126",
+  "name": "Ladies Tee",
+  "composition": "100% Organic Cotton",
+  "gsm": "160 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2126.PNG",
+    "role": "front",
+    "alt": "Ladies Tee — style ABD-2126"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2127",
+  "name": "Ladies Heavy Knit Quarter-Zip",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2127.png",
+    "role": "front",
+    "alt": "Ladies Heavy Knit Quarter-Zip — style ABD-2127"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2128",
+  "name": "Ladies Heavy Knit Hoodie",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2128.png",
+    "role": "front",
+    "alt": "Ladies Heavy Knit Hoodie — style ABD-2128"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2129",
+  "name": "Ladies Heavy Knit Crew",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2129.png",
+    "role": "front",
+    "alt": "Ladies Heavy Knit Crew — style ABD-2129"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2130",
+  "name": "Ladies Pant",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2130.png",
+    "role": "front",
+    "alt": "Ladies Pant — style ABD-2130"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2131",
+  "name": "Ladies Pant (Style 2)",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2131.png",
+    "role": "front",
+    "alt": "Ladies Pant (Style 2) — style ABD-2131"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2132",
+  "name": "Ladies Shorts",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2132.png",
+    "role": "front",
+    "alt": "Ladies Shorts — style ABD-2132"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2133",
+  "name": "Ladies Hoodie",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2133.png",
+    "role": "front",
+    "alt": "Ladies Hoodie — style ABD-2133"
+   }
+  ]
+ },
+ {
+  "category": "knitwear",
+  "styleNumber": "ABD-2134",
+  "name": "Ladies Heavy Knit Fashion Crew",
+  "composition": "55% Rayon, 39% Polyester, 6% Spandex",
+  "gsm": "250 GSM",
+  "fabricConstruction": "Scuba Interlock",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Knitwear & Fashionwear/2134.png",
+    "role": "front",
+    "alt": "Ladies Heavy Knit Fashion Crew — style ABD-2134"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2901",
+  "name": "Men’s Hoodie",
+  "composition": "80% Organic Cotton, 20% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2901.PNG",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2901"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2902",
+  "name": "Men’s Hoodie",
+  "composition": "80% Organic Cotton, 20% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2902.PNG",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2902"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2903",
+  "name": "Men’s Hoodie",
+  "composition": "70% Organic Cotton, 20% Recycled Polyester, 10% Viscose",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2903.png",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2903"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2904",
+  "name": "Men’s Hoodie",
+  "composition": "70% Organic Cotton, 20% Recycled Polyester, 10% Viscose",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2904.PNG",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2904"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2905",
+  "name": "Men’s Hoodie",
+  "composition": "80% Organic Cotton, 20% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2905.PNG",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2905"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2906",
+  "name": "Men’s Hoodie",
+  "composition": "80% Organic Cotton, 20% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {
+   "Padding": "taffeta 80 GSM"
+  },
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2906.PNG",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2906"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2907",
+  "name": "Men’s Full-Zip Fleece Jacket",
+  "composition": "100% Polyester",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Micro Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2907.png",
+    "role": "front",
+    "alt": "Men’s Full-Zip Fleece Jacket — style ABD-2907"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2908",
+  "name": "Men’s Crew Neck",
+  "composition": "100% Polyester",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Micro Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2908.png",
+    "role": "front",
+    "alt": "Men’s Crew Neck — style ABD-2908"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2909",
+  "name": "Men’s Full Zip",
+  "composition": "100% Polyester",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Micro Fleece",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2909.png",
+    "role": "front",
+    "alt": "Men’s Full Zip — style ABD-2909"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2930",
+  "name": "Ladies Full Zip",
+  "composition": "100% Polyester",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Micro Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2930.png",
+    "role": "front",
+    "alt": "Ladies Full Zip — style ABD-2930"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2931",
+  "name": "Men’s Hoodie",
+  "composition": "93% Polyester, 7% Spandex",
+  "gsm": "190 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2931.png",
+    "role": "front",
+    "alt": "Men’s Hoodie — style ABD-2931"
+   }
+  ]
+ },
+ {
+  "category": "outerwear",
+  "styleNumber": "ABD-2932",
+  "name": "Men’s Quarter-Zip",
+  "composition": "93% Polyester, 7% Spandex",
+  "gsm": "190 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "OuterWear & Jacket/2932.png",
+    "role": "front",
+    "alt": "Men’s Quarter-Zip — style ABD-2932"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2701",
+  "name": "Men’s Workwear Polo",
+  "composition": "100% BCI Cotton",
+  "gsm": "200 GSM",
+  "fabricConstruction": "Piqué",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "WorkWear/2701.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Polo — style ABD-2701"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2702",
+  "name": "Men’s Workwear Long-Sleeve Tee",
+  "composition": "100% BCI Cotton",
+  "gsm": "180 GSM",
+  "fabricConstruction": "Single Jersey",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "WorkWear/2702.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Long-Sleeve Tee — style ABD-2702"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2703",
+  "name": "Men’s Workwear Hoodie 1",
+  "composition": "70% BCI Cotton, 30% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": "Back Brush Fleece",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "WorkWear/2703.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Hoodie 1 — style ABD-2703"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2704",
+  "name": "Men’s Workwear Hoodie 2",
+  "composition": "70% BCI Cotton, 30% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": "Back Brush Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "WorkWear/2704.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Hoodie 2 — style ABD-2704"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2705",
+  "name": "Men’s Workwear Hoodie 3",
+  "composition": "70% BCI Cotton, 30% Recycled Polyester",
+  "gsm": "300 GSM",
+  "fabricConstruction": "Back Brush Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "WorkWear/2705.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Hoodie 3 — style ABD-2705"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2706",
+  "name": "Men’s Workwear Quarter-Zip",
+  "composition": "100% Recycled Polyester",
+  "gsm": "230 GSM",
+  "fabricConstruction": "Back Brush Fleece",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "WorkWear/2706.PNG",
+    "role": "front",
+    "alt": "Men’s Workwear Quarter-Zip — style ABD-2706"
+   }
+  ]
+ },
+ {
+  "category": "workwear",
+  "styleNumber": "ABD-2707",
+  "name": "Men’s Heavy Workwear Hoodie",
+  "composition": "300D Polyester Oxford with White Film",
+  "gsm": "210 GSM",
+  "fabricConstruction": null,
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "WorkWear/2707.png",
+    "role": "front",
+    "alt": "Men’s Heavy Workwear Hoodie — style ABD-2707"
+   }
+  ]
+ },
+ {
+  "category": "woven-wear",
+  "styleNumber": "ABD-2301",
+  "name": "Men’s Chinos",
+  "composition": "100% Cotton",
+  "gsm": "275 GSM",
+  "fabricConstruction": "Twill",
+  "otherSpecs": {},
+  "featured": true,
+  "images": [
+   {
+    "file": "Woven Wear/2301.png",
+    "role": "front",
+    "alt": "Men’s Chinos — style ABD-2301"
+   }
+  ]
+ },
+ {
+  "category": "woven-wear",
+  "styleNumber": "ABD-2302",
+  "name": "Men’s Chinos shorts",
+  "composition": "100% Cotton",
+  "gsm": "275 GSM",
+  "fabricConstruction": "Twill",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Woven Wear/2302.png",
+    "role": "front",
+    "alt": "Men’s Chinos shorts — style ABD-2302"
+   }
+  ]
+ },
+ {
+  "category": "woven-wear",
+  "styleNumber": "ABD-2303",
+  "name": "Ladies Chinos",
+  "composition": "98% Cotton, 2% Spandex",
+  "gsm": "275 GSM",
+  "fabricConstruction": "Twill",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Woven Wear/2303.PNG",
+    "role": "front",
+    "alt": "Ladies Chinos — style ABD-2303"
+   }
+  ]
+ },
+ {
+  "category": "woven-wear",
+  "styleNumber": "ABD-2304",
+  "name": "Ladies Chinos Shorts",
+  "composition": "98% Cotton, 2% Spandex",
+  "gsm": "275 GSM",
+  "fabricConstruction": "Twill",
+  "otherSpecs": {},
+  "featured": false,
+  "images": [
+   {
+    "file": "Woven Wear/2304.png",
+    "role": "front",
+    "alt": "Ladies Chinos Shorts — style ABD-2304"
+   }
+  ]
+ }
+]

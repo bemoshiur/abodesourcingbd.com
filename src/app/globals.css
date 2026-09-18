@@ -358,6 +358,170 @@ body::before {
 }
 
 /* ============================================================
+   Lively layer — richer gradients, marquee bands, spotlight cards,
+   staggered reveals, animated rings. Every animation is guarded by
+   prefers-reduced-motion (users who opt out get a calm static page).
+   ============================================================ */
+
+/* Vivid dark mesh — hero bands, certifications, CTA. Forest → emerald with gold glints. */
+.mesh-dark {
+  position: relative;
+  color: var(--primary-foreground);
+  background:
+    radial-gradient(55% 75% at 10% 0%, oklch(0.52 0.105 165 / 0.9), transparent 62%),
+    radial-gradient(48% 70% at 95% 8%, oklch(0.76 0.14 92 / 0.34), transparent 62%),
+    radial-gradient(70% 90% at 62% 112%, oklch(0.42 0.075 172 / 0.95), transparent 66%),
+    linear-gradient(135deg, oklch(0.31 0.05 165), oklch(0.2 0.02 163));
+  background-size: 140% 140%, 140% 140%, 140% 140%, 100% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mesh-dark { animation: mesh-drift 26s ease-in-out infinite alternate; }
+}
+@keyframes mesh-drift {
+  0%   { background-position: 0% 0%, 100% 0%, 60% 100%, 0 0; }
+  100% { background-position: 14% 10%, 84% 12%, 50% 88%, 0 0; }
+}
+
+/* Light mesh — hero on paper background: brighter than the ambient body wash. */
+.mesh-light {
+  background:
+    radial-gradient(46% 60% at 8% 4%, oklch(0.58 0.09 166 / 0.20), transparent 68%),
+    radial-gradient(40% 55% at 96% 0%, oklch(0.78 0.14 92 / 0.22), transparent 66%),
+    radial-gradient(50% 60% at 55% 105%, oklch(0.64 0.08 160 / 0.16), transparent 70%);
+}
+
+/* Decorative blurred orbs. */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(56px);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .float-slow { animation: float-y 9s ease-in-out infinite alternate; }
+  .float-slower { animation: float-y 13s ease-in-out infinite alternate-reverse; }
+}
+@keyframes float-y {
+  from { transform: translate3d(0, -10px, 0); }
+  to   { transform: translate3d(0, 14px, 0); }
+}
+
+/* Marquee — pure CSS, seamless (track = two identical sets, moves exactly -50%). */
+.marquee-mask {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.marquee-track { display: flex; width: max-content; }
+.marquee-set {
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  gap: var(--marquee-gap, 1rem);
+  padding: 0 var(--marquee-gap, 1rem) 0 0;
+  margin: 0;
+  list-style: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track { animation: marquee-x var(--marquee-duration, 45s) linear infinite; }
+  .marquee-reverse .marquee-track { animation-direction: reverse; }
+  .marquee-mask:hover .marquee-track,
+  .marquee-mask:focus-within .marquee-track { animation-play-state: paused; }
+}
+@keyframes marquee-x { to { transform: translateX(-50%); } }
+/* Reduced motion: no ticker — a single swipeable row, duplicate set hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-mask { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .marquee-set[aria-hidden="true"] { display: none; }
+}
+
+/* Spotlight cards — a soft light follows the pointer (vars set by <Spotlight/>). */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), oklch(0.62 0.11 150 / 0.16), transparent 62%);
+  transition: opacity 0.35s var(--ease-out-soft);
+  pointer-events: none;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .spotlight:hover::before { opacity: 1; }
+}
+
+/* Button shine sweep on primary CTAs. */
+.btn-shine { position: relative; overflow: hidden; isolation: isolate; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, oklch(1 0 0 / 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-shine:hover::after { transition: transform 0.7s var(--ease-out-soft); transform: translateX(120%); }
+}
+
+/* Rotating conic ring — featured card / hero CTA halo. */
+@property --ring-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.ring-spin { position: relative; }
+.ring-spin::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(from var(--ring-angle), oklch(0.4 0.066 167), oklch(0.78 0.14 92), oklch(0.62 0.11 150), oklch(0.4 0.066 167));
+  opacity: 0.85;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ring-spin::before { animation: ring-rotate 6s linear infinite; }
+}
+@keyframes ring-rotate { to { --ring-angle: 360deg; } }
+
+/* Staggered + directional reveals (Reveal sets --i / delay; content stays visible without motion/JS). */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-left:not(.is-visible)  { opacity: 0; transform: translateX(-22px); }
+  .reveal-right:not(.is-visible) { opacity: 0; transform: translateX(22px); }
+  .reveal-scale:not(.is-visible) { opacity: 0; transform: scale(0.96); }
+  .reveal-left, .reveal-right, .reveal-scale {
+    transition: opacity 0.7s var(--ease-out-soft), transform 0.7s var(--ease-out-soft);
+  }
+}
+
+/* Gradient underline that grows on hover — inline links. */
+.link-grow { background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; }
+@media (prefers-reduced-motion: no-preference) {
+  .link-grow { transition: background-size 0.35s var(--ease-out-soft); }
+  .link-grow:hover { background-size: 100% 1.5px; }
+}
+
+/* Soft product-photo stage: white studio backdrop, subtle inner vignette. */
+.photo-stage {
+  background:
+    radial-gradient(90% 80% at 50% 40%, #fff, oklch(0.975 0.004 100));
+}
+
+/* Inquiry "added" pop. */
+@media (prefers-reduced-motion: no-preference) {
+  .pop-in { animation: pop-in 0.35s var(--ease-out-soft); }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Room for the mobile action bar so it never covers page content. */
+@media (max-width: 767px) {
+  body { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom)); }
+}
+
+/* ============================================================
    Print — hide chrome, force light, kill gradients/shadows/blur.
    ============================================================ */
 @media print {
@@ -385,6 +549,8 @@ body::before {
   }
   .glass,
   .glass-on-dark,
+  .mesh-dark,
+  .mesh-light,
   .ring-gradient,
   .bg-brand-gradient,
   .bg-soft-gradient,

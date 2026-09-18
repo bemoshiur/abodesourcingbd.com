@@ -4,6 +4,8 @@ import {
   Wind, HardHat, ArrowRight, ArrowUpRight, Check, Mail, Phone, MapPin,
   ExternalLink, ChevronRight, Menu, X, Globe, PackageCheck, Send,
   Clock, Lock, LoaderCircle, CircleCheck, CircleAlert,
+  Plus, Minus, Trash2, ZoomIn, ChevronLeft, ChevronDown, ChevronUp, Search,
+  ArrowLeft, Sparkles, BadgeCheck, Award, ClipboardCheck, Layers, MousePointerClick,
   type LucideIcon,
 } from "lucide-react";
 
@@ -14,6 +16,8 @@ const registry: Record<string, LucideIcon> = {
   Wind, HardHat, ArrowRight, ArrowUpRight, Check, Mail, Phone, MapPin,
   ExternalLink, ChevronRight, Menu, X, Globe, PackageCheck, Send,
   Clock, Lock, LoaderCircle, CircleCheck, CircleAlert,
+  Plus, Minus, Trash2, ZoomIn, ChevronLeft, ChevronDown, ChevronUp, Search,
+  ArrowLeft, Sparkles, BadgeCheck, Award, ClipboardCheck, Layers, MousePointerClick,
 };
 
 export function Icon({

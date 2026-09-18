@@ -12,11 +12,12 @@ export const Media: CollectionConfig = {
   upload: {
     mimeTypes: ["image/*"],
     adminThumbnail: "thumb",
-    focalPoint: true,
-    formatOptions: { format: "webp", options: { quality: 82 } },
+        formatOptions: { format: "webp", options: { quality: 82 } },
     imageSizes: [
-      { name: "thumb", width: 240, height: 300, position: "centre" },
-      { name: "card", width: 720, height: 900, position: "centre" },
+      // Width-only variants keep the original aspect ratio — garment photos vary
+      // from portrait to landscape and must never be cropped.
+      { name: "thumb", width: 240, withoutEnlargement: true },
+      { name: "card", width: 720, withoutEnlargement: true },
       { name: "detail", width: 1400, withoutEnlargement: true },
     ],
   },
