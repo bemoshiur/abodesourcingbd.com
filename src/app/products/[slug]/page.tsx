@@ -12,16 +12,20 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
 import {
-  products,
+  getCategories,
   getCategory,
   shotsForCategory,
-  type ProductShot,
-} from "@/content/products";
-import { buyersForCategory } from "@/content/buyers";
-import { servicesForCategory, factoriesForCategory } from "@/lib/relations";
-import { site } from "@/content/site";
+  buyersForCategory,
+  servicesForCategory,
+  factoriesForCategory,
+  getSiteSettings,
+  type ShotView,
+} from "@/lib/payload";
 
-export function generateStaticParams() {
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const products = await getCategories();
   return products.map((p) => ({ slug: p.slug }));
 }
 
@@ -33,8 +37,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const cat = getCategory(slug);
+  const cat = await getCategory(slug);
   if (!cat) return {};
+  const { site } = await getSiteSettings();
   return {
     title: `${cat.title} Sourcing`,
     description: cat.summary,
@@ -60,16 +65,20 @@ export default async function ProductCategoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const cat = getCategory(slug);
+  const cat = await getCategory(slug);
   if (!cat) notFound();
 
-  const shots = shotsForCategory(cat.slug);
-  const buyers = buyersForCategory(cat.slug);
-  const relatedServices = servicesForCategory(cat.slug);
-  const relatedFactories = factoriesForCategory(cat.slug);
+  const [{ site }, shots, buyers, relatedServices, relatedFactories] =
+    await Promise.all([
+      getSiteSettings(),
+      shotsForCategory(cat.slug),
+      buyersForCategory(cat.slug),
+      servicesForCategory(cat.slug),
+      factoriesForCategory(cat.slug),
+    ]);
 
   // Group the running-product gallery by brand.
-  const byBrand = new Map<string, ProductShot[]>();
+  const byBrand = new Map<string, ShotView[]>();
   for (const s of shots) {
     const arr = byBrand.get(s.brandName) ?? [];
     arr.push(s);

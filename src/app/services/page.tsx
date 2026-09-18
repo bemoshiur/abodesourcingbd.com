@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/page-header";
 import { Icon } from "@/components/icon";
 import { Reveal } from "@/components/reveal";
-import { services } from "@/content/services";
+import { getServices } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "Apparel Sourcing Services",
@@ -21,7 +21,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services/" },
 };
 
-export default function ServicesIndexPage() {
+export const revalidate = 60;
+
+export default async function ServicesIndexPage() {
+  const services = await getServices();
+
   return (
     <>
       <Breadcrumbs items={[{ label: "Services", href: "/services/" }]} />

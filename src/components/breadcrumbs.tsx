@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
-import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 import type { Crumb } from "@/lib/routes";
 
 /**
  * Visual breadcrumb + BreadcrumbList JSON-LD. Used on every non-home page.
  * `items` excludes Home — it is prepended automatically.
  */
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+export async function Breadcrumbs({ items }: { items: Crumb[] }) {
+  const { site } = await getSiteSettings();
   const trail: Crumb[] = [{ label: "Home", href: "/" }, ...items];
 
   const jsonLd = {

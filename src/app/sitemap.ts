@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 import { allRoutes } from "@/lib/routes";
 
 export const dynamic = "force-static";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { site } = await getSiteSettings();
   const now = new Date();
-  return allRoutes().map((path) => ({
+  const routes = await allRoutes();
+  return routes.map((path) => ({
     url: `${site.url}${path}`,
     lastModified: now,
     changeFrequency: path === "/" ? "weekly" : "monthly",

@@ -1,12 +1,16 @@
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // WordPress-style permalinks: every route ends in a trailing slash.
   trailingSlash: true,
   images: {
-    // All product photos are local under /public; no remote patterns needed.
+    // Product/factory/buyer images are served from Vercel Blob via Payload Media.
     formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
+    ],
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

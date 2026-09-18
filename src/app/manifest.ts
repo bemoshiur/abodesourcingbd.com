@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 
 // Static export needs each metadata route to opt into static rendering.
 export const dynamic = "force-static";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const { site } = await getSiteSettings();
   return {
     name: site.name,
     short_name: "ABD Sourcing",

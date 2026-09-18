@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/page-header";
 import { Icon } from "@/components/icon";
 import { Reveal } from "@/components/reveal";
-import { factories } from "@/content/factories";
+import { getFactories } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "Partner Factory Network",
@@ -21,7 +21,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/factories/" },
 };
 
-export default function FactoriesIndexPage() {
+export const revalidate = 60;
+
+export default async function FactoriesIndexPage() {
+  const factories = await getFactories();
+
   return (
     <>
       <Breadcrumbs items={[{ label: "Factories", href: "/factories/" }]} />

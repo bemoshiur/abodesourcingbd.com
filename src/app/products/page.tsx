@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/page-header";
 import { Icon } from "@/components/icon";
 import { Reveal } from "@/components/reveal";
-import { products, shotsForCategory } from "@/content/products";
+import { getCategories, getShots } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "Product Categories",
@@ -21,7 +21,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/products/" },
 };
 
-export default function ProductsIndexPage() {
+export const revalidate = 60;
+
+export default async function ProductsIndexPage() {
+  const [products, shots] = await Promise.all([getCategories(), getShots()]);
+
   return (
     <>
       <Breadcrumbs items={[{ label: "Products", href: "/products/" }]} />
@@ -33,7 +37,7 @@ export default function ProductsIndexPage() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <Reveal as="div" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => {
-            const count = shotsForCategory(p.slug).length;
+            const count = shots.filter((s) => s.categorySlug === p.slug).length;
             return (
               <Link
                 key={p.slug}

@@ -5,7 +5,7 @@ import DE from "country-flag-icons/react/3x2/DE";
 import NL from "country-flag-icons/react/3x2/NL";
 import US from "country-flag-icons/react/3x2/US";
 import { Reveal } from "@/components/reveal";
-import { exportMarkets } from "@/content/site";
+import { getSiteContent } from "@/lib/payload";
 import { cn } from "@/lib/utils";
 
 const flags: Record<string, typeof SE> = { SE, GB, DK, DE, NL, US };
@@ -18,7 +18,9 @@ const region: Record<string, string> = {
   US: "North America",
 };
 
-export function ExportMarkets({ className }: { className?: string }) {
+export async function ExportMarkets({ className }: { className?: string }) {
+  const { exportMarkets } = await getSiteContent();
+
   return (
     <section className={cn("relative overflow-hidden", className)} aria-labelledby="export-markets">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

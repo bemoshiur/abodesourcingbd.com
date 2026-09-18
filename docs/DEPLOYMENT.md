@@ -1,12 +1,26 @@
 # Deploying to Vercel
 
-This is a standard Next.js project (App Router, Next 16, React 19). Vercel
+This is a standard Next.js project (App Router, Next 16, React 19) with
+**Payload CMS v3** embedded in the same app (admin at `/admin`). Vercel
 auto-detects it — no `vercel.json`, no special config. The inquiry form
 delivers via the **Next Route Handler** at `src/app/api/inquiry/route.ts`,
 which calls Resend's REST API server-side so the API key never reaches the
 browser.
 
 ---
+
+## 0. One-time services the CMS needs
+
+Payload stores content in **Postgres** and uploads in **Vercel Blob**.
+
+1. **Neon Postgres (free tier):** create an account at https://neon.tech →
+   new project → copy the pooled connection string
+   (`postgresql://…?sslmode=require`). This is `DATABASE_URL`.
+2. **Vercel Blob:** in the Vercel project → **Storage → Create Database →
+   Blob** → connect to the project. Vercel sets `BLOB_READ_WRITE_TOKEN`
+   automatically on deploy; for local dev copy the token from the store's
+   `.env.local` tab.
+3. **`PAYLOAD_SECRET`:** any random string — `openssl rand -base64 32`.
 
 ## 1. Push to GitHub
 
@@ -49,6 +63,9 @@ Before the first deploy, click **Environment Variables** and add these
 
 | Key | Value |
 |---|---|
+| `PAYLOAD_SECRET` | Random string (`openssl rand -base64 32`) |
+| `DATABASE_URL` | Neon Postgres connection string |
+| `BLOB_READ_WRITE_TOKEN` | Set automatically if you connected the Blob store |
 | `RESEND_API_KEY` | _Public Pulse Agency Resend key_ (`re_…`) |
 | `INQUIRY_FROM_EMAIL` _(optional)_ | `ABD Sourcing <noreply@your-verified-domain.com>` |
 | `INQUIRY_TO_EMAILS` _(optional)_ | `shakhawat@abodesourcingbd.com` |
@@ -63,7 +80,26 @@ Before the first deploy, click **Environment Variables** and add these
 - `INQUIRY_TO_EMAILS` defaults to `shakhawat@abodesourcingbd.com` if
   omitted; comma-separate to add more recipients.
 
-Click **Deploy**. First build takes ~1–2 minutes.
+Click **Deploy**. First build takes ~2–3 minutes.
+
+## 3b. First run: seed the content + create the admin user
+
+After the first successful deploy:
+
+1. Run the seed **once** against the production database from your machine:
+
+   ```bash
+   # .env.local must contain the production DATABASE_URL (+ BLOB_READ_WRITE_TOKEN)
+   npm run seed
+   ```
+
+   This imports all existing content (services, categories, photos,
+   factories, buyers, settings) into the CMS. It is idempotent — safe to
+   re-run.
+2. Open `https://abodesourcingbd.com/admin` — Payload asks you to create
+   the first user. That email + password is the admin login.
+3. From then on, all content edits happen in `/admin`; changes go live
+   within ~60 seconds (ISR), no redeploy needed.
 
 ---
 
@@ -114,14 +150,17 @@ repo with the Vercel project).
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+# .env.local needs PAYLOAD_SECRET + DATABASE_URL (+ BLOB_READ_WRITE_TOKEN
+# for real uploads; without it uploads stay on local disk)
+npm run seed     # first time only — imports the legacy content into the CMS
+npm run dev      # http://localhost:3000 — admin at /admin
 ```
 
 The inquiry form's Route Handler runs in dev too — set `RESEND_API_KEY`
 in `.env.local` (gitignored) to test real send locally:
 
 ```bash
-echo 'RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx' > .env.local
+echo 'RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx' >> .env.local
 npm run dev
 ```
 

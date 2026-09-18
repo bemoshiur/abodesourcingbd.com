@@ -5,57 +5,69 @@ import { JsonLd } from "@/components/jsonld";
 import { StatsStrip } from "@/components/stats-strip";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { Reveal } from "@/components/reveal";
-import { LogoWall } from "@/components/logo-wall";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
-import { site, mission } from "@/content/site";
-import { services } from "@/content/services";
-import { products, featuredShots } from "@/content/products";
-import { factories } from "@/content/factories";
-import { buyers } from "@/content/buyers";
+import {
+  getSiteSettings,
+  getServices,
+  getCategories,
+  featuredShots,
+  getFactories,
+} from "@/lib/payload";
 
-const orgJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.name,
-  url: site.url,
-  logo: `${site.url}/logos/abd-logo.png`,
-  description: site.oneLiner,
-  email: site.emails,
-  telephone: site.phones,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: `${site.address.line1}, ${site.address.line2}`,
-    addressLocality: "Dhaka",
-    postalCode: "1230",
-    addressCountry: "BD",
-  },
-};
+export const revalidate = 60;
 
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: site.name,
-  image: `${site.url}/logos/abd-logo.png`,
-  url: site.url,
-  telephone: site.phones,
-  email: site.emails,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: `${site.address.line1}, ${site.address.line2}`,
-    addressLocality: "Dhaka",
-    postalCode: "1230",
-    addressCountry: "BD",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: site.address.geo.lat,
-    longitude: site.address.geo.lng,
-  },
-};
+export default async function HomePage() {
+  const [{ site, mission }, services, products, featured, factories] =
+    await Promise.all([
+      getSiteSettings(),
+      getServices(),
+      getCategories(),
+      featuredShots(),
+      getFactories(),
+    ]);
 
-export default function HomePage() {
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site.name,
+    url: site.url,
+    logo: `${site.url}/logos/abd-logo.png`,
+    description: site.oneLiner,
+    email: site.emails,
+    telephone: site.phones,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: `${site.address.line1}, ${site.address.line2}`,
+      addressLocality: "Dhaka",
+      postalCode: "1230",
+      addressCountry: "BD",
+    },
+  };
+
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: site.name,
+    image: `${site.url}/logos/abd-logo.png`,
+    url: site.url,
+    telephone: site.phones,
+    email: site.emails,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: `${site.address.line1}, ${site.address.line2}`,
+      addressLocality: "Dhaka",
+      postalCode: "1230",
+      addressCountry: "BD",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: site.address.geo.lat,
+      longitude: site.address.geo.lng,
+    },
+  };
+
   return (
     <>
       <JsonLd data={[orgJsonLd, localBusinessJsonLd]} />
@@ -198,7 +210,7 @@ export default function HomePage() {
             cta="See all categories"
           />
           <Reveal as="div" className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {featuredShots().map((shot) => (
+            {featured.map((shot) => (
               <figure
                 key={shot.src}
                 className="group overflow-hidden rounded-xl glass"
@@ -219,19 +231,6 @@ export default function HomePage() {
             ))}
           </Reveal>
         </div>
-      </section>
-
-      {/* Buyers logo wall teaser */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <SectionHeading
-          eyebrow="Trusted by"
-          title="Brands in production with ABD"
-          href="/buyers/"
-          cta="All buyers"
-        />
-        <Reveal className="mt-8">
-          <LogoWall buyers={buyers} />
-        </Reveal>
       </section>
 
       {/* Factories + Compliance teasers */}

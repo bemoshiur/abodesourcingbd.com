@@ -26,11 +26,6 @@ export const site = {
     "Payment terms: TT or LC. Bank: USD A/C, Commercial Bank of Ceylon PLC, Bangladesh.",
 } as const;
 
-export const partners = [
-  { name: "Afzalur Rahman", role: "Managing Partner", email: "afzalur@abodesourcingbd.com" },
-  { name: "Md Shakhawat Hossain Taluckder", role: "Executive Partner", email: "shakhawat@abodesourcingbd.com" },
-] as const;
-
 export const mission =
   "Reliable, ethical, cost-effective apparel sourcing while maintaining the highest standards of quality and customer satisfaction.";
 

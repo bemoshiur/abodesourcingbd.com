@@ -1,14 +1,16 @@
 import { Icon } from "@/components/icon";
-import { whyChooseUs } from "@/content/site";
+import { getSiteContent } from "@/lib/payload";
 
 /** Reusable "Why Choose Us" band — 9 differentiators, reused on Home/About/Contact. */
-export function WhyChooseUs({
+export async function WhyChooseUs({
   className,
   heading = "Why brands choose ABD Sourcing",
 }: {
   className?: string;
   heading?: string;
 }) {
+  const { whyChooseUs } = await getSiteContent();
+
   return (
     <section className={className} aria-labelledby="why-choose-us">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

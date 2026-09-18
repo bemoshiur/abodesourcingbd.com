@@ -48,3 +48,7 @@ next-env.d.ts
 # Logo source & working files (generated web assets live in public/ + src/app/)
 /ABD logo.ai
 /abd-logo-silver.png
+
+# working files — research output and raw source photos (uploaded to Blob by the seed script)
+/.work/
+/Website_images/

@@ -3,11 +3,14 @@ import { Logo } from "@/components/logo";
 import { Icon } from "@/components/icon";
 import { CtaBand } from "@/components/cta-band";
 import { navItems } from "@/lib/routes";
-import { site } from "@/content/site";
-import { services } from "@/content/services";
-import { products } from "@/content/products";
+import { getSiteSettings, getServices, getCategories } from "@/lib/payload";
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const [{ site }, services, products] = await Promise.all([
+    getSiteSettings(),
+    getServices(),
+    getCategories(),
+  ]);
   const year = new Date().getFullYear();
 
   return (

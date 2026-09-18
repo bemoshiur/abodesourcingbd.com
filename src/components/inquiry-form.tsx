@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { exportMarkets } from "@/content/site";
-import { products } from "@/content/products";
 
 const fieldClass =
   "h-11 w-full rounded-lg border border-input bg-card/60 px-3.5 py-1 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-destructive/20";
@@ -32,7 +30,13 @@ type SubmitState =
 
 const initial: SubmitState = { status: "idle" };
 
-export function InquiryForm() {
+export function InquiryForm({
+  markets,
+  categories,
+}: {
+  markets: readonly { name: string; code: string }[];
+  categories: readonly { slug: string; title: string }[];
+}) {
   const [state, setState] = useState<SubmitState>(initial);
   const [values, setValues] = useState<Values>({
     name: "", company: "", email: "", country: "", category: "", quantity: "", message: "",
@@ -188,7 +192,7 @@ export function InquiryForm() {
           <Field label="Country" error={err("country")}>
             <select name="country" aria-label="Country" value={values.country} onChange={set("country")} className={fieldClass}>
               <option value="">Select country</option>
-              {exportMarkets.map((m) => <option key={m.code} value={m.name}>{m.name}</option>)}
+              {markets.map((m) => <option key={m.code} value={m.name}>{m.name}</option>)}
               <option value="Other">Other</option>
             </select>
           </Field>
@@ -198,7 +202,7 @@ export function InquiryForm() {
           <Field label="Product category" error={err("category")}>
             <select name="category" aria-label="Product category" value={values.category} onChange={set("category")} className={fieldClass}>
               <option value="">Select category</option>
-              {products.map((p) => <option key={p.slug} value={p.title}>{p.title}</option>)}
+              {categories.map((c) => <option key={c.slug} value={c.title}>{c.title}</option>)}
             </select>
           </Field>
           <Field label="Target quantity / MOQ" error={err("quantity")}>

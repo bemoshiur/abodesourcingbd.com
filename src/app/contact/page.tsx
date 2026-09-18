@@ -5,7 +5,7 @@ import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
 import { InquiryForm } from "@/components/inquiry-form";
 import { WhyChooseUs } from "@/components/why-choose-us";
-import { site, partners } from "@/content/site";
+import { getSiteSettings, getSiteContent, getCategories } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "Contact & Request a Quote",
@@ -20,29 +20,37 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact/" },
 };
 
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: site.name,
-  image: `${site.url}/logos/abd-logo.png`,
-  url: `${site.url}/contact/`,
-  telephone: site.phones,
-  email: site.emails,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: `${site.address.line1}, ${site.address.line2}`,
-    addressLocality: "Dhaka",
-    postalCode: "1230",
-    addressCountry: "BD",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: site.address.geo.lat,
-    longitude: site.address.geo.lng,
-  },
-};
+export const revalidate = 60;
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const [{ site }, { exportMarkets }, categories] = await Promise.all([
+    getSiteSettings(),
+    getSiteContent(),
+    getCategories(),
+  ]);
+
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: site.name,
+    image: `${site.url}/logos/abd-logo.png`,
+    url: `${site.url}/contact/`,
+    telephone: site.phones,
+    email: site.emails,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: `${site.address.line1}, ${site.address.line2}`,
+      addressLocality: "Dhaka",
+      postalCode: "1230",
+      addressCountry: "BD",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: site.address.geo.lat,
+      longitude: site.address.geo.lng,
+    },
+  };
+
   return (
     <>
       <JsonLd data={localBusinessJsonLd} />
@@ -92,18 +100,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-6">
-            <h2 className="font-display text-lg font-semibold">Partners</h2>
-            <ul className="mt-3 space-y-3">
-              {partners.map((p) => (
-                <li key={p.email} className="text-sm">
-                  <span className="font-medium text-foreground">{p.name}</span>
-                  <span className="block text-muted-foreground">{p.role}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <p className="rounded-lg border border-border bg-muted/40 p-4 text-xs text-muted-foreground">
             {site.payment}
           </p>
@@ -121,7 +117,7 @@ export default function ContactPage() {
         </div>
 
         {/* Inquiry form — the conversion core */}
-        <InquiryForm />
+        <InquiryForm markets={exportMarkets} categories={categories} />
       </div>
 
       <WhyChooseUs className="border-t border-border bg-muted/40 py-16 lg:py-20" />

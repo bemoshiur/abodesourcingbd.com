@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 
 export const dynamic = "force-static";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const { site } = await getSiteSettings();
   return {
     rules: { userAgent: "*", allow: "/" },
     sitemap: `${site.url}/sitemap.xml`,

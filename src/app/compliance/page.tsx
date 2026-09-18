@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/page-header";
 import { Icon } from "@/components/icon";
-import { certifications, qcSteps, productionFlow } from "@/content/site";
+import { getSiteContent } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "Compliance, Certifications & Quality",
@@ -18,7 +18,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/compliance/" },
 };
 
-export default function CompliancePage() {
+export const revalidate = 60;
+
+export default async function CompliancePage() {
+  const { certifications, qcSteps, productionFlow } = await getSiteContent();
+
   return (
     <>
       <Breadcrumbs items={[{ label: "Compliance", href: "/compliance/" }]} />

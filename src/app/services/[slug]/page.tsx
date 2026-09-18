@@ -8,12 +8,18 @@ import { JsonLd } from "@/components/jsonld";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
-import { services, getService } from "@/content/services";
-import { getCategory } from "@/content/products";
-import { factoriesForCategory } from "@/lib/relations";
-import { site } from "@/content/site";
+import {
+  getServices,
+  getService,
+  getCategory,
+  factoriesForCategory,
+  getSiteSettings,
+} from "@/lib/payload";
 
-export function generateStaticParams() {
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const services = await getServices();
   return services.map((s) => ({ slug: s.slug }));
 }
 
@@ -25,8 +31,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getService(slug);
   if (!service) return {};
+  const { site } = await getSiteSettings();
   return {
     title: `${service.title} — Garment Sourcing`,
     description: service.summary,
@@ -52,18 +59,20 @@ export default async function ServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getService(slug);
   if (!service) notFound();
 
-  const related = service.relatedCategories
-    .map((c) => getCategory(c))
-    .filter((c): c is NonNullable<typeof c> => Boolean(c));
+  const { site } = await getSiteSettings();
+
+  const related = (
+    await Promise.all(service.relatedCategories.map((c) => getCategory(c)))
+  ).filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   // Factories that run any of this service's related categories (deduped).
   const relatedFactories = Array.from(
     new Map(
-      service.relatedCategories
-        .flatMap((c) => factoriesForCategory(c))
+      (await Promise.all(service.relatedCategories.map((c) => factoriesForCategory(c))))
+        .flat()
         .map((f) => [f.slug, f]),
     ).values(),
   );

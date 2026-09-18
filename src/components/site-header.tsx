@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Logo } from "@/components/logo";
 import { Icon } from "@/components/icon";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -16,7 +15,7 @@ import {
 import { navItems, CONTACT_PATH } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
-export function SiteHeader() {
+export function SiteHeader({ logo }: { logo: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   // Closing on link click (below) keeps route changes and sheet state in sync
@@ -29,7 +28,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Logo />
+        {logo}
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => (
@@ -72,7 +71,7 @@ export function SiteHeader() {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="right" className="w-full max-w-xs gap-0 p-0">
           <SheetHeader className="border-b border-border p-4">
-            <Logo />
+            {logo}
             <SheetTitle className="sr-only">Menu</SheetTitle>
             <SheetDescription className="sr-only">
               Site navigation

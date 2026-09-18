@@ -9,12 +9,19 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTACT_PATH } from "@/lib/routes";
-import { factories, getFactory } from "@/content/factories";
-import { getCategory } from "@/content/products";
-import { servicesForFactory } from "@/lib/relations";
-import { site, certifications } from "@/content/site";
+import {
+  getFactories,
+  getFactory,
+  getCategory,
+  servicesForFactory,
+  getSiteSettings,
+  getSiteContent,
+} from "@/lib/payload";
 
-export function generateStaticParams() {
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const factories = await getFactories();
   return factories.map((f) => ({ slug: f.slug }));
 }
 
@@ -26,8 +33,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const f = getFactory(slug);
+  const f = await getFactory(slug);
   if (!f) return {};
+  const { site } = await getSiteSettings();
   return {
     title: `${f.name} — Partner Factory`,
     description: `${f.name}: ${f.specialty}. A compliant ABD Sourcing partner factory in Bangladesh.`,
@@ -53,14 +61,17 @@ export default async function FactoryDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const f = getFactory(slug);
+  const f = await getFactory(slug);
   if (!f) notFound();
 
-  const cats = f.categories
-    .map((c) => getCategory(c))
-    .filter((c): c is NonNullable<typeof c> => Boolean(c));
-  const relatedServices = servicesForFactory(f);
-  const host = new URL(f.website).host.replace(/^www\./, "");
+  const [{ certifications }, relatedServices] = await Promise.all([
+    getSiteContent(),
+    servicesForFactory(f),
+  ]);
+  const cats = (
+    await Promise.all(f.categories.map((c) => getCategory(c)))
+  ).filter((c): c is NonNullable<typeof c> => Boolean(c));
+  const host = f.website ? new URL(f.website).host.replace(/^www\./, "") : "";
 
   return (
     <>

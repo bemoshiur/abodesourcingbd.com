@@ -1,18 +1,28 @@
-import { factories } from "@/content/factories";
-import { exportMarkets, certifications } from "@/content/site";
-import { products } from "@/content/products";
-import { buyers } from "@/content/buyers";
+import {
+  getFactories,
+  getSiteContent,
+  getCategories,
+  getBuyers,
+} from "@/lib/payload";
 
-// Every figure is derived with .length so it can never drift from the content arrays.
-const stats = [
-  { value: factories.length, label: "Partner factories" },
-  { value: exportMarkets.length, label: "Export markets" },
-  { value: products.length, label: "Product categories" },
-  { value: buyers.length, label: "Running brands" },
-  { value: certifications.length, label: "Certifications" },
-];
+export async function StatsStrip({ className }: { className?: string }) {
+  const [factories, { exportMarkets, certifications }, products, buyers] =
+    await Promise.all([
+      getFactories(),
+      getSiteContent(),
+      getCategories(),
+      getBuyers(),
+    ]);
 
-export function StatsStrip({ className }: { className?: string }) {
+  // Every figure is derived with .length so it can never drift from the CMS data.
+  const stats = [
+    { value: factories.length, label: "Partner factories" },
+    { value: exportMarkets.length, label: "Export markets" },
+    { value: products.length, label: "Product categories" },
+    { value: buyers.length, label: "Running brands" },
+    { value: certifications.length, label: "Certifications" },
+  ];
+
   return (
     <section className={className} aria-label="ABD Sourcing at a glance">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

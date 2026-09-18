@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 
 /**
  * Brand lockup — the silver "A" monogram (transparent vector art extracted
@@ -11,7 +11,7 @@ import { site } from "@/content/site";
  * The mark sits on its own dark tile so the metallic art always reads.
  * `tone="invert"` switches the wordmark to light for dark surfaces.
  */
-export function Logo({
+export async function Logo({
   className,
   markClassName = "size-9",
   tone = "default",
@@ -22,6 +22,7 @@ export function Logo({
   /** "default" = dark wordmark (light surfaces); "invert" = light wordmark (dark surfaces). */
   tone?: "default" | "invert";
 }) {
+  const { site } = await getSiteSettings();
   const invert = tone === "invert";
   return (
     <Link

@@ -5,12 +5,12 @@ import { PageHeader } from "@/components/page-header";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { ExportMarkets } from "@/components/export-markets";
 import { Icon } from "@/components/icon";
-import { site, partners, mission, vision } from "@/content/site";
+import { getSiteSettings } from "@/lib/payload";
 
 export const metadata: Metadata = {
   title: "About ABD Sourcing Bangladesh",
   description:
-    "ABD Sourcing Bangladesh is a Dhaka-based garments buying & sourcing office serving global fashion brands — our mission, vision, partners, and export markets.",
+    "ABD Sourcing Bangladesh is a Dhaka-based garments buying & sourcing office serving global fashion brands — our mission, vision, and export markets.",
   keywords: [
     "about ABD Sourcing Bangladesh",
     "garments buying office Dhaka",
@@ -20,7 +20,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
 };
 
-export default function AboutPage() {
+export const revalidate = 60;
+
+export default async function AboutPage() {
+  const { site, mission, vision } = await getSiteSettings();
+
   return (
     <>
       <Breadcrumbs items={[{ label: "About", href: "/about/" }]} />
@@ -71,31 +75,6 @@ export default function AboutPage() {
             </span>
             <h2 className="mt-4 font-display text-xl font-semibold">Vision</h2>
             <p className="mt-2 text-sm text-muted-foreground">{vision}</p>
-          </div>
-        </section>
-
-        {/* Partners */}
-        <section className="mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-2xl font-semibold">Leadership</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {partners.map((p) => (
-              <div key={p.email} className="flex items-start gap-4 rounded-xl border border-border bg-card p-6">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-primary font-display text-lg font-semibold text-primary-foreground">
-                  {p.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
-                </span>
-                <div>
-                  <h3 className="font-semibold">{p.name}</h3>
-                  <p className="text-sm text-primary">{p.role}</p>
-                  <a
-                    href={`mailto:${p.email}`}
-                    className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    <Icon name="Mail" className="size-3.5" />
-                    {p.email}
-                  </a>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
 
