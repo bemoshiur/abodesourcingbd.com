@@ -6,7 +6,6 @@ export const navItems = [
   { label: "Services", href: "/services/" },
   { label: "Products", href: "/products/" },
   { label: "Factories", href: "/factories/" },
-  { label: "Buyers", href: "/buyers/" },
   { label: "Compliance", href: "/compliance/" },
   { label: "Contact", href: "/contact/" },
 ] as const;
@@ -32,7 +31,6 @@ export async function allRoutes(): Promise<string[]> {
     "/services/",
     "/products/",
     "/factories/",
-    "/buyers/",
     "/compliance/",
     "/contact/",
   ];

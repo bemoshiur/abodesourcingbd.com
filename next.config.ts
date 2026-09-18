@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
     ],
   },
+  // The buyers/brands page was retired — send its indexed URL to products.
+  async redirects() {
+    return [{ source: "/buyers", destination: "/products/", permanent: true }];
+  },
 };
 
 export default withPayload(nextConfig);
