@@ -1,7 +1,7 @@
 {
   "name": "abodesourcingbd-com",
   "version": "0.1.0",
-  "description": "ABD Sourcing Bangladesh \u2014 garments buying & sourcing office marketing site.",
+  "description": "ABD Sourcing Bangladesh — garments buying & sourcing office marketing site.",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,16 +11,19 @@
     "payload": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload",
     "generate:types": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "seed": "tsx scripts/seed.ts",
+    "seed": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/seed.mts",
     "migrate": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:create && node scripts/fix-migration-imports.mjs",
-    "migrate:status": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:status"
+    "migrate:status": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:status",
+    "admin:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/create-admin.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@payloadcms/db-postgres": "^3.88.0",
     "@payloadcms/next": "^3.88.0",
+    "@payloadcms/plugin-cloud-storage": "3.88.0",
     "@payloadcms/storage-vercel-blob": "^3.88.0",
+    "@vercel/blob": "2.3.1",
     "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

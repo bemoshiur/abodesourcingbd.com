@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { privateBlobStorage } from "./storage/private-blob.ts";
 import sharp from "sharp";
 
 import { Users } from "./collections/Users.ts";
@@ -49,13 +50,18 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
-    vercelBlobStorage({
-      // Disabled locally when no token is present — uploads then stay on disk.
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-      collections: { media: true },
-      // Serve images straight from the Blob CDN (no serverless proxy hop).
-      disablePayloadAccessControl: true,
-      token: process.env.BLOB_READ_WRITE_TOKEN || "",
-    }),
+    // A private Blob store is served through /api/media/file/* (custom adapter);
+    // a public store (BLOB_ACCESS=public) uses the official adapter with direct CDN URLs.
+    // With no token (local dev) uploads stay on disk.
+    process.env.BLOB_ACCESS === "public"
+      ? vercelBlobStorage({
+          enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+          collections: { media: { disablePayloadAccessControl: true } },
+          token: process.env.BLOB_READ_WRITE_TOKEN || "",
+        })
+      : privateBlobStorage({
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+          collections: ["media"],
+        }),
   ],
 });

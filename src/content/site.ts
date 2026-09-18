@@ -20,8 +20,7 @@ export const site = {
     // Approx. geo for Uttara Sector-04, Dhaka — used for LocalBusiness JSON-LD.
     geo: { lat: 23.8759, lng: 90.3795 },
   },
-  phones: ["+8801730303927", "+8801730303922"],
-  emails: ["afzalur@abodesourcingbd.com", "shakhawat@abodesourcingbd.com"],
+  emails: ["info@abodesourcingbd.com"],
   payment:
     "Payment terms: TT or LC. Bank: USD A/C, Commercial Bank of Ceylon PLC, Bangladesh.",
 } as const;
@@ -55,16 +54,22 @@ export const exportMarkets = [
   { name: "USA", code: "US" },
 ] as const;
 
-// 8 certifications held across all partner factories.
+// Certifications held across our partner factories.
 export const certifications = [
   { name: "BSCI", full: "Business Social Compliance Initiative" },
   { name: "SEDEX", full: "Supplier Ethical Data Exchange" },
   { name: "WRAP", full: "Worldwide Responsible Accredited Production" },
   { name: "ISO", full: "International Organization for Standardization" },
   { name: "OEKO-TEX", full: "Confidence in Textiles standard" },
-  { name: "GOTS", full: "Global Organic Textile Standard" },
-  { name: "GRS", full: "Global Recycled Standard" },
   { name: "Recycled OEKO-TEX", full: "Recycled-content OEKO-TEX certification" },
+  { name: "Organic OEKO-TEX", full: "Organic-content OEKO-TEX certification" },
+  { name: "OEKO-TEX STeP", full: "Sustainable Textile Production" },
+  { name: "GOTS", full: "Global Organic Textile Standard" },
+  { name: "OCS", full: "Organic Content Standard" },
+  { name: "GRS", full: "Global Recycled Standard" },
+  { name: "Higg Index", full: "Sustainable Apparel Coalition impact assessment suite" },
+  { name: "Friends of ZDHC", full: "Zero Discharge of Hazardous Chemicals programme" },
+  { name: "BCI Chain of Custody", full: "Better Cotton Initiative chain of custody" },
 ] as const;
 
 // 7-step QC process.

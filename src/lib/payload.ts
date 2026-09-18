@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import type { Media, ProductCategory } from "@/payload/payload-types";
+import type { Media, Product, ProductCategory } from "@/payload/payload-types";
 
 /**
  * Data-access layer — the single bridge between Payload CMS and the site's
@@ -12,6 +12,29 @@ import type { Media, ProductCategory } from "@/payload/payload-types";
 const getPayloadClient = cache(() => getPayload({ config }));
 
 // --- View models (shapes the components consume) ---
+
+export interface ImageView {
+  /** Full-size (≤1400px WebP) — product detail, hero. */
+  url: string;
+  /** 720×900 crop — cards. */
+  cardUrl: string;
+  /** 240×300 crop — thumbnails. */
+  thumbUrl: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+export interface FaqView {
+  question: string;
+  answer: string;
+}
+
+export interface SeoView {
+  metaTitle?: string;
+  metaDescription?: string;
+  ogImage?: ImageView;
+}
 
 export interface SiteInfo {
   name: string;
@@ -26,9 +49,13 @@ export interface SiteInfo {
     country: string;
     geo: { lat: number; lng: number };
   };
-  phones: string[];
   emails: string[];
   payment: string;
+  officeImage?: ImageView;
+  ogImage?: ImageView;
+  foundingYear?: number;
+  sameAs: string[];
+  keywords: string[];
 }
 
 export interface ServiceView {
@@ -40,6 +67,8 @@ export interface ServiceView {
   covers: string[];
   how: string[];
   relatedCategories: string[];
+  faqs: FaqView[];
+  seo: SeoView;
 }
 
 export interface CategoryView {
@@ -49,15 +78,26 @@ export interface CategoryView {
   summary: string;
   intro: string;
   subItems: string[];
+  image?: ImageView;
+  faqs: FaqView[];
+  seo: SeoView;
 }
 
-export interface ShotView {
-  src: string;
-  alt: string;
-  brandName: string;
-  brandSlug?: string;
+export interface ProductView {
+  slug: string;
+  name: string;
+  styleNumber?: string;
   categorySlug: string;
+  categoryTitle: string;
+  summary?: string;
+  description?: string;
+  composition?: string;
+  gsm?: string;
+  fabricConstruction?: string;
+  specs: { label: string; value: string }[];
+  images: (ImageView & { view: string })[];
   featured: boolean;
+  seo: SeoView;
 }
 
 export interface FactoryView {
@@ -67,24 +107,48 @@ export interface FactoryView {
   productTypes: string[];
   categories: string[];
   website?: string;
-  logo?: string;
+  logo?: ImageView;
   intro: string;
+  faqs: FaqView[];
+  seo: SeoView;
 }
 
-export interface BuyerView {
+export interface CertificationView {
   name: string;
-  slug: string;
-  country?: string;
-  note?: string;
-  categories: string[];
-  logo?: string;
+  full: string;
+  logo?: ImageView;
 }
+
+export interface PageMeta {
+  metaTitle?: string;
+  metaDescription?: string;
+  heading?: string;
+  intro?: string;
+  faqs: FaqView[];
+}
+
+export type PageKey =
+  | "home"
+  | "about"
+  | "services"
+  | "products"
+  | "factories"
+  | "compliance"
+  | "contact";
 
 // --- Mapping helpers ---
 
-function mediaUrl(media: number | Media | null | undefined): string | undefined {
-  if (!media || typeof media === "number") return undefined;
-  return media.url ?? undefined;
+function toImage(media: number | Media | null | undefined): ImageView | undefined {
+  if (!media || typeof media === "number" || !media.url) return undefined;
+  const url = media.url;
+  return {
+    url: media.sizes?.detail?.url || url,
+    cardUrl: media.sizes?.card?.url || media.sizes?.detail?.url || url,
+    thumbUrl: media.sizes?.thumb?.url || media.sizes?.card?.url || url,
+    alt: media.alt,
+    width: media.sizes?.detail?.width || media.width || 1400,
+    height: media.sizes?.detail?.height || media.height || 1400,
+  };
 }
 
 /** Relationship field → slug, when populated. */
@@ -97,11 +161,28 @@ function relSlugs(rels: (number | ProductCategory)[] | null | undefined): string
   return (rels ?? []).map(relSlug).filter((s): s is string => Boolean(s));
 }
 
+function toFaqs(faqs: { question: string; answer: string }[] | null | undefined): FaqView[] {
+  return (faqs ?? []).map((f) => ({ question: f.question, answer: f.answer }));
+}
+
+function toSeo(
+  seo:
+    | { metaTitle?: string | null; metaDescription?: string | null; ogImage?: number | Media | null }
+    | null
+    | undefined,
+): SeoView {
+  return {
+    metaTitle: seo?.metaTitle || undefined,
+    metaDescription: seo?.metaDescription || undefined,
+    ogImage: toImage(seo?.ogImage),
+  };
+}
+
 // --- Globals ---
 
 export const getSiteSettings = cache(async () => {
   const payload = await getPayloadClient();
-  const g = await payload.findGlobal({ slug: "site-settings" });
+  const g = await payload.findGlobal({ slug: "site-settings", depth: 1 });
   const site: SiteInfo = {
     name: g.name,
     tagline: g.tagline,
@@ -109,24 +190,71 @@ export const getSiteSettings = cache(async () => {
     domain: g.domain,
     url: g.url,
     address: g.address,
-    phones: g.phones.map((p) => p.number),
     emails: g.emails.map((e) => e.address),
     payment: g.payment,
+    officeImage: toImage(g.officeImage),
+    ogImage: toImage(g.ogImage),
+    foundingYear: g.foundingYear ?? undefined,
+    sameAs: (g.sameAs ?? []).map((s) => s.url),
+    keywords: (g.keywords ?? []).map((k) => k.keyword),
   };
   return { site, mission: g.mission, vision: g.vision };
 });
 
 export const getSiteContent = cache(async () => {
   const payload = await getPayloadClient();
-  const g = await payload.findGlobal({ slug: "site-content" });
+  const g = await payload.findGlobal({ slug: "site-content", depth: 1 });
   return {
     whyChooseUs: g.whyChooseUs.map((i) => ({ title: i.title, icon: i.icon })),
     exportMarkets: g.exportMarkets.map((m) => ({ name: m.name, code: m.code })),
-    certifications: g.certifications.map((c) => ({ name: c.name, full: c.full })),
+    certifications: g.certifications.map(
+      (c): CertificationView => ({ name: c.name, full: c.full, logo: toImage(c.logo) }),
+    ),
     qcSteps: g.qcSteps.map((s) => ({ step: s.step, detail: s.detail })),
     productionFlow: g.productionFlow.map((s) => s.stage),
   };
 });
+
+const emptyPage: PageMeta = { faqs: [] };
+
+export const getPageContent = cache(async () => {
+  const payload = await getPayloadClient();
+  const g = await payload.findGlobal({ slug: "page-content", depth: 0 });
+  const pick = (
+    p:
+      | {
+          metaTitle?: string | null;
+          metaDescription?: string | null;
+          heading?: string | null;
+          intro?: string | null;
+          faqs?: { question: string; answer: string }[] | null;
+        }
+      | null
+      | undefined,
+  ): PageMeta =>
+    p
+      ? {
+          metaTitle: p.metaTitle || undefined,
+          metaDescription: p.metaDescription || undefined,
+          heading: p.heading || undefined,
+          intro: p.intro || undefined,
+          faqs: toFaqs(p.faqs),
+        }
+      : emptyPage;
+  return {
+    home: pick(g.home),
+    about: pick(g.about),
+    services: pick(g.services),
+    products: pick(g.products),
+    factories: pick(g.factories),
+    compliance: pick(g.compliance),
+    contact: pick(g.contact),
+  } satisfies Record<PageKey, PageMeta>;
+});
+
+export async function getPageMeta(key: PageKey): Promise<PageMeta> {
+  return (await getPageContent())[key];
+}
 
 // --- Services ---
 
@@ -139,6 +267,8 @@ function toServiceView(s: {
   covers: { item: string }[];
   how: { item: string }[];
   relatedCategories?: (number | ProductCategory)[] | null;
+  faqs?: { question: string; answer: string }[] | null;
+  seo?: Parameters<typeof toSeo>[0];
 }): ServiceView {
   return {
     slug: s.slug,
@@ -149,6 +279,8 @@ function toServiceView(s: {
     covers: s.covers.map((c) => c.item),
     how: s.how.map((h) => h.item),
     relatedCategories: relSlugs(s.relatedCategories),
+    faqs: toFaqs(s.faqs),
+    seo: toSeo(s.seo),
   };
 }
 
@@ -177,6 +309,9 @@ function toCategoryView(c: {
   summary: string;
   intro: string;
   subItems: { item: string }[];
+  image?: number | Media | null;
+  faqs?: { question: string; answer: string }[] | null;
+  seo?: Parameters<typeof toSeo>[0];
 }): CategoryView {
   return {
     slug: c.slug,
@@ -185,6 +320,9 @@ function toCategoryView(c: {
     summary: c.summary,
     intro: c.intro,
     subItems: c.subItems.map((i) => i.item),
+    image: toImage(c.image),
+    faqs: toFaqs(c.faqs),
+    seo: toSeo(c.seo),
   };
 }
 
@@ -193,7 +331,7 @@ export const getCategories = cache(async (): Promise<CategoryView[]> => {
   const { docs } = await payload.find({
     collection: "product-categories",
     limit: 100,
-    sort: "createdAt",
+    sort: "order",
     depth: 1,
   });
   return docs.map(toCategoryView);
@@ -204,42 +342,70 @@ export async function getCategory(slug: string): Promise<CategoryView | undefine
   return all.find((c) => c.slug === slug);
 }
 
-// --- Product shots ---
+// --- Products ---
 
-export const getShots = cache(async (): Promise<ShotView[]> => {
-  const payload = await getPayloadClient();
-  const { docs } = await payload.find({
-    collection: "product-shots",
-    limit: 500,
-    sort: "createdAt",
-    depth: 1,
-  });
-  return docs.flatMap((s) => {
-    const src = mediaUrl(s.image);
-    const categorySlug = relSlug(s.category);
-    if (!src || !categorySlug) return [];
-    const media = typeof s.image === "number" ? undefined : s.image;
-    return [
-      {
-        src,
-        alt: s.alt || media?.alt || s.brandName,
-        brandName: s.brandName,
-        brandSlug: relSlug(s.brand),
-        categorySlug,
-        featured: Boolean(s.featured),
-      },
-    ];
-  });
-});
-
-export async function shotsForCategory(slug: string): Promise<ShotView[]> {
-  const all = await getShots();
-  return all.filter((s) => s.categorySlug === slug);
+function toProductView(p: Product): ProductView {
+  const cat = typeof p.category === "number" ? undefined : p.category;
+  return {
+    slug: p.slug ?? "",
+    name: p.name,
+    styleNumber: p.styleNumber ?? undefined,
+    categorySlug: cat?.slug ?? "",
+    categoryTitle: cat?.title ?? "",
+    summary: p.summary ?? undefined,
+    description: p.description ?? undefined,
+    composition: p.composition ?? undefined,
+    gsm: p.gsm ?? undefined,
+    fabricConstruction: p.fabricConstruction ?? undefined,
+    specs: (p.specs ?? []).map((s) => ({ label: s.label, value: s.value })),
+    images: (p.images ?? []).flatMap((i) => {
+      const img = toImage(i.image);
+      return img ? [{ ...img, view: i.view ?? "front" }] : [];
+    }),
+    featured: Boolean(p.featured),
+    seo: toSeo(p.seo),
+  };
 }
 
-export async function featuredShots(): Promise<ShotView[]> {
-  const all = await getShots();
-  return all.filter((s) => s.featured);
+export const getProducts = cache(async (): Promise<ProductView[]> => {
+  const payload = await getPayloadClient();
+  const { docs } = await payload.find({
+    collection: "products",
+    where: { published: { equals: true } },
+    limit: 1000,
+    sort: ["order", "styleNumber"],
+    depth: 2,
+  });
+  return docs.map(toProductView).filter((p) => p.slug && p.categorySlug && p.images.length > 0);
+});
+
+export async function productsForCategory(slug: string): Promise<ProductView[]> {
+  const all = await getProducts();
+  return all.filter((p) => p.categorySlug === slug);
+}
+
+export async function featuredProducts(): Promise<ProductView[]> {
+  const all = await getProducts();
+  return all.filter((p) => p.featured);
+}
+
+export async function getProduct(
+  categorySlug: string,
+  slug: string,
+): Promise<ProductView | undefined> {
+  const all = await getProducts();
+  return all.find((p) => p.categorySlug === categorySlug && p.slug === slug);
+}
+
+/** Previous / next product within the same category (wraps around). */
+export async function adjacentProducts(product: ProductView) {
+  const list = await productsForCategory(product.categorySlug);
+  const i = list.findIndex((p) => p.slug === product.slug);
+  if (i === -1 || list.length < 2) return { prev: undefined, next: undefined };
+  return {
+    prev: list[(i - 1 + list.length) % list.length],
+    next: list[(i + 1) % list.length],
+  };
 }
 
 // --- Factories ---
@@ -253,6 +419,8 @@ function toFactoryView(f: {
   website?: string | null;
   logo?: (number | null) | Media;
   intro: string;
+  faqs?: { question: string; answer: string }[] | null;
+  seo?: Parameters<typeof toSeo>[0];
 }): FactoryView {
   return {
     slug: f.slug,
@@ -261,8 +429,10 @@ function toFactoryView(f: {
     productTypes: f.productTypes.map((t) => t.item),
     categories: relSlugs(f.categories),
     website: f.website ?? undefined,
-    logo: mediaUrl(f.logo),
+    logo: toImage(f.logo),
     intro: f.intro,
+    faqs: toFaqs(f.faqs),
+    seo: toSeo(f.seo),
   };
 }
 
@@ -282,32 +452,7 @@ export async function getFactory(slug: string): Promise<FactoryView | undefined>
   return all.find((f) => f.slug === slug);
 }
 
-// --- Buyers ---
-
-export const getBuyers = cache(async (): Promise<BuyerView[]> => {
-  const payload = await getPayloadClient();
-  const { docs } = await payload.find({
-    collection: "buyers",
-    limit: 200,
-    sort: "createdAt",
-    depth: 1,
-  });
-  return docs.map((b) => ({
-    name: b.name,
-    slug: b.slug,
-    country: b.country ?? undefined,
-    note: b.note ?? undefined,
-    categories: relSlugs(b.categories),
-    logo: mediaUrl(b.logo),
-  }));
-});
-
-export async function buyersForCategory(slug: string): Promise<BuyerView[]> {
-  const all = await getBuyers();
-  return all.filter((b) => b.categories.includes(slug));
-}
-
-// --- Cross-links (previously src/lib/relations.ts) ---
+// --- Cross-links ---
 
 /** Services whose relatedCategories include this product category. */
 export async function servicesForCategory(slug: string): Promise<ServiceView[]> {

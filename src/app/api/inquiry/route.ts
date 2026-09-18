@@ -16,21 +16,42 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs"; // we use Node fetch + standard env access
 
-const RECIPIENTS = (
-  process.env.INQUIRY_TO_EMAILS?.split(",").map((e) => e.trim()).filter(Boolean) ??
-  ["shakhawat@abodesourcingbd.com"]
-);
+const DEFAULT_RECIPIENTS = ["info@abodesourcingbd.com"];
+const configured = (process.env.INQUIRY_TO_EMAILS ?? "")
+  .split(",")
+  .map((e) => e.trim())
+  .filter(Boolean);
+// An empty / missing setting must never mean "no recipients".
+const RECIPIENTS = configured.length ? configured : DEFAULT_RECIPIENTS;
+
+const SITE_URL = "https://abodesourcingbd.com";
+const MAX_STYLES = 30;
+
+type Style = { name: string; styleNumber: string; url: string };
 
 const FROM =
   process.env.INQUIRY_FROM_EMAIL || "ABD Sourcing <onboarding@resend.dev>";
 
-type Input = Record<"name" | "company" | "email" | "country" | "category" | "quantity" | "message" | "website", unknown>;
+type Input = Record<"name" | "company" | "email" | "country" | "category" | "quantity" | "message" | "website" | "styles", unknown>;
 type Errors = Partial<Record<"name" | "company" | "email" | "message", string>>;
 
 const clean = (s: unknown, max: number) =>
   (typeof s === "string" ? s : "").trim().slice(0, max);
 
-function buildText(d: Record<string, string>): string {
+/** Selected products from the visitor's "Add to inquiry" list — sanitised, links forced onto our own domain. */
+function cleanStyles(input: unknown): Style[] {
+  if (!Array.isArray(input)) return [];
+  return input.slice(0, MAX_STYLES).flatMap((raw) => {
+    if (!raw || typeof raw !== "object") return [];
+    const r = raw as Record<string, unknown>;
+    const name = clean(r.name, 140);
+    const path = clean(r.path, 200);
+    if (!name || !/^\/products\/[a-z0-9/-]+\/?$/.test(path)) return [];
+    return [{ name, styleNumber: clean(r.styleNumber, 60), url: `${SITE_URL}${path}` }];
+  });
+}
+
+function buildText(d: Record<string, string>, styles: Style[] = []): string {
   const lines = [
     "New inquiry from ABD Sourcing Bangladesh website",
     "",
@@ -41,11 +62,17 @@ function buildText(d: Record<string, string>): string {
   if (d.country) lines.push(`Country: ${d.country}`);
   if (d.category) lines.push(`Product category: ${d.category}`);
   if (d.quantity) lines.push(`Target quantity / MOQ: ${d.quantity}`);
+  if (styles.length) {
+    lines.push("", `Selected styles (${styles.length}):`);
+    for (const st of styles) {
+      lines.push(`- ${st.name}${st.styleNumber ? ` (style ${st.styleNumber})` : ""} — ${st.url}`);
+    }
+  }
   lines.push("", "Message:", d.message);
   return lines.join("\n");
 }
 
-function buildHtml(d: Record<string, string>): string {
+function buildHtml(d: Record<string, string>, styles: Style[] = []): string {
   const esc = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const rows = (
@@ -64,18 +91,27 @@ function buildHtml(d: Record<string, string>): string {
         `<tr><td style="padding:4px 12px 4px 0;color:#566057;font-size:13px;white-space:nowrap;vertical-align:top">${k}</td><td style="padding:4px 0;color:#16201B;font-size:14px">${esc(v)}</td></tr>`,
     )
     .join("");
+  const styleList = styles.length
+    ? `<p style="margin:16px 0 4px;color:#566057;font-size:13px">Selected styles (${styles.length})</p>
+  <ul style="margin:0;padding-left:18px;color:#16201B;font-size:14px;line-height:1.6">${styles
+    .map(
+      (st) =>
+        `<li><a href="${esc(st.url)}" style="color:#1C5340">${esc(st.name)}</a>${st.styleNumber ? ` <span style="color:#566057">— style ${esc(st.styleNumber)}</span>` : ""}</li>`,
+    )
+    .join("")}</ul>`
+    : "";
   return `<div style="font-family:Helvetica,Arial,sans-serif;max-width:560px">
   <h2 style="color:#1C5340;font-size:18px;margin:0 0 12px">New website inquiry</h2>
-  <table style="border-collapse:collapse;width:100%">${rows}</table>
+  <table style="border-collapse:collapse;width:100%">${rows}</table>${styleList}
   <p style="margin:16px 0 4px;color:#566057;font-size:13px">Message</p>
   <p style="margin:0;color:#16201B;font-size:14px;line-height:1.5;white-space:pre-wrap">${esc(d.message)}</p>
 </div>`;
 }
 
-function buildMailto(d: Record<string, string>): string {
+function buildMailto(d: Record<string, string>, styles: Style[] = []): string {
   const params = new URLSearchParams({
     subject: `New inquiry — ${d.company} (${d.name})`,
-    body: buildText(d),
+    body: buildText(d, styles),
   });
   return `mailto:${RECIPIENTS.join(",")}?${params.toString()}`;
 }
@@ -103,6 +139,8 @@ export async function POST(req: Request): Promise<Response> {
     message: clean(body.message, 4000),
   };
 
+  const styles = cleanStyles(body.styles);
+
   const fieldErrors: Errors = {};
   if (!d.name) fieldErrors.name = "Please enter your name";
   if (!d.company) fieldErrors.company = "Please enter your company";
@@ -118,7 +156,7 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
-  const mailto = buildMailto(d);
+  const mailto = buildMailto(d, styles);
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
@@ -142,9 +180,9 @@ export async function POST(req: Request): Promise<Response> {
         from: FROM,
         to: RECIPIENTS,
         reply_to: d.email,
-        subject: `New inquiry — ${d.company} (${d.name})`,
-        html: buildHtml(d),
-        text: buildText(d),
+        subject: `New inquiry — ${d.company} (${d.name})${styles.length ? ` · ${styles.length} style${styles.length > 1 ? "s" : ""}` : ""}`,
+        html: buildHtml(d, styles),
+        text: buildText(d, styles),
       }),
       // Resend usually replies in well under 10s.
       signal: AbortSignal.timeout(20_000),
