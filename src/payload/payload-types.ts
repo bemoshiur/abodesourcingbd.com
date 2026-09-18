@@ -71,9 +71,8 @@ export interface Config {
     media: Media;
     services: Service;
     'product-categories': ProductCategory;
-    'product-shots': ProductShot;
+    products: Product;
     factories: Factory;
-    buyers: Buyer;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -85,9 +84,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
-    'product-shots': ProductShotsSelect<false> | ProductShotsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     factories: FactoriesSelect<false> | FactoriesSelect<true>;
-    buyers: BuyersSelect<false> | BuyersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -100,10 +98,12 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'site-content': SiteContent;
+    'page-content': PageContent;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'site-content': SiteContentSelect<false> | SiteContentSelect<true>;
+    'page-content': PageContentSelect<false> | PageContentSelect<true>;
   };
   locale: null;
   widgets: {
@@ -166,7 +166,7 @@ export interface User {
 export interface Media {
   id: number;
   /**
-   * Descriptive alt text (SEO + accessibility).
+   * Describe what the image shows (style, fabric, view). Used for SEO and screen readers. Never include client or buyer brand names.
    */
   alt: string;
   updatedAt: string;
@@ -180,6 +180,32 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumb?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    detail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -207,6 +233,30 @@ export interface Service {
     id?: string | null;
   }[];
   relatedCategories?: (number | ProductCategory)[] | null;
+  /**
+   * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Search-result overrides. Leave blank to use the automatic title and description.
+   */
+  seo?: {
+    /**
+     * ≤ 60 characters is ideal. Put the main keyword first.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters is ideal. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -231,45 +281,116 @@ export interface ProductCategory {
     item: string;
     id?: string | null;
   }[];
+  image?: (number | null) | Media;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  /**
+   * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Search-result overrides. Leave blank to use the automatic title and description.
+   */
+  seo?: {
+    /**
+     * ≤ 60 characters is ideal. Put the main keyword first.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters is ideal. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Running styles shown on the Products pages. Never enter client or buyer brand names.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-shots".
+ * via the `definition` "products".
  */
-export interface ProductShot {
+export interface Product {
   id: number;
-  image: number | Media;
-  brandName: string;
-  brand?: (number | null) | Buyer;
+  /**
+   * e.g. Men's Short-Sleeve Polo Shirt
+   */
+  name: string;
+  /**
+   * Your own style / reference number, exactly as on the spec sheet.
+   */
+  styleNumber?: string | null;
   category: number | ProductCategory;
   /**
-   * Descriptive alt: brand + style + fabric (SEO + a11y).
+   * One or two sentences shown on the product card.
    */
-  alt: string;
+  summary?: string | null;
+  description?: string | null;
   /**
-   * Show on the Home running-product strip.
+   * e.g. 100% Pima Cotton
+   */
+  composition?: string | null;
+  /**
+   * e.g. 170 GSM
+   */
+  gsm?: string | null;
+  /**
+   * e.g. Interlock
+   */
+  fabricConstruction?: string | null;
+  specs?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The first photo is the main image and the card cover.
+   */
+  images?:
+    | {
+        image: number | Media;
+        view?: ('front' | 'back' | 'side' | 'detail' | 'other') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Generated from name + style number. Changing it changes the page URL.
+   */
+  slug?: string | null;
+  /**
+   * Show on the Home page strip.
    */
   featured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buyers".
- */
-export interface Buyer {
-  id: number;
-  name: string;
-  slug: string;
-  country?: string | null;
+  published?: boolean | null;
   /**
-   * Extra context (sub-brands, retail group) where applicable.
+   * Lower numbers appear first.
    */
-  note?: string | null;
-  categories?: (number | ProductCategory)[] | null;
-  logo?: (number | null) | Media;
+  order?: number | null;
+  /**
+   * Search-result overrides. Leave blank to use the automatic title and description.
+   */
+  seo?: {
+    /**
+     * ≤ 60 characters is ideal. Put the main keyword first.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters is ideal. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -293,6 +414,30 @@ export interface Factory {
   website?: string | null;
   logo?: (number | null) | Media;
   intro: string;
+  /**
+   * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Search-result overrides. Leave blank to use the automatic title and description.
+   */
+  seo?: {
+    /**
+     * ≤ 60 characters is ideal. Put the main keyword first.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters is ideal. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -337,16 +482,12 @@ export interface PayloadLockedDocument {
         value: number | ProductCategory;
       } | null)
     | ({
-        relationTo: 'product-shots';
-        value: number | ProductShot;
+        relationTo: 'products';
+        value: number | Product;
       } | null)
     | ({
         relationTo: 'factories';
         value: number | Factory;
-      } | null)
-    | ({
-        relationTo: 'buyers';
-        value: number | Buyer;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -430,6 +571,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumb?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        detail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -454,6 +629,20 @@ export interface ServicesSelect<T extends boolean = true> {
         id?: T;
       };
   relatedCategories?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -473,20 +662,63 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
         item?: T;
         id?: T;
       };
+  image?: T;
+  order?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-shots_select".
+ * via the `definition` "products_select".
  */
-export interface ProductShotsSelect<T extends boolean = true> {
-  image?: T;
-  brandName?: T;
-  brand?: T;
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  styleNumber?: T;
   category?: T;
-  alt?: T;
+  summary?: T;
+  description?: T;
+  composition?: T;
+  gsm?: T;
+  fabricConstruction?: T;
+  specs?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        view?: T;
+        id?: T;
+      };
+  slug?: T;
   featured?: T;
+  published?: T;
+  order?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -508,20 +740,20 @@ export interface FactoriesSelect<T extends boolean = true> {
   website?: T;
   logo?: T;
   intro?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buyers_select".
- */
-export interface BuyersSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  country?: T;
-  note?: T;
-  categories?: T;
-  logo?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -566,7 +798,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Company identity, contact details, mission and vision.
+ * Company identity, public contact details, mission, vision and site-wide imagery.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -578,6 +810,16 @@ export interface SiteSetting {
   oneLiner: string;
   domain: string;
   url: string;
+  mission: string;
+  vision: string;
+  payment: string;
+  /**
+   * Shown in the footer and on the Contact page. Public inbox only — no personal addresses.
+   */
+  emails: {
+    address: string;
+    id?: string | null;
+  }[];
   address: {
     line1: string;
     line2: string;
@@ -588,17 +830,30 @@ export interface SiteSetting {
       lng: number;
     };
   };
-  phones: {
-    number: string;
-    id?: string | null;
-  }[];
-  emails: {
-    address: string;
-    id?: string | null;
-  }[];
-  payment: string;
-  mission: string;
-  vision: string;
+  /**
+   * Shown in the “Who we are” sections on Home and About.
+   */
+  officeImage?: (number | null) | Media;
+  ogImage?: (number | null) | Media;
+  /**
+   * Optional. Only fill in a year you can stand behind — it appears in structured data.
+   */
+  foundingYear?: number | null;
+  /**
+   * LinkedIn, Facebook, etc. Used as entity signals for search and AI engines.
+   */
+  sameAs?:
+    | {
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  keywords?:
+    | {
+        keyword: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -629,6 +884,10 @@ export interface SiteContent {
   certifications: {
     name: string;
     full: string;
+    /**
+     * Optional. When present the logo is shown in the scrolling band instead of the text badge.
+     */
+    logo?: (number | null) | Media;
     id?: string | null;
   }[];
   qcSteps: {
@@ -644,6 +903,171 @@ export interface SiteContent {
   createdAt?: string | null;
 }
 /**
+ * Search titles, descriptions, headings and FAQs for every main page. Blank fields use the built-in defaults.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-content".
+ */
+export interface PageContent {
+  id: number;
+  home?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  about?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  services?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  products?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  factories?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  compliance?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  contact?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -653,6 +1077,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   oneLiner?: T;
   domain?: T;
   url?: T;
+  mission?: T;
+  vision?: T;
+  payment?: T;
+  emails?:
+    | T
+    | {
+        address?: T;
+        id?: T;
+      };
   address?:
     | T
     | {
@@ -667,21 +1100,21 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               lng?: T;
             };
       };
-  phones?:
+  officeImage?: T;
+  ogImage?: T;
+  foundingYear?: T;
+  sameAs?:
     | T
     | {
-        number?: T;
+        url?: T;
         id?: T;
       };
-  emails?:
+  keywords?:
     | T
     | {
-        address?: T;
+        keyword?: T;
         id?: T;
       };
-  payment?: T;
-  mission?: T;
-  vision?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -710,6 +1143,7 @@ export interface SiteContentSelect<T extends boolean = true> {
     | {
         name?: T;
         full?: T;
+        logo?: T;
         id?: T;
       };
   qcSteps?:
@@ -724,6 +1158,120 @@ export interface SiteContentSelect<T extends boolean = true> {
     | {
         stage?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-content_select".
+ */
+export interface PageContentSelect<T extends boolean = true> {
+  home?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  about?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  services?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  products?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  factories?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  compliance?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  contact?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

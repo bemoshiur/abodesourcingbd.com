@@ -1,4 +1,6 @@
 import type { CollectionConfig } from "payload";
+import { revalidateHooks } from "../hooks/revalidate.ts";
+import { faqsField, seoField } from "../fields/seo.ts";
 
 export const Services: CollectionConfig = {
   slug: "services",
@@ -6,6 +8,7 @@ export const Services: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "slug"],
   },
+  hooks: revalidateHooks,
   fields: [
     {
       name: "slug",
@@ -44,5 +47,7 @@ export const Services: CollectionConfig = {
       relationTo: "product-categories",
       hasMany: true,
     },
+    faqsField,
+    seoField,
   ],
 };

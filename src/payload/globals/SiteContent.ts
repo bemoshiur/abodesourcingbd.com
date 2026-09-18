@@ -1,4 +1,5 @@
 import type { GlobalConfig } from "payload";
+import { globalAfterChangeRevalidate } from "../hooks/revalidate.ts";
 
 export const SiteContent: GlobalConfig = {
   slug: "site-content",
@@ -6,6 +7,7 @@ export const SiteContent: GlobalConfig = {
   admin: {
     description: "Reusable content lists shown across the site.",
   },
+  hooks: { afterChange: [globalAfterChangeRevalidate] },
   fields: [
     {
       type: "tabs",
@@ -61,6 +63,12 @@ export const SiteContent: GlobalConfig = {
               fields: [
                 { name: "name", type: "text", required: true },
                 { name: "full", type: "text", required: true },
+                {
+                  name: "logo",
+                  type: "upload",
+                  relationTo: "media",
+                  admin: { description: "Optional. When present the logo is shown in the scrolling band instead of the text badge." },
+                },
               ],
             },
           ],

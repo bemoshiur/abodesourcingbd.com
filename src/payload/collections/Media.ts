@@ -1,19 +1,38 @@
 import type { CollectionConfig } from "payload";
+import { revalidateHooks } from "../hooks/revalidate.ts";
 
+/**
+ * All site imagery. Uploads are converted to WebP and resized into three
+ * ready-made variants so pages never ship a multi-megabyte original.
+ */
 export const Media: CollectionConfig = {
   slug: "media",
+  access: { read: () => true },
+  hooks: revalidateHooks,
   upload: {
     mimeTypes: ["image/*"],
+    adminThumbnail: "thumb",
+    focalPoint: true,
+    formatOptions: { format: "webp", options: { quality: 82 } },
+    imageSizes: [
+      { name: "thumb", width: 240, height: 300, position: "centre" },
+      { name: "card", width: 720, height: 900, position: "centre" },
+      { name: "detail", width: 1400, withoutEnlargement: true },
+    ],
   },
   admin: {
     useAsTitle: "filename",
+    defaultColumns: ["filename", "alt", "createdAt"],
   },
   fields: [
     {
       name: "alt",
       type: "text",
       required: true,
-      admin: { description: "Descriptive alt text (SEO + accessibility)." },
+      admin: {
+        description:
+          "Describe what the image shows (style, fabric, view). Used for SEO and screen readers. Never include client or buyer brand names.",
+      },
     },
   ],
 };

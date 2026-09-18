@@ -1,11 +1,15 @@
 import type { CollectionConfig } from "payload";
+import { revalidateHooks } from "../hooks/revalidate.ts";
+import { faqsField, seoField } from "../fields/seo.ts";
 
 export const ProductCategories: CollectionConfig = {
   slug: "product-categories",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "slug"],
+    defaultColumns: ["title", "slug", "order"],
   },
+  defaultSort: "order",
+  hooks: revalidateHooks,
   fields: [
     {
       name: "slug",
@@ -31,5 +35,14 @@ export const ProductCategories: CollectionConfig = {
       labels: { singular: "Sub-item", plural: "Sub-items" },
       fields: [{ name: "item", type: "text", required: true }],
     },
+    { name: "image", type: "upload", relationTo: "media", label: "Cover image (optional)" },
+    {
+      name: "order",
+      type: "number",
+      defaultValue: 100,
+      admin: { position: "sidebar", description: "Lower numbers appear first." },
+    },
+    faqsField,
+    seoField,
   ],
 };

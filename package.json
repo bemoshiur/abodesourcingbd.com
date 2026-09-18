@@ -1,17 +1,20 @@
 {
   "name": "abodesourcingbd-com",
   "version": "0.1.0",
-  "description": "ABD Sourcing Bangladesh — garments buying & sourcing office marketing site.",
+  "description": "ABD Sourcing Bangladesh \u2014 garments buying & sourcing office marketing site.",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate && next build",
     "start": "next start",
     "lint": "eslint",
-    "payload": "payload",
-    "generate:types": "payload generate:types",
-    "generate:importmap": "payload generate:importmap",
-    "seed": "tsx scripts/seed.ts"
+    "payload": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload",
+    "generate:types": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:types",
+    "generate:importmap": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "seed": "tsx scripts/seed.ts",
+    "migrate": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:create && node scripts/fix-migration-imports.mjs",
+    "migrate:status": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:status"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
