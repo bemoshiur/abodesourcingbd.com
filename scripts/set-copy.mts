@@ -46,6 +46,27 @@ const CHANGES: Change[] = [
     to: "Compliant Garment Factories in Bangladesh & India",
   },
   {
+    // The owner asked for the company name in the H1 (and no underline under "Bangladesh").
+    page: "home",
+    field: "heading",
+    from: "Garment Sourcing & Buying Office in Bangladesh and India",
+    to: "ABD Sourcing: Garment Buying & Sourcing Office in Bangladesh & India",
+  },
+  {
+    page: "compliance",
+    field: "heading",
+    from: "BSCI-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
+    to: "Multiple-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
+  },
+  {
+    // The same change for a database that already took the earlier wording of it (an intermediate
+    // draft that read "Multiple Certified ... Bangladesh & India"). The owner's exact text wins.
+    page: "compliance",
+    field: "heading",
+    from: "Multiple Certified Garment Factories in Bangladesh & India: 7-Step Quality Control",
+    to: "Multiple-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
+  },
+  {
     page: "home",
     field: "metaTitle",
     from: "Garment Sourcing Agent Bangladesh | ABD Sourcing Bangladesh",

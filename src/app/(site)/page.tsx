@@ -64,6 +64,7 @@ export default async function HomePage() {
   const e = homeEntry(site, pc);
   const faqs = pc.faqs.length ? pc.faqs : homeFaqs(faqCtx);
 
+  // The hero shows the first two Featured styles, lowest Order first — set in the CMS, no code change.
   const heroCards = featured.slice(0, 3);
   const stats = [
     { value: factories.length, label: "Partner factories" },
@@ -95,6 +96,7 @@ export default async function HomePage() {
       {/* ───────── Hero ───────── */}
       <section className="relative isolate overflow-hidden border-b border-border">
         <div aria-hidden className="mesh-light absolute inset-0 -z-10" />
+        <div aria-hidden className="dot-field" />
         <div aria-hidden className="hero-aurora" />
         <div aria-hidden className="orb float-slow -right-32 top-10 -z-10 size-96 bg-accent/20" />
         <div aria-hidden className="orb float-slower -left-32 bottom-0 -z-10 size-80 bg-primary/15" />
@@ -105,10 +107,13 @@ export default async function HomePage() {
               <span className="size-1.5 rounded-full bg-accent" />
               Garments buying &amp; sourcing office · Dhaka
             </p>
-            <h1 className="mt-5 max-w-3xl font-display text-4xl font-semibold leading-[1.06] tracking-tight sm:text-5xl lg:text-[4rem]">
+            <h1 className="mt-5 max-w-[19ch] text-balance font-display text-[2.4rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl sm:leading-[1.06] lg:text-[3.5rem]">
               <Headline text={e.heading} />
             </h1>
-            <p className="mt-4 font-display text-xl font-medium text-foreground/80 sm:text-2xl">{site.tagline}</p>
+            <p className="mt-5 flex items-center gap-3 font-display text-lg font-medium text-foreground/75 sm:text-xl">
+              <span aria-hidden className="h-px w-8 shrink-0 bg-gradient-to-r from-primary to-accent" />
+              {site.tagline}
+            </p>
             <AnswerBlock text={e.answer} className="mt-6" />
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
