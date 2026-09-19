@@ -64,7 +64,7 @@ export default async function HomePage() {
   const e = homeEntry(site, pc);
   const faqs = pc.faqs.length ? pc.faqs : homeFaqs(faqCtx);
 
-  // The hero shows the first two Featured styles, lowest Order first — set in the CMS, no code change.
+  // Featured styles, lowest Order first — set in the CMS, no code change. Three are kept here; the hero shows the first two.
   const heroCards = featured.slice(0, 3);
   const stats = [
     { value: factories.length, label: "Partner factories" },

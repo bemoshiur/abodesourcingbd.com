@@ -809,6 +809,7 @@ body::before {
     display: none !important;
   }
   .text-gradient,
+  .text-gradient-gold,
   .word-brand,
   .word-bd {
     background: none !important;

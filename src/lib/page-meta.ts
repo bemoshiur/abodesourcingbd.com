@@ -111,7 +111,7 @@ export function categoryEntry(site: SiteInfo, c: CategoryView): Entry {
   return {
     kind: "category",
     path: `/products/${c.slug}/`,
-    title: pick(c.seo.metaTitle, `${c.title} Manufacturer & Sourcing in Bangladesh`),
+    title: pick(c.seo.metaTitle, `${c.title} Manufacturer & Sourcing${originPhrase(c.origins)}`),
     description: pick(
       c.seo.metaDescription,
       `${c.summary} Sourced through compliant partner factories${originPhrase(c.origins)} — request a quote.`,

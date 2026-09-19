@@ -42,12 +42,18 @@ export default async function ProductsPage() {
   const crumbs = [{ label: "Products", href: e.path }];
   const faqs = pc.faqs.length ? pc.faqs : productsFaqs(faqCtx);
 
-  // The category list is CMS-driven, so the desktop column count follows its length and the last row
-  // is not a lone tile (six tiles: two rows of three). A prime count such as seven cannot divide
-  // evenly and keeps one short row. Tailwind only sees complete class names, hence the literals.
-  const n = categories.length;
+  // The category list is CMS-driven, so the desktop column count follows its length (six tiles: two rows
+  // of three). Some counts (7, 10, 13 …) cannot divide evenly and keep one short last row. Tailwind only
+  // sees complete class names, hence the literals.
+  const categoryCount = categories.length;
   const lgCols =
-    n <= 4 ? "lg:grid-cols-4" : n === 5 ? "lg:grid-cols-5" : n % 4 === 0 ? "lg:grid-cols-4" : "lg:grid-cols-3";
+    categoryCount <= 4
+      ? "lg:grid-cols-4"
+      : categoryCount === 5
+        ? "lg:grid-cols-5"
+        : categoryCount % 4 === 0
+          ? "lg:grid-cols-4"
+          : "lg:grid-cols-3";
 
   const jsonLd = graph([
     webPageNode(site, {

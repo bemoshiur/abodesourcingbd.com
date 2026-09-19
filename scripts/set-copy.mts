@@ -40,12 +40,6 @@ interface FaqChange {
 
 const CHANGES: Change[] = [
   {
-    page: "home",
-    field: "heading",
-    from: "ABD Sourcing is a Garment Sourcing & Buying Office specializing in apparel sourcing and production in Bangladesh and India.",
-    to: "Garment Sourcing & Buying Office in Bangladesh and India",
-  },
-  {
     page: "services",
     field: "heading",
     from: "Apparel Sourcing Services in Bangladesh & India , From Tech Pack to Shipment",
@@ -58,10 +52,14 @@ const CHANGES: Change[] = [
     to: "Compliant Garment Factories in Bangladesh & India",
   },
   {
-    // The owner asked for the company name in the H1 (and no underline under "Bangladesh").
+    // The owner asked for the company name in the H1 (and no underline under "Bangladesh"). A database holds
+    // either the wording the CMS had originally or the shorter one set earlier the same day.
     page: "home",
     field: "heading",
-    from: "Garment Sourcing & Buying Office in Bangladesh and India",
+    from: [
+      "ABD Sourcing is a Garment Sourcing & Buying Office specializing in apparel sourcing and production in Bangladesh and India.",
+      "Garment Sourcing & Buying Office in Bangladesh and India",
+    ],
     to: "ABD Sourcing: Garment Buying & Sourcing Office in Bangladesh & India",
   },
   {
@@ -81,8 +79,8 @@ const CHANGES: Change[] = [
     from: "Garment Sourcing Agent Bangladesh | ABD Sourcing Bangladesh",
     to: "Garment Sourcing Agent in Bangladesh | ABD Sourcing",
   },
-  // The site now has six categories, so "five categories" is wrong. The Products copy names the
-  // garment categories without counting them (a count goes stale the next time one is added).
+  // A category count in copy goes stale the next time a category is added (the CMS once said "five" and
+  // then grew a sixth), so the Products copy names the garment categories without counting them.
   {
     page: "products",
     field: "heading",
@@ -135,14 +133,14 @@ for (const c of CHANGES) {
     console.log(`= ${c.page}.${c.field} already set`);
     continue;
   }
-  if (!froms.includes(now as string)) {
+  if (!froms.some((f) => f === now)) {
     skipped++;
     console.log(`! ${c.page}.${c.field} was edited since this change was written — left alone`);
     console.log(`    now: ${String(now).slice(0, 160)}`);
     continue;
   }
   console.log(`${apply ? "set" : "would set"} ${c.page}.${c.field}\n    -> ${c.to}`);
-  const page = (patch[c.page] as Record<string, unknown>) ?? { ...current[c.page] };
+  const page = (patch[c.page] as Record<string, unknown>) ?? {};
   page[c.field] = c.to;
   patch[c.page] = page;
 }
@@ -168,8 +166,9 @@ for (const c of FAQ_CHANGES) {
     continue;
   }
   console.log(`${apply ? "set" : "would set"} ${label}\n    -> ${c.to}`);
-  // Write the whole page group back (as the scalar path does), swapping only this row's answer.
-  const page = (patch[c.page] as Record<string, unknown>) ?? { ...current[c.page] };
+  // An array must be sent whole (rows keep their ids), but nothing else in the group is re-sent: a field the
+  // owner saves between our read and our write must not be reverted to its snapshot value.
+  const page = (patch[c.page] as Record<string, unknown>) ?? {};
   page.faqs = ((page.faqs as Faq[] | undefined) ?? faqs).map((f) => (f.question === c.question ? { ...f, answer: c.to } : f));
   patch[c.page] = page;
 }
