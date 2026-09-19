@@ -61,7 +61,13 @@ export async function buildGeoArtifacts() {
     stats.memberships
       .filter((m) => m.idValue)
       .map((m) => [
-        (m.idLabel ?? m.name).replace(/[^A-Za-z0-9 ]+/g, "").trim().replace(/ (\w)/g, (_, c: string) => c.toUpperCase()).replace(/^./, (c) => c.toLowerCase()),
+        // "BGBA ID" -> "bgbaId"
+        (m.idLabel ?? m.name)
+          .replace(/[^A-Za-z0-9 ]+/g, "")
+          .trim()
+          .split(/\s+/)
+          .map((w, i) => (i === 0 ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1).toLowerCase()))
+          .join(""),
         m.idValue as string,
       ]),
   );

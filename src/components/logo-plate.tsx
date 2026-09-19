@@ -4,9 +4,13 @@ import { cn } from "@/lib/utils";
 
 /**
  * An official logo on a white plate. Certification, membership and factory marks are drawn
- * for a light ground, so they never sit directly on a tinted or dark surface. `fill` +
- * `object-contain` keeps any aspect ratio (tall badge or wide wordmark) inside the box —
- * a percentage height on a plain <img> does not, and tall marks spill out of the plate.
+ * for a light ground, so they never sit directly on a tinted or dark surface.
+ *
+ * The plate is a plain block with a definite size and padding, and the image fills its
+ * content box with `object-contain`, so any aspect ratio (tall badge, wide wordmark) stays
+ * inside. Keep it a block: as a grid/flex item with an auto track a percentage height does
+ * not resolve and tall marks spill out. The <img> keeps real width/height attributes (from
+ * the media record) so the browser reserves space before it loads.
  *
  * Pass `height` (px) with `minWidth` / `maxWidth` to size the plate to the logo's own
  * proportions (wide wordmarks get a wider plate); otherwise size it with `className`.
@@ -36,6 +40,7 @@ export function LogoPlate({
   const style = height
     ? {
         height,
+        padding: pad,
         width: Math.round(
           Math.min(maxWidth, Math.max(minWidth, (image.width / image.height) * (height - pad * 2) + pad * 2)),
         ),
@@ -44,16 +49,20 @@ export function LogoPlate({
   return (
     <span
       style={style}
-      className={cn("relative block shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-border", className)}
+      className={cn(
+        "block shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-border",
+        !height && "p-1.5",
+        className,
+      )}
     >
       <Image
         src={image.cardUrl}
         alt={alt}
-        fill
+        width={image.width}
+        height={image.height}
         sizes={sizes}
         priority={priority}
-        style={height ? { padding: pad } : undefined}
-        className={cn("object-contain", !height && "p-1.5")}
+        className="block h-full w-full object-contain"
       />
     </span>
   );
