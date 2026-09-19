@@ -132,7 +132,7 @@ export function productEntry(site: SiteInfo, p: ProductView): Entry {
     title: pick(p.seo.metaTitle, title),
     description: pick(
       p.seo.metaDescription,
-      `${p.name}${spec ? ` in ${spec}` : ""}${p.styleNumber ? ` (style ${p.styleNumber})` : ""}. Developed and produced through ABD's partner factories in Bangladesh. Request a quote.`,
+      `${p.name}${spec ? ` in ${spec}` : ""}${p.styleNumber ? ` (style ${p.styleNumber})` : ""}. Sourced through ABD's compliant partner factories. Request a quote.`,
     ),
     heading: pick(p.seo.heading, p.name),
     answer: productAnswer(p, site),
@@ -149,7 +149,7 @@ export function factoriesEntry(site: SiteInfo, pc: PageMeta): Entry {
       pc.metaDescription,
       "Our vetted network of compliant knit and woven partner factories in Bangladesh and India — sportswear, activewear, polos, tees, jackets and more.",
     ),
-    heading: pick(pc.heading, "Our compliant partner factories in Bangladesh and India"),
+    heading: pick(pc.heading, "Compliant Garment Factories in Bangladesh & India"),
     answer: pick(pc.answer, pageAnswer("factories", site)),
   };
 }
@@ -166,7 +166,9 @@ export function factoryEntry(site: SiteInfo, f: FactoryView): Entry {
       f.seo.metaDescription,
       `${f.name}: ${softLower(f.specialty)} partner factory in ${where}, managed by ABD Sourcing with seven-step QC. Request a factory match.`,
     ),
-    heading: pick(f.seo.heading, `${f.name}: ${softLower(f.specialty)} partner factory in ${where}`),
+    // Seobility flags an H1 over ~70 characters, and several partner names are long on their own,
+    // so the specialty moves to the intro and the H1 keeps the name plus the country.
+    heading: pick(f.seo.heading, `${f.name} — Factory in ${where}`.length <= 70 ? `${f.name} — Factory in ${where}` : f.name),
     answer: pick(f.answer, factoryAnswer(f, site)),
     lastModified: f.updatedAt,
   };

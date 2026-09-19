@@ -10,7 +10,9 @@ import type { ImageView, SiteInfo } from "@/lib/payload";
 
 const BRAND_SHORT = "ABD Sourcing";
 export const TITLE_MAX = 60;
-export const DESCRIPTION_MAX = 155;
+// Search engines cut descriptions on pixel width (Seobility meters 1000px at 14px Arial ~ 150
+// characters of ordinary prose), so the budget is 150 rather than the often-quoted 155.
+export const DESCRIPTION_MAX = 150;
 
 /** Cut at a word boundary so we never end mid-word. */
 function clamp(text: string, max: number): string {

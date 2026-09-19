@@ -40,7 +40,7 @@ export async function Logo({
       >
         <Image
           src="/logos/abd-mark.png"
-          alt=""
+          alt="ABD Sourcing Bangladesh logo"
           width={400}
           height={345}
           priority
@@ -48,7 +48,8 @@ export async function Logo({
           sizes="48px"
         />
       </span>
-      <span className="flex flex-col leading-none">
+      {/* The mark's alt text already names the company, so the wordmark is decorative for screen readers. */}
+      <span aria-hidden className="flex flex-col leading-none">
         <span
           className={cn(
             "font-display text-[0.98rem] font-semibold uppercase tracking-tight",

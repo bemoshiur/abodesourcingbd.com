@@ -3,6 +3,7 @@ import { Logo } from "@/components/logo";
 import { LogoPlate } from "@/components/logo-plate";
 import { Icon } from "@/components/icon";
 import { CtaBand } from "@/components/cta-band";
+import { FooterCertifications } from "@/components/footer-certifications";
 import { navItems } from "@/lib/routes";
 import { getSiteSettings, getServices, getCategories, getSiteContent } from "@/lib/payload";
 
@@ -51,6 +52,8 @@ export async function SiteFooter() {
               ))}
             </FooterCol>
           </div>
+
+          <FooterCertifications />
 
           {memberships.length > 0 && (
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-border pt-8">

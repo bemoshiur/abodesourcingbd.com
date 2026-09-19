@@ -97,7 +97,7 @@ export default async function ContactPage() {
             <ol className="mt-5 space-y-3">
               {steps.map((s, i) => (
                 <Reveal as="li" key={s.title} delay={i * 80} className="glass flex items-start gap-4 rounded-2xl p-4">
-                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/15 to-accent/25 text-primary">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.55_0.1_155)] text-primary-foreground shadow-md">
                     <Icon name={s.icon} className="size-5" />
                   </span>
                   <span>

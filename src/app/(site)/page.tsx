@@ -4,10 +4,10 @@ import type { Metadata } from "next";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
 import { AnswerBlock } from "@/components/answer-block";
-import { CertificationsBand } from "@/components/certifications-band";
 import { CountUp } from "@/components/count-up";
 import { ExportMarkets } from "@/components/export-markets";
 import { FaqSection } from "@/components/faq-section";
+import { Headline } from "@/components/headline";
 import { MembershipsBand } from "@/components/memberships-band";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
@@ -63,9 +63,6 @@ export default async function HomePage() {
 
   const e = homeEntry(site, pc);
   const faqs = pc.faqs.length ? pc.faqs : homeFaqs(faqCtx);
-  const words = e.heading.split(" ");
-  const headHead = words.slice(0, -2).join(" ");
-  const headTail = words.slice(-2).join(" ");
 
   const heroCards = featured.slice(0, 3);
   const stats = [
@@ -108,8 +105,8 @@ export default async function HomePage() {
               <span className="size-1.5 rounded-full bg-accent" />
               Garments buying &amp; sourcing office · Dhaka
             </p>
-            <h1 className="mt-5 max-w-3xl font-display text-4xl font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.6rem]">
-              {headHead} <span className="text-gradient">{headTail}</span>
+            <h1 className="mt-5 max-w-3xl font-display text-4xl font-semibold leading-[1.06] tracking-tight sm:text-5xl lg:text-[4rem]">
+              <Headline text={e.heading} />
             </h1>
             <p className="mt-4 font-display text-xl font-medium text-foreground/80 sm:text-2xl">{site.tagline}</p>
             <AnswerBlock text={e.answer} className="mt-6" />
@@ -276,7 +273,7 @@ export default async function HomePage() {
                       <span key={p.slug} className="photo-stage relative block aspect-square">
                         <Image
                           src={p.images[0].thumbUrl}
-                          alt=""
+                          alt={p.images[0].alt}
                           width={p.images[0].width}
                           height={p.images[0].height}
                           sizes="(max-width: 768px) 30vw, 12vw"
@@ -382,8 +379,6 @@ export default async function HomePage() {
 
       <FaqSection faqs={faqs} className="border-t border-border" />
 
-      {/* Certifications ticker — the last band before the footer call to action. */}
-      <CertificationsBand />
     </>
   );
 }

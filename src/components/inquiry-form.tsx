@@ -15,8 +15,8 @@ const fieldClass =
   "h-11 w-full rounded-lg border border-input bg-card/60 px-3.5 py-1 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-destructive/20";
 
 const trustCues = [
-  { icon: "Lock", text: "Stays private — never shared" },
   { icon: "Clock", text: "Reply within 24 hours" },
+  { icon: "Lock", text: "Stays private" },
   { icon: "ShieldCheck", text: "Secure submission" },
 ];
 
@@ -132,20 +132,31 @@ export function InquiryForm({
   }
 
   return (
-    <div className="glass rounded-3xl p-6 sm:p-8">
-      <h2 className="font-display text-xl font-semibold sm:text-2xl">Tell us about your program</h2>
-      <p className="mt-1.5 text-sm text-muted-foreground">
-        A few details is all we need to come back with a clear next step.
-      </p>
+    <div data-inquiry-panel className="overflow-hidden rounded-3xl border border-primary/15 bg-card shadow-[var(--shadow-lift)]">
+      <div data-inquiry-band className="mesh-dark relative isolate px-6 py-7 sm:px-8 sm:py-9">
+        <div aria-hidden className="orb float-slow -right-16 -top-24 -z-10 size-64 bg-accent/35" />
+        <div aria-hidden className="orb float-slower -bottom-20 -left-16 -z-10 size-52 bg-primary-foreground/10" />
+        <p className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-accent ring-1 ring-white/15 backdrop-blur">
+          <Icon name="Sparkles" className="size-3.5" />
+          Free quotation
+        </p>
+        <h2 className="mt-3 font-display text-2xl font-semibold text-primary-foreground sm:text-3xl">
+          Tell us about your <span className="text-gradient-gold">program</span>
+        </h2>
+        <p className="mt-2 max-w-md text-sm text-primary-foreground/80">
+          A few details are all we need to come back with a clear next step.
+        </p>
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {trustCues.map((c) => (
+            <li key={c.text} className="inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1.5 text-xs font-medium text-primary-foreground ring-1 ring-white/15 backdrop-blur">
+              <Icon name={c.icon} className="size-3.5 text-accent" />
+              {c.text}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <ul className="mt-4 flex flex-wrap gap-2">
-        {trustCues.map((c) => (
-          <li key={c.text} className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3 py-1.5 text-xs font-medium text-primary">
-            <Icon name={c.icon} className="size-3.5" />
-            {c.text}
-          </li>
-        ))}
-      </ul>
+      <div className="p-6 sm:p-8">
 
       {inquiry.count > 0 && (
         <section aria-label="Styles you selected" className="mt-6 rounded-2xl border border-primary/25 bg-primary/5 p-4">
@@ -261,7 +272,7 @@ export function InquiryForm({
 
         <div className="flex flex-col-reverse items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">Goes straight to our merchandising team.</p>
-          <Button type="submit" size="xl" disabled={isPending} className="btn-shine sm:min-w-44">
+          <Button type="submit" size="xl" disabled={isPending} className="btn-shine bg-gradient-to-r from-primary to-[oklch(0.5_0.09_160)] text-primary-foreground shadow-[0_10px_24px_-12px_var(--primary)] hover:brightness-110 sm:min-w-44">
             {isPending ? (
               <>
                 <Icon name="LoaderCircle" className="size-4 animate-spin" />
@@ -275,7 +286,8 @@ export function InquiryForm({
             )}
           </Button>
         </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

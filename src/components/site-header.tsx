@@ -138,7 +138,7 @@ export function SiteHeader({
                     href={item.href}
                     onClick={close}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="flex items-center justify-between rounded-lg px-3 py-3.5 text-base font-medium transition-colors hover:bg-muted aria-[current=page]:text-primary"
+                    className="flex items-center justify-between rounded-lg px-3 py-3.5 text-base font-medium transition-colors hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/20 aria-[current=page]:text-primary"
                   >
                     {item.label}
                     <Icon name="ChevronRight" className="size-4 text-muted-foreground" />
@@ -147,12 +147,12 @@ export function SiteHeader({
               }
               return (
                 <details key={item.href} className="group rounded-lg" open={isActive(item.href)}>
-                  <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-3.5 text-base font-medium transition-colors marker:hidden hover:bg-muted [&::-webkit-details-marker]:hidden">
+                  <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-3.5 text-base font-medium transition-colors marker:hidden hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/20 [&::-webkit-details-marker]:hidden">
                     {item.label}
                     <Icon name="ChevronDown" className="size-4 text-muted-foreground transition-transform group-open:rotate-180" />
                   </summary>
                   <div className="mb-1 ml-3 space-y-0.5 border-l border-border pl-2">
-                    <Link href={item.href} onClick={close} className="block rounded-md px-3 py-2.5 text-sm font-medium text-primary hover:bg-muted">
+                    <Link href={item.href} onClick={close} className="block rounded-md px-3 py-2.5 text-sm font-semibold text-primary hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/20">
                       {sub.cta}
                     </Link>
                     {sub.items.map((m) => (
@@ -160,7 +160,7 @@ export function SiteHeader({
                         key={m.href}
                         href={m.href}
                         onClick={close}
-                        className="flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-foreground/85 hover:bg-muted"
+                        className="flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-foreground/85 hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/20"
                       >
                         <Icon name={m.icon} className="size-4 text-primary" />
                         {m.title}
@@ -189,7 +189,7 @@ export function SiteHeader({
 }
 
 const linkBase =
-  "relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground after:absolute after:inset-x-3 after:-bottom-px after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-primary after:to-accent after:transition-transform after:duration-300 hover:after:scale-x-100 aria-[current=page]:text-foreground aria-[current=page]:after:scale-x-100";
+  "nav-link relative inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-semibold text-foreground/85 outline-none transition-colors duration-200 hover:text-primary focus-visible:text-primary focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary aria-expanded:text-primary";
 
 function NavLink({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
@@ -245,7 +245,7 @@ function NavDropdown({
         aria-current={active ? "page" : undefined}
         aria-haspopup="true"
         aria-expanded={open}
-        className={cn(linkBase, "inline-flex items-center gap-1")}
+        className={linkBase}
       >
         {label}
         <Icon name="ChevronDown" className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")} />
@@ -256,7 +256,7 @@ function NavDropdown({
           open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0",
         )}
       >
-        <div className="glass rounded-2xl p-3 shadow-[var(--shadow-lift)]">
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-card/95 p-3 shadow-[var(--shadow-lift)] backdrop-blur-xl before:absolute before:inset-x-8 before:top-0 before:h-0.5 before:rounded-full before:bg-gradient-to-r before:from-primary before:via-[oklch(0.62_0.11_150)] before:to-accent">
           <ul className="grid grid-cols-2 gap-1">
             {items.map((m) => (
               <li key={m.href}>
@@ -264,15 +264,16 @@ function NavDropdown({
                   href={m.href}
                   prefetch={false}
                   onClick={() => setOpen(false)}
-                  className="group/item flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-primary/5"
+                  className="group/item flex items-start gap-3 rounded-xl p-3 outline-none ring-1 ring-transparent transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:bg-gradient-to-br hover:from-primary/10 hover:to-accent/20 hover:ring-primary/25 focus-visible:bg-gradient-to-br focus-visible:from-primary/10 focus-visible:to-accent/20 focus-visible:ring-primary/40 motion-reduce:transform-none"
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-transform duration-300 group-hover/item:scale-105">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-all duration-300 group-hover/item:scale-105 group-hover/item:bg-gradient-to-br group-hover/item:from-primary group-hover/item:to-[oklch(0.55_0.1_155)] group-hover/item:text-primary-foreground group-hover/item:shadow-md group-focus-visible/item:bg-gradient-to-br group-focus-visible/item:from-primary group-focus-visible/item:to-[oklch(0.55_0.1_155)] group-focus-visible/item:text-primary-foreground">
                     <Icon name={m.icon} className="size-[1.1rem]" />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-foreground">{m.title}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-foreground transition-colors group-hover/item:text-primary">{m.title}</span>
                     <span className="mt-0.5 line-clamp-2 block text-xs text-muted-foreground">{m.summary}</span>
                   </span>
+                  <Icon name="ArrowRight" className="mt-1 size-4 shrink-0 -translate-x-1 text-primary opacity-0 transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100" />
                 </Link>
               </li>
             ))}
@@ -280,7 +281,7 @@ function NavDropdown({
           <Link
             href={href}
             onClick={() => setOpen(false)}
-            className="mt-2 flex items-center justify-between rounded-xl bg-primary/5 px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+            className="btn-shine mt-2 flex items-center justify-between rounded-xl bg-gradient-to-r from-primary to-[oklch(0.5_0.09_160)] px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-[filter] hover:brightness-110"
           >
             {cta}
             <Icon name="ArrowRight" className="size-4" />

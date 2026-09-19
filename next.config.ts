@@ -2,6 +2,9 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Do not advertise the stack. withPayload also skips its own "X-Powered-By: Next.js, Payload"
+  // header when this is explicitly false (see @payloadcms/next/withPayload).
+  poweredByHeader: false,
   // Site and CMS admin are separate root layouts, so unmatched URLs need a global 404.
   experimental: { globalNotFound: true },
   // sharp loads libvips (a native shared library) via dlopen, which Next's file tracer cannot see —

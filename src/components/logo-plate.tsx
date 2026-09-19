@@ -25,6 +25,7 @@ export function LogoPlate({
   maxWidth = 224,
   pad = 8,
   priority = false,
+  plain = false,
 }: {
   image: ImageView;
   alt: string;
@@ -36,6 +37,12 @@ export function LogoPlate({
   /** Padding in px between the plate edge and the logo (only used with `height`). */
   pad?: number;
   priority?: boolean;
+  /**
+   * Render a plain <img> instead of next/image. next/image writes a full srcset for every logo, which
+   * is pure page weight for a mark that is always a few dozen pixels tall (the footer strip repeats
+   * 17 of them twice per page). The source is already a Payload-generated WebP thumbnail.
+   */
+  plain?: boolean;
 }) {
   const style = height
     ? {
@@ -55,15 +62,28 @@ export function LogoPlate({
         className,
       )}
     >
-      <Image
-        src={image.cardUrl}
-        alt={alt}
-        width={image.width}
-        height={image.height}
-        sizes={sizes}
-        priority={priority}
-        className="block h-full w-full object-contain"
-      />
+      {plain ? (
+        // eslint-disable-next-line @next/next/no-img-element -- deliberate: no srcset for a tiny fixed-size mark
+        <img
+          src={image.thumbUrl}
+          alt={alt}
+          width={image.width}
+          height={image.height}
+          loading="lazy"
+          decoding="async"
+          className="block h-full w-full object-contain"
+        />
+      ) : (
+        <Image
+          src={image.cardUrl}
+          alt={alt}
+          width={image.width}
+          height={image.height}
+          sizes={sizes}
+          priority={priority}
+          className="block h-full w-full object-contain"
+        />
+      )}
     </span>
   );
 }

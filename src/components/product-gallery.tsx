@@ -104,7 +104,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
                   i === active ? "border-primary" : "border-border hover:border-primary/40",
                 )}
               >
-                <Image src={im.thumbUrl} alt="" width={im.width} height={im.height} sizes="80px" className="h-full w-full object-contain p-1.5" />
+                <Image src={im.thumbUrl} alt={`${name} — ${im.view} view thumbnail`} width={im.width} height={im.height} sizes="80px" className="h-full w-full object-contain p-1.5" />
               </button>
             </li>
           ))}
