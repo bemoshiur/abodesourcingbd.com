@@ -26,6 +26,17 @@ interface Change {
   to: string;
 }
 
+/**
+ * One FAQ answer on a page. `faqs` is an array, so it cannot go through CHANGES: the row is found by
+ * its question and only its answer is replaced, and only while that answer still equals `from`.
+ */
+interface FaqChange {
+  page: string;
+  question: string;
+  from: string;
+  to: string;
+}
+
 const CHANGES: Change[] = [
   {
     page: "home",
@@ -72,6 +83,42 @@ const CHANGES: Change[] = [
     from: "Garment Sourcing Agent Bangladesh | ABD Sourcing Bangladesh",
     to: "Garment Sourcing Agent in Bangladesh | ABD Sourcing",
   },
+  // The site now has six categories, so "five categories" is wrong. The Products copy names the
+  // garment categories without counting them (a count goes stale the next time one is added).
+  {
+    page: "products",
+    field: "heading",
+    from: "Clothing Manufacturer in Bangladesh: Five Product Categories",
+    to: "Clothing Manufacturer in Bangladesh: Our Product Range",
+  },
+  {
+    page: "products",
+    field: "intro",
+    from: "Looking for a clothing manufacturer in Bangladesh? ABD Sourcing Bangladesh is a buying and sourcing office in Dhaka that develops and produces garments through compliant partner factories in five categories: knitwear, woven wear, activewear and performance wear, outerwear and workwear. We manage samples, quality control and shipment for buyers in Europe and North America.",
+    to: "Looking for a clothing manufacturer in Bangladesh? ABD Sourcing Bangladesh is a buying and sourcing office in Dhaka that develops and produces garments through compliant partner factories across knitwear, woven wear, activewear and performance wear, outerwear and workwear. We manage samples, quality control and shipment for buyers in Europe and North America.",
+  },
+  {
+    page: "products",
+    field: "answer",
+    from: "ABD Sourcing Bangladesh manages clothing manufacturing in Bangladesh through compliant partner factories in five categories: knitwear, woven wear, activewear and performance wear, outerwear and workwear. Fabrics range from combed and organic cotton to recycled polyester, developed to the buyer's specification, with seven-step quality control and shipment to Europe and North America.",
+    to: "ABD Sourcing Bangladesh manages clothing manufacturing in Bangladesh through compliant partner factories across knitwear, woven wear, activewear and performance wear, outerwear and workwear. Fabrics range from combed and organic cotton to recycled polyester, developed to the buyer's specification, with seven-step quality control and shipment to Europe and North America.",
+  },
+];
+
+/** Same rule for the FAQ rows that also said "five categories". */
+const FAQ_CHANGES: FaqChange[] = [
+  {
+    page: "home",
+    question: "What products can ABD source from Bangladesh?",
+    from: "We source five categories: knitwear such as T-shirts, polos and hoodies; woven wear such as chinos and shorts; activewear and performance wear; outerwear including micro fleece and softshell; and workwear including high-visibility layers. Fabrics range from combed and organic cotton to recycled polyester, developed to your specification.",
+    to: "We source knitwear such as T-shirts, polos and hoodies; woven wear such as chinos and shorts; activewear and performance wear; outerwear including micro fleece and softshell; and workwear including high-visibility layers. Fabrics range from combed and organic cotton to recycled polyester, developed to your specification.",
+  },
+  {
+    page: "products",
+    question: "What clothing can ABD source and produce in Bangladesh?",
+    from: "ABD sources five categories through compliant partner factories: knitwear (T-shirts, polos, tank tops, hoodies, sweatshirts, knit shirts), woven wear (pants, chinos, cargo pants, shorts, woven shirts), activewear and performance wear, outerwear (jackets, micro fleece, fleece hoodies, softshell) and workwear (contrast hoodies, full-zips, high-visibility, workwear polos).",
+    to: "ABD sources knitwear (T-shirts, polos, tank tops, hoodies, sweatshirts, knit shirts), woven wear (pants, chinos, cargo pants, shorts, woven shirts), activewear and performance wear, outerwear (jackets, micro fleece, fleece hoodies, softshell) and workwear (contrast hoodies, full-zips, high-visibility, workwear polos) through compliant partner factories.",
+  },
 ];
 
 const apply = process.argv.includes("apply");
@@ -98,6 +145,33 @@ for (const c of CHANGES) {
   console.log(`${apply ? "set" : "would set"} ${c.page}.${c.field}\n    -> ${c.to}`);
   const page = (patch[c.page] as Record<string, unknown>) ?? { ...current[c.page] };
   page[c.field] = c.to;
+  patch[c.page] = page;
+}
+
+type Faq = { id?: string; question: string; answer: string };
+for (const c of FAQ_CHANGES) {
+  const label = `${c.page}.faqs["${c.question}"]`;
+  const faqs = (current[c.page]?.faqs as Faq[] | undefined) ?? [];
+  const row = faqs.find((f) => f.question === c.question);
+  if (!row) {
+    skipped++;
+    console.log(`! ${label} not found — skipped`);
+    continue;
+  }
+  if (row.answer === c.to) {
+    console.log(`= ${label} already set`);
+    continue;
+  }
+  if (row.answer !== c.from) {
+    skipped++;
+    console.log(`! ${label} was edited since this change was written — left alone`);
+    console.log(`    now: ${String(row.answer).slice(0, 160)}`);
+    continue;
+  }
+  console.log(`${apply ? "set" : "would set"} ${label}\n    -> ${c.to}`);
+  // Write the whole page group back (as the scalar path does), swapping only this row's answer.
+  const page = (patch[c.page] as Record<string, unknown>) ?? { ...current[c.page] };
+  page.faqs = ((page.faqs as Faq[] | undefined) ?? faqs).map((f) => (f.question === c.question ? { ...f, answer: c.to } : f));
   patch[c.page] = page;
 }
 

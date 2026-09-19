@@ -9,6 +9,7 @@ import type {
 import {
   categoryAnswer,
   factoryAnswer,
+  originPhrase,
   softLower,
   pageAnswer,
   productAnswer,
@@ -91,7 +92,8 @@ export function serviceEntry(site: SiteInfo, s: ServiceView): Entry {
   };
 }
 
-export function productsEntry(site: SiteInfo, pc: PageMeta): Entry {
+/** `categories` only feeds the generated fallback answer; a CMS-written answer wins. */
+export function productsEntry(site: SiteInfo, pc: PageMeta, categories?: CategoryView[]): Entry {
   return {
     kind: "products",
     path: "/products/",
@@ -101,7 +103,7 @@ export function productsEntry(site: SiteInfo, pc: PageMeta): Entry {
       "Browse knitwear, woven wear, activewear, outerwear and workwear styles sourced in Bangladesh, with style refs and fabric specs. Add styles to an inquiry list.",
     ),
     heading: pick(pc.heading, "Apparel styles sourced from Bangladesh"),
-    answer: pick(pc.answer, pageAnswer("products", site)),
+    answer: pick(pc.answer, pageAnswer("products", site, { categories: categories?.map((c) => c.title.toLowerCase()) })),
   };
 }
 
@@ -110,7 +112,10 @@ export function categoryEntry(site: SiteInfo, c: CategoryView): Entry {
     kind: "category",
     path: `/products/${c.slug}/`,
     title: pick(c.seo.metaTitle, `${c.title} Manufacturer & Sourcing in Bangladesh`),
-    description: pick(c.seo.metaDescription, `${c.summary} Sourced through compliant Bangladesh factories — request a quote.`),
+    description: pick(
+      c.seo.metaDescription,
+      `${c.summary} Sourced through compliant partner factories${originPhrase(c.origins)} — request a quote.`,
+    ),
     heading: pick(c.seo.heading, c.title),
     answer: pick(c.answer, categoryAnswer(c, site)),
     lastModified: c.updatedAt,

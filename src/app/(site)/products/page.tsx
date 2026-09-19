@@ -18,8 +18,8 @@ import { getFaqContext } from "@/lib/site-pages";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [{ site }, pc] = await Promise.all([getSiteSettings(), getPageMeta("products")]);
-  const e = productsEntry(site, pc);
+  const [{ site }, pc, categories] = await Promise.all([getSiteSettings(), getPageMeta("products"), getCategories()]);
+  const e = productsEntry(site, pc, categories);
   return buildMetadata({
     site,
     path: e.path,
@@ -38,7 +38,7 @@ export default async function ProductsPage() {
     getProducts(),
     getFaqContext(),
   ]);
-  const e = productsEntry(site, pc);
+  const e = productsEntry(site, pc, categories);
   const crumbs = [{ label: "Products", href: e.path }];
   const faqs = pc.faqs.length ? pc.faqs : productsFaqs(faqCtx);
 

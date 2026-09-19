@@ -41,7 +41,7 @@ export const getSitePages = cache(async (): Promise<Entry[]> => {
     aboutEntry(site, pc.about),
     servicesEntry(site, pc.services),
     ...services.map((s) => serviceEntry(site, s)),
-    productsEntry(site, pc.products),
+    productsEntry(site, pc.products, categories),
     ...categories.map((c) => categoryEntry(site, c)),
     ...products.map((p) => productEntry(site, p)),
     factoriesEntry(site, pc.factories),

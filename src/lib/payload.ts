@@ -2,6 +2,7 @@ import { cache } from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import type { Media, Product, ProductCategory } from "@/payload/payload-types";
+import { categoryOrigins } from "@/lib/answers";
 
 /**
  * Data-access layer — the single bridge between Payload CMS and the site's
@@ -83,6 +84,11 @@ export interface CategoryView {
   intro: string;
   subItems: string[];
   image?: ImageView;
+  /**
+   * Countries of the partner factories that list this category (unique, Bangladesh first). Empty when
+   * none does. Generated copy names only these; a single style's origin is never stated.
+   */
+  origins: FactoryCountry[];
   answer?: string;
   updatedAt: string;
   faqs: FaqView[];
@@ -345,19 +351,22 @@ export async function getService(slug: string): Promise<ServiceView | undefined>
 
 // --- Product categories ---
 
-function toCategoryView(c: {
-  slug: string;
-  title: string;
-  icon: string;
-  summary: string;
-  intro: string;
-  subItems: { item: string }[];
-  image?: number | Media | null;
-  answer?: string | null;
-  updatedAt: string;
-  faqs?: { question: string; answer: string }[] | null;
-  seo?: Parameters<typeof toSeo>[0];
-}): CategoryView {
+function toCategoryView(
+  c: {
+    slug: string;
+    title: string;
+    icon: string;
+    summary: string;
+    intro: string;
+    subItems: { item: string }[];
+    image?: number | Media | null;
+    answer?: string | null;
+    updatedAt: string;
+    faqs?: { question: string; answer: string }[] | null;
+    seo?: Parameters<typeof toSeo>[0];
+  },
+  origins: FactoryCountry[],
+): CategoryView {
   return {
     slug: c.slug,
     title: c.title,
@@ -366,6 +375,7 @@ function toCategoryView(c: {
     intro: c.intro,
     subItems: c.subItems.map((i) => i.item),
     image: toImage(c.image),
+    origins,
     answer: c.answer || undefined,
     updatedAt: c.updatedAt,
     faqs: toFaqs(c.faqs),
@@ -375,13 +385,16 @@ function toCategoryView(c: {
 
 export const getCategories = cache(async (): Promise<CategoryView[]> => {
   const payload = await getPayloadClient();
-  const { docs } = await payload.find({
-    collection: "product-categories",
-    limit: 100,
-    sort: "order",
-    depth: 1,
-  });
-  return docs.map(toCategoryView);
+  const [{ docs }, factories] = await Promise.all([
+    payload.find({
+      collection: "product-categories",
+      limit: 100,
+      sort: "order",
+      depth: 1,
+    }),
+    getFactories(),
+  ]);
+  return docs.map((c) => toCategoryView(c, categoryOrigins(c.slug, factories)));
 });
 
 export async function getCategory(slug: string): Promise<CategoryView | undefined> {
