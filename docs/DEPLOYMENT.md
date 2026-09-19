@@ -106,9 +106,11 @@ When Vercel shows the deployment as *Ready* (about 2–3 minutes; `npx vercel ls
   project, point `DATABASE_URL` at it, `npm run migrate`, drop it afterwards).
 - Releases are marked with tags. `release-2026-09-19` is the rebuilt Payload site with the Indian
   partner factories, 17 certifications and the redesigned Home hero.
-- Unmerged work is kept on branch `seo-backlog` (guides collection, richer `llms.txt` / `facts.json`,
-  robots, two migrations that are **not** applied to production). Rebase it onto `main` before using
-  it and expect conflicts in `src/lib/answers.ts`, `src/lib/payload.ts` and `scripts/set-copy.mts`.
+- Unmerged work (guides collection, richer `llms.txt` / `facts.json`, robots, two migrations that are
+  **not** applied to production) is archived as the tag `archive/seo-backlog-2026-09-19` — a tag rather
+  than a branch so Vercel does not build it. Restore with
+  `git switch -c seo-backlog archive/seo-backlog-2026-09-19`, rebase it onto `main` and expect
+  conflicts in `src/lib/answers.ts`, `src/lib/payload.ts` and `scripts/set-copy.mts`.
 - Dependabot opens pull requests for dependency updates. Lockfile-only ones are safe to take after the
   checklist; anything touching `next`, `sharp` or `@payloadcms/*` follows § 9.
 
