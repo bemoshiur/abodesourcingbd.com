@@ -262,6 +262,7 @@ function NavDropdown({
               <li key={m.href}>
                 <Link
                   href={m.href}
+                  prefetch={false}
                   onClick={() => setOpen(false)}
                   className="group/item flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-primary/5"
                 >

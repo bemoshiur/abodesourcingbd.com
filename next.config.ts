@@ -2,7 +2,6 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: { inlineCss: true },
   // WordPress-style permalinks: every route ends in a trailing slash.
   trailingSlash: true,
   images: {
