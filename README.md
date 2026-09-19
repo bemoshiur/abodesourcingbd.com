@@ -40,6 +40,8 @@ npm run dev
 | `npm run seed [-- base\|products\|imagery\|seo]` | Idempotent content import (`scripts/seed.mts`, data in `scripts/data/`) |
 | `npm run seed:network` | Applies the factory network (Bangladesh + India), 17 certifications with logos and the BGBA / DoT memberships to an existing database without overwriting CMS edits (`scripts/seed-network.mts`; logos and their provenance in `scripts/data/logos/`) |
 | `npm run fix:slugs [-- apply]` | Finds (and with `apply`, repairs) slugs that are not URL-safe — e.g. a category typed as "Fair Trade bags"; the CMS also converts typed slugs automatically |
+| `npm run set:copy [-- apply]` | Compare-and-set updates of live CMS copy (`scripts/set-copy.mts`): a dry run by default; with `apply` it changes a field only while it still holds the wording the script expects, so the owner's own `/admin` edits are never overwritten (exit code 2 = some entries were skipped because they had been edited) |
+| `npm test` | Unit tests for the answer-block builders (`scripts/tests/`) |
 | `npm run admin:create` | Create or reset the CMS admin (`ADMIN_EMAIL` / `ADMIN_PASSWORD` from the environment) |
 | `npm run check:content` | Fails if any published content contains buyer names, personal names, phone numbers, extra emails or a count of styles |
 | `npm run media:repair [-- <substr>]` | Re-upload any Media file that is missing from Blob storage and verify it |
@@ -79,7 +81,8 @@ scripts/            seed, admin bootstrap, content guard, media repair, seed dat
 Sign in at `/admin`. Saved changes go live immediately (every save revalidates the site).
 
 - **Products** — name, style number, composition/GSM/construction, photos, featured, order,
-  per-product SEO. Each product gets its own page at `/products/<category>/<slug>/`.
+  per-product SEO. Each product gets its own page at `/products/<category>/<slug>/`. The two
+  style cards in the Home hero are the first two *Featured* products, lowest *Order* first.
 - **Product categories · Services · Factories** — copy, quick answer (40–60 words), FAQs, SEO
   title/description/heading.
 - **Page SEO & FAQs** (global) — title, description, H1, answer and FAQs for every main page.
@@ -117,10 +120,14 @@ A weekly GitHub Action (`.github/workflows/omnirank.yml`) audits production.
 
 ---
 
-## Deployment
+## Deployment, git and maintenance
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — environment variables, domains, first deploy,
-admin creation, verification and troubleshooting.
+admin creation, verification, the release checklist, the git workflow, open maintenance and
+security items, and troubleshooting. Project history: [`docs/JOURNEY.md`](docs/JOURNEY.md).
+
+`main` is production: every push to it deploys on Vercel. Rules for anyone (or any agent) working
+in this repo are in [`AGENTS.md`](AGENTS.md).
 
 ---
 

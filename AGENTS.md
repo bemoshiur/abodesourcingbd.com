@@ -47,3 +47,15 @@ All site content lives in Payload (Postgres), not in code. Conventions:
 - FAQ blocks (≥ 3) render as `<details>` and mirror `FAQPage` JSON-LD from the same array.
 - Verify with the OmniRank audit (see README) — target overall ≥ 98, every layer ≥ 93.
 <!-- END:seo-rules -->
+
+<!-- BEGIN:release-rules -->
+# Git, releases and live content
+
+- **`main` is production.** Every push to `main` builds and deploys on Vercel (`npm run build` = fix migration imports → `payload migrate` → content guard → `next build`). Push to `main` only with the owner's explicit OK — a push is a production deploy.
+- **Branch previews are expected to fail.** `DATABASE_URL` exists only in Vercel's *Production* environment, so `payload migrate` cannot run in a preview. That is deliberate: it keeps unfinished migrations away from the live database. Never add `DATABASE_URL` to Preview or Development.
+- **Before a release:** `npm run lint`, `npm test`, `npm run build` (runs the content guard), then check the live site — see "SEO · AEO · GEO" in the README (OmniRank overall ≥ 98) and `docs/DEPLOYMENT.md` § Release checklist.
+- **The owner edits copy in `/admin` while you work.** Never bulk-reseed page copy. Change wording through `scripts/set-copy.mts` — compare-and-set: it writes a field only while that field still holds the text it expects. `npm run set:copy` is a dry run, `npm run set:copy -- apply` writes; exit code 2 means some entries were skipped because the owner had edited them (normal, not a failure).
+- **The Home hero cards are CMS data**: the first two *Featured* products, lowest *Order* first. Change them in `/admin` (Products → Featured / Order). A script cannot revalidate the site — a data change shows at the next deploy, within the hour (ISR), or as soon as anyone saves a document in `/admin`.
+- **Local builds and `next start` read the live database.** For anything that writes, create a scratch database on the same Neon project, run `npm run migrate` against it, and drop it afterwards — never test writes against production.
+- **Paused work** lives on branch `seo-backlog` (guides collection, richer llms.txt / facts.json, robots, and two migrations that are **not** applied to production). Do not merge it without the owner's OK.
+<!-- END:release-rules -->

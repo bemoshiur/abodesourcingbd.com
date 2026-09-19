@@ -41,3 +41,11 @@ A running log of structural decisions. One line per working chunk.
 - UI/UX pass: mesh gradients, glass, spotlight cards, staggered reveals, mega-menu, mobile action bars.
 - SEO/AEO/GEO to the OmniRank spec: answer blocks, FAQs, JSON-LD graph, llms.txt/facts.json, AI-crawler allowlist, honest sitemap; keyword map (no volume data was available — Semrush/Ahrefs had no credits).
 - Guards: content guard in every build; media integrity repair script; browser QA (overflow, headings, alt, interactions).
+
+## 2026-09-19 — network, certifications, hero and wrap-up
+- Partner network: four factories in India (Luna Apparels, Frontier Protectivewear, Prachi Exports, Dibella India) beside the six in Bangladesh; every factory labelled by country; the size of the catalogue is hidden everywhere.
+- 17 certifications with their official logos (SA 8000:2014, Fairtrade and RCS added) and the BGBA / Department of Textiles memberships, shown as a slow footer marquee on every page.
+- Front end: visible gradient navigation and inquiry panel; Home H1 with the brand in capitals, "Bangladesh" in an animated gradient and "India" in the brand colour; hero without a membership chip and with two CMS-chosen style cards; redesigned footer call-to-action ("…in Bangladesh & India?"); balanced category tiles; origin-aware, count-free copy; Seobility on-page fixes.
+- Tooling: `npm run set:copy` (compare-and-set copy updater), `npm run fix:slugs`, a URL-safe slug guard, unit tests (`npm test`).
+- Paused at the owner's request: SEO / guides work (branch `seo-backlog`).
+- Wrap-up: merged and duplicate branches removed, release tag `release-2026-09-19`, transitive dependency fixes (`npm audit` 29 → 17 findings), docs refreshed; the remaining Next.js / sharp / Payload upgrade is written up in `docs/DEPLOYMENT.md` § 9.

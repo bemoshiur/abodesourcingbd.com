@@ -67,3 +67,78 @@ Webmaster Tools** (owner action).
   email is in published content — the message names the exact record.
 - **Rotate secrets** (Neon password, Blob token, `PAYLOAD_SECRET`) in the provider dashboards, then
   update Vercel and redeploy.
+- **Build stops at the content guard with `payloadInitError`**: Payload could not start — most likely a
+  transient database connection problem (the cause was not captured). It happened twice on 2026-09-19
+  in local builds, then passed 3 further builds and 8 out of 8 stand-alone start-ups with identical code
+  and dependencies. Re-run the build; a failed Vercel deploy never replaces the live one.
+
+## 7. Release checklist
+
+Run from the repo root with `.env.local` pointing at the database (local builds read the live
+database; they do not write to it):
+
+```bash
+npm run lint && npm test         # 0 errors; unit tests pass
+npm run build                    # migrate → content guard → next build
+npm start                        # then look at http://localhost:3000 at 390 px and 1440 px
+git push origin <branch>:main    # a push to main is a production deploy — get the owner's OK first
+```
+
+When Vercel shows the deployment as *Ready* (about 2–3 minutes; `npx vercel ls abodesourcingbd-com`):
+
+- the key URLs answer `200` (section 5);
+- `omnirank audit --config omnirank.config.json` → overall ≥ 98, every layer ≥ 93 (100/100 on 2026-09-19);
+- look at Home, a category, a product, Compliance and Contact at phone width: hero, footer call-to-action,
+  footer certification strip, no sideways scroll;
+- nothing that must not be public appears in the rendered pages — the content guard checks the CMS,
+  so also spot-check the HTML for buyer names, personal names and phone numbers.
+
+## 8. Git workflow
+
+- `origin` is `github.com/bemoshiur/abodesourcingbd.com`; **`main` is production**.
+- Work on a short-lived branch and fast-forward it into `main` after the checklist. Commit explicit
+  paths, never `git add -A`: `.env*`, `.next/`, `node_modules/` and local working folders are git-ignored on purpose.
+- Vercel builds every branch, but only `main` can succeed: `DATABASE_URL` exists only in Vercel's
+  *Production* environment, so `payload migrate` fails in previews. That is deliberate — an unfinished
+  migration can never run against the live database from a branch. Test locally instead.
+- Schema changes ship as committed migrations (`npm run migrate:create -- <name>`) and the deploy
+  applies them. Try every new migration on a scratch database first (`CREATE DATABASE` on the Neon
+  project, point `DATABASE_URL` at it, `npm run migrate`, drop it afterwards).
+- Releases are marked with tags. `release-2026-09-19` is the rebuilt Payload site with the Indian
+  partner factories, 17 certifications and the redesigned Home hero.
+- Unmerged work is kept on branch `seo-backlog` (guides collection, richer `llms.txt` / `facts.json`,
+  robots, two migrations that are **not** applied to production). Rebase it onto `main` before using
+  it and expect conflicts in `src/lib/answers.ts`, `src/lib/payload.ts` and `scripts/set-copy.mts`.
+- Dependabot opens pull requests for dependency updates. Lockfile-only ones are safe to take after the
+  checklist; anything touching `next`, `sharp` or `@payloadcms/*` follows § 9.
+
+## 9. Maintenance and security
+
+Snapshot 2026-09-19 (`npm audit --omit=dev`): **17 findings — 1 critical, 2 high, 13 moderate, 1 low.**
+It was 29 before the lockfile update shipped in this release, which cleared every finding that does
+not need a framework upgrade (`hono`, `js-yaml`, `qs`, `fast-uri`, `nanoid`, `ip-address`,
+`brace-expansion`, `browserslist`, … — Dependabot PRs #3, #7, #8, #12, #14–#20).
+
+What is left is **one supervised upgrade**:
+
+| Finding | Where | Cleared by |
+|---|---|---|
+| Next.js advisories, including two critical remote-code-execution issues (one Windows-only, one in the image optimizer with AVIF) | `next` 16.2.6 | Next ≥ 16.3.3 (Dependabot PR #22) |
+| sharp / libvips CVEs; PostCSS file-read | `sharp` 0.35.3, `postcss` bundled inside Next | Next 16.3.5 and sharp ≥ 0.35.4 (PR #21) |
+| Moderate findings in the Payload family (drizzle / esbuild tooling, dompurify, …) | `payload`, `@payloadcms/*` 3.88 | Payload ≥ 3.90.1, which itself requires Next ≥ 16.3.3 |
+
+Exposure, so the urgency is judged fairly: the site has no middleware, the public site uses no Server
+Actions (the admin uses Payload's own server functions), and on Vercel `/_next/image` is served by
+Vercel's image optimisation service. Still worth scheduling soon.
+
+Procedure:
+
+1. On a branch, bump `next` (it is pinned exactly in `package.json`) to the latest 16.3.x and `sharp`.
+2. `npm run build`, then confirm `sharp-libvips` files are listed in
+   `.next/server/app/(payload)/api/[...slug]/route.js.nft.json` — without them every Payload route
+   returns 500 on Vercel (see `outputFileTracingIncludes` in `next.config.ts`).
+3. Run the release checklist, sign in at `/admin`, edit and save a record, upload an image.
+4. Merge, watch the deploy, verify production.
+5. Repeat for `payload` and `@payloadcms/*` (also bump the exact-pinned `@payloadcms/plugin-cloud-storage`).
+   Run `npm run migrate:create -- drift-check` on a scratch database: the generated migration should be
+   empty; if it is not, the upgrade changes the schema and must ship as a real migration.
