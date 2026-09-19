@@ -12,6 +12,7 @@
     "generate:types": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "seed": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/seed.mts",
+    "fix:slugs": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/fix-slugs.mts",
     "seed:network": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/seed-network.mts",
     "migrate": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:create && node scripts/fix-migration-imports.mjs",

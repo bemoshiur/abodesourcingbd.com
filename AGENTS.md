@@ -34,6 +34,7 @@ All site content lives in Payload (Postgres), not in code. Conventions:
 - **No invented facts**: no made-up statistics, MOQs, prices, lead times, ratings, reviews, awards or dates. Numbers shown on the site are computed from CMS counts.
 - Certifications are described as "held across our partner factories", never as ABD's own.
 - **Never reveal how many styles / products the catalogue holds** — no "71 styles", no "styles listed", no `numberOfItems` in JSON-LD, no result counts in filters. Counts of factories, categories, markets, certifications and QC steps are fine.
+- **Slugs are always URL-safe** (`slugField()` in `src/payload/fields/slug.ts` converts typed text; `check:content` fails the build on a bad slug). A raw slug with spaces produced a live 308 loop and an invalid sitemap entry once — never add a plain text `slug` field.
 - **Factories are labelled by country** ("Factory in Bangladesh" / "Factory in India", from the factory's `country` field). Factory websites are kept in the CMS but never linked or shown publicly.
 - **Third-party logos** (certifications, memberships, factories) are the owners' marks, sourced from their own sites and recorded in `scripts/data/logos/manifest.json`. Always render them through `LogoPlate` (white plate, `fill` + `object-contain`); never redraw or recolour them. A row with no logo falls back to a text badge.
 <!-- END:site-content-rules -->

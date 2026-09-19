@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 import { revalidateHooks } from "../hooks/revalidate.ts";
 import { faqsField, seoField } from "../fields/seo.ts";
 import { answerField } from "../fields/answer.ts";
+import { slugField } from "../fields/slug.ts";
 
 export const Services: CollectionConfig = {
   slug: "services",
@@ -11,14 +12,7 @@ export const Services: CollectionConfig = {
   },
   hooks: revalidateHooks,
   fields: [
-    {
-      name: "slug",
-      type: "text",
-      required: true,
-      unique: true,
-      index: true,
-      admin: { description: "URL slug, e.g. merchandising-support. Changing it changes the page URL." },
-    },
+    slugField("merchandising-support"),
     { name: "title", type: "text", required: true },
     {
       name: "icon",

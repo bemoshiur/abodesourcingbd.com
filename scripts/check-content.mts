@@ -5,6 +5,7 @@
  *   2. no owner or staff personal names
  *   3. no phone numbers, and no email other than the single public inbox
  *   4. no count of how many styles / products are available (the size of the catalogue stays private)
+ *   5. every slug is URL-safe (lowercase words joined by hyphens)
  *
  * Runs as part of `npm run build`, so a violation blocks the deploy instead of going live.
  *   npm run check:content
@@ -59,6 +60,15 @@ for (const slug of collections) {
 for (const slug of ["site-settings", "site-content", "page-content"] as const) {
   const g = await payload.findGlobal({ slug, depth: 0 });
   scan(`global/${slug}`, g);
+}
+
+// Slugs become URLs and sitemap entries — a value like "Fair Trade bags" breaks both.
+const SLUG_OK = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+for (const slug of ["product-categories", "services", "factories", "products"] as const) {
+  const { docs } = await payload.find({ collection: slug, limit: 2000, depth: 0, pagination: false });
+  for (const d of docs as unknown as { id: number | string; slug?: string | null }[]) {
+    if (d.slug && !SLUG_OK.test(d.slug)) hits.push(`${slug}/${d.id}: slug "${d.slug}" is not URL-safe (use lowercase words joined by hyphens, e.g. "fair-trade-bags")`);
+  }
 }
 
 if (hits.length) {

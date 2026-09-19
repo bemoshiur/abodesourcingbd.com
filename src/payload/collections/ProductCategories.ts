@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 import { revalidateHooks } from "../hooks/revalidate.ts";
 import { faqsField, seoField } from "../fields/seo.ts";
 import { answerField } from "../fields/answer.ts";
+import { slugField } from "../fields/slug.ts";
 
 export const ProductCategories: CollectionConfig = {
   slug: "product-categories",
@@ -12,14 +13,7 @@ export const ProductCategories: CollectionConfig = {
   defaultSort: "order",
   hooks: revalidateHooks,
   fields: [
-    {
-      name: "slug",
-      type: "text",
-      required: true,
-      unique: true,
-      index: true,
-      admin: { description: "URL slug, e.g. knitwear. Changing it changes the page URL." },
-    },
+    slugField("knitwear"),
     { name: "title", type: "text", required: true },
     {
       name: "icon",

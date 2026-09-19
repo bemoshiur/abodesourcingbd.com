@@ -39,6 +39,7 @@ npm run dev
 | `npm run generate:types` | Regenerate `src/payload/payload-types.ts` after any schema change |
 | `npm run seed [-- base\|products\|imagery\|seo]` | Idempotent content import (`scripts/seed.mts`, data in `scripts/data/`) |
 | `npm run seed:network` | Applies the factory network (Bangladesh + India), 17 certifications with logos and the BGBA / DoT memberships to an existing database without overwriting CMS edits (`scripts/seed-network.mts`; logos and their provenance in `scripts/data/logos/`) |
+| `npm run fix:slugs [-- apply]` | Finds (and with `apply`, repairs) slugs that are not URL-safe — e.g. a category typed as "Fair Trade bags"; the CMS also converts typed slugs automatically |
 | `npm run admin:create` | Create or reset the CMS admin (`ADMIN_EMAIL` / `ADMIN_PASSWORD` from the environment) |
 | `npm run check:content` | Fails if any published content contains buyer names, personal names, phone numbers, extra emails or a count of styles |
 | `npm run media:repair [-- <substr>]` | Re-upload any Media file that is missing from Blob storage and verify it |

@@ -214,7 +214,7 @@ export interface Media {
 export interface Service {
   id: number;
   /**
-   * URL slug, e.g. merchandising-support. Changing it changes the page URL.
+   * URL slug, e.g. merchandising-support. Typed text is converted to lowercase-with-hyphens. Changing it changes the page URL.
    */
   slug: string;
   title: string;
@@ -275,7 +275,7 @@ export interface Service {
 export interface ProductCategory {
   id: number;
   /**
-   * URL slug, e.g. knitwear. Changing it changes the page URL.
+   * URL slug, e.g. knitwear. Typed text is converted to lowercase-with-hyphens. Changing it changes the page URL.
    */
   slug: string;
   title: string;
@@ -421,7 +421,7 @@ export interface Product {
 export interface Factory {
   id: number;
   /**
-   * URL slug, e.g. liz-fashion. Changing it changes the page URL.
+   * URL slug, e.g. liz-fashion. Typed text is converted to lowercase-with-hyphens. Changing it changes the page URL.
    */
   slug: string;
   name: string;

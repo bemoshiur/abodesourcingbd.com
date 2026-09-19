@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 import { revalidateHooks } from "../hooks/revalidate.ts";
 import { faqsField, seoField } from "../fields/seo.ts";
 import { answerField } from "../fields/answer.ts";
+import { slugField } from "../fields/slug.ts";
 
 export const Factories: CollectionConfig = {
   slug: "factories",
@@ -12,14 +13,7 @@ export const Factories: CollectionConfig = {
   defaultSort: "order",
   hooks: revalidateHooks,
   fields: [
-    {
-      name: "slug",
-      type: "text",
-      required: true,
-      unique: true,
-      index: true,
-      admin: { description: "URL slug, e.g. liz-fashion. Changing it changes the page URL." },
-    },
+    slugField("liz-fashion"),
     { name: "name", type: "text", required: true },
     {
       name: "country",
