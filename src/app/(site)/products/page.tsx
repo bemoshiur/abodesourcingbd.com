@@ -42,6 +42,13 @@ export default async function ProductsPage() {
   const crumbs = [{ label: "Products", href: e.path }];
   const faqs = pc.faqs.length ? pc.faqs : productsFaqs(faqCtx);
 
+  // The category list is CMS-driven, so the desktop column count follows its length and the last row
+  // is not a lone tile (six tiles: two rows of three). A prime count such as seven cannot divide
+  // evenly and keeps one short row. Tailwind only sees complete class names, hence the literals.
+  const n = categories.length;
+  const lgCols =
+    n <= 4 ? "lg:grid-cols-4" : n === 5 ? "lg:grid-cols-5" : n % 4 === 0 ? "lg:grid-cols-4" : "lg:grid-cols-3";
+
   const jsonLd = graph([
     webPageNode(site, {
       path: e.path,
@@ -71,7 +78,7 @@ export default async function ProductsPage() {
       />
 
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <ul className={cn("grid gap-3 sm:grid-cols-2", lgCols)}>
           {categories.map((c, i) => (
             <Reveal as="li" key={c.slug} delay={i * 60}>
               <Link
