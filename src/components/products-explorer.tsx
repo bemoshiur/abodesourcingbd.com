@@ -83,11 +83,11 @@ export function ProductsExplorer({
 
           <div className="-mx-1 flex flex-1 gap-2 overflow-x-auto px-1 pb-1 lg:pb-0" role="group" aria-label="Filter by category">
             <Chip active={category === "all"} onClick={() => pick(setCategory)("all")}>
-              All <span className="tabular-nums opacity-70">{products.length}</span>
+              All <Count active={category === "all"}>{products.length}</Count>
             </Chip>
             {categories.map((c) => (
               <Chip key={c.slug} active={category === c.slug} onClick={() => pick(setCategory)(c.slug)}>
-                {c.title} <span className="tabular-nums opacity-70">{c.count}</span>
+                {c.title} <Count active={category === c.slug}>{c.count}</Count>
               </Chip>
             ))}
           </div>
@@ -152,6 +152,11 @@ export function ProductsExplorer({
       )}
     </div>
   );
+}
+
+function Count({ active, children }: { active: boolean; children: React.ReactNode }) {
+  // Solid colours (not opacity) so the count keeps AA contrast on both chip states.
+  return <span className={cn("tabular-nums", active ? "text-primary-foreground/90" : "text-muted-foreground")}>{children}</span>;
 }
 
 function Chip({

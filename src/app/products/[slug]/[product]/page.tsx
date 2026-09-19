@@ -206,13 +206,13 @@ export default async function ProductPage({
         <nav aria-label="More styles in this category" className="border-y border-border bg-muted/40">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             {adj.prev ? (
-              <Link href={productPath(adj.prev.categorySlug, adj.prev.slug)} className="group inline-flex min-w-0 items-center gap-2 text-sm">
+              <Link href={productPath(adj.prev.categorySlug, adj.prev.slug)} className="group inline-flex min-w-0 items-center gap-2 py-2 text-sm">
                 <Icon name="ChevronLeft" className="size-4 shrink-0 text-primary transition-transform group-hover:-translate-x-0.5" />
                 <span className="truncate"><span className="text-muted-foreground">Previous · </span>{adj.prev.name}</span>
               </Link>
             ) : <span />}
             {adj.next && (
-              <Link href={productPath(adj.next.categorySlug, adj.next.slug)} className="group inline-flex min-w-0 items-center gap-2 text-right text-sm">
+              <Link href={productPath(adj.next.categorySlug, adj.next.slug)} className="group inline-flex min-w-0 items-center gap-2 py-2 text-right text-sm">
                 <span className="truncate"><span className="text-muted-foreground">Next · </span>{adj.next.name}</span>
                 <Icon name="ChevronRight" className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
               </Link>

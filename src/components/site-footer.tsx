@@ -63,7 +63,7 @@ export async function SiteFooter() {
                   <a
                     key={email}
                     href={`mailto:${email}`}
-                    className="inline-flex items-center gap-2 hover:text-foreground"
+                    className="inline-flex items-center gap-2 py-1.5 hover:text-foreground"
                   >
                     <Icon name="Mail" className="size-4 text-primary" />
                     {email}
@@ -106,7 +106,7 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link href={href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+      <Link href={href} className="inline-block py-1 text-sm text-muted-foreground transition-colors hover:text-foreground">
         {children}
       </Link>
     </li>

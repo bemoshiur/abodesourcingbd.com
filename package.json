@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate && next build",
+    "build": "node scripts/fix-migration-imports.mjs && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate && PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/check-content.mts && next build",
     "start": "next start",
     "lint": "eslint",
     "payload": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload",
@@ -16,7 +16,8 @@
     "migrate:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:create && node scripts/fix-migration-imports.mjs",
     "migrate:status": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload migrate:status",
     "admin:create": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/create-admin.mts",
-    "media:repair": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/repair-media.mts"
+    "media:repair": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/repair-media.mts",
+    "check:content": "PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts NODE_OPTIONS=--no-deprecation payload run scripts/check-content.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

@@ -14,7 +14,7 @@ A running log of structural decisions. One line per working chunk.
 - shadcn primitives added (base-nova / base-ui): card, badge, input, select, textarea, dialog, sheet, breadcrumb, skeleton, label; button kept with custom `xl` size + `press-fx`. Mobile nav upgraded to a focus-trapped Sheet (closes on link click — no setState-in-effect).
 - Verified: `next build` + `eslint` clean; mobile Sheet, hover-lift, reveal, and aurora confirmed in-browser.
 - STEP 3 done: all routes fully populated from content arrays. Completed the cross-link triangle via `src/lib/relations.ts` — product category pages now list "Sourced through these factories" + "Related services"; factory pages list "How we support this factory"; service pages list "Factories involved". Adopted the Badge primitive for sub-item / category tags. Added `Reveal` scroll motion to the services/products/factories index grids and the category gallery. `next build` + `eslint` clean (excluded `.remember`/`.venv` from lint).
-- STEP 4 done: inquiry Server Action (zod-validated → Resend, prefilled mailto fallback when no key) + engaging 3-step glass form (stepper, per-step client validation, optimistic submit, success/error/fallback states). Recipient = shakhawat@abodesourcingbd.com (override via INQUIRY_TO_EMAILS).
+- STEP 4 done: inquiry Server Action (zod-validated → Resend, prefilled mailto fallback when no key) + engaging 3-step glass form (stepper, per-step client validation, optimistic submit, success/error/fallback states). Recipient = the public inbox (override via INQUIRY_TO_EMAILS).
 - Design overhaul (user-directed): gradient + glassmorphism vocabulary — ambient backdrop, .glass / .glass-on-dark / .ring-gradient, brand gradient fills, .text-gradient, all as named utilities. Applied to header, hero (gradient headline), glass stat tiles, cards, CTA band, why-choose-us, export markets, contact form.
 - Modern SVG logomark (forest badge + needle-point "A" + gold thread) wired into chrome; favicon (icon.svg), apple-icon, opengraph-image + twitter-image (1200×630), web manifest.
 - SEO: per-page keywords + OG on every route, robots directives, richer root metadata.
@@ -33,3 +33,11 @@ A running log of structural decisions. One line per working chunk.
 - `scripts/seed.ts` (idempotent, `npm run seed`) imports the legacy `src/content/*` arrays + uploads public/ images into Media. Legacy content kept until the seed is verified against a real DB.
 - Gotcha: Node 25 + Payload's loaders need explicit `.ts` extensions on relative imports in `payload.config.ts` (`allowImportingTsExtensions` enabled in tsconfig).
 - Pending: owner provisions Neon `DATABASE_URL` + Vercel Blob token + `PAYLOAD_SECRET`; then seed, create first admin user, build-verify, deploy.
+
+## 2026-09 — CMS rebuild
+- Payload CMS on Neon + private Vercel Blob (custom storage adapter). Buyers, partners/leadership and phone numbers removed; single public inbox.
+- 71 products (style refs, composition, GSM) from the owner's spec sheets, each with its own page; "Add to inquiry" list wired into the contact form.
+- Certifications: 14 marks in a two-row scrolling band with pause control and reduced-motion fallback.
+- UI/UX pass: mesh gradients, glass, spotlight cards, staggered reveals, mega-menu, mobile action bars.
+- SEO/AEO/GEO to the OmniRank spec: answer blocks, FAQs, JSON-LD graph, llms.txt/facts.json, AI-crawler allowlist, honest sitemap; keyword map (no volume data was available — Semrush/Ahrefs had no credits).
+- Guards: content guard in every build; media integrity repair script; browser QA (overflow, headings, alt, interactions).

@@ -2,25 +2,22 @@
 
 > **Delivering Apparel. Building Trust.**
 
-Marketing site for **ABD Sourcing Bangladesh** — a Dhaka-based garments
-buying & sourcing office serving global fashion and workwear brands across
-Europe and North America. Knitwear, woven, sportswear, outerwear, and
-customized apparel.
+Marketing and lead-generation site for **ABD Sourcing Bangladesh** — a Dhaka-based garments
+buying & sourcing office serving global fashion and workwear brands across Europe and North
+America. Knitwear, woven wear, activewear, outerwear and workwear.
 
-Live: [abodesourcingbd.com](https://abodesourcingbd.com)
+Live: [www.abodesourcingbd.com](https://www.abodesourcingbd.com) · Admin: `/admin`
 
 ---
 
 ## Stack
 
-- **Next.js 16** (App Router, React Server Components) + **React 19**
-- **TypeScript** (strict), **Tailwind CSS v4**
-- **shadcn/ui** (base-nova style) on **Base UI** primitives
-- **lucide-react** icons, **country-flag-icons** for export-market flags
-- **Payload CMS v3** embedded in the same app — admin panel at `/admin`,
-  Postgres (Neon) for content, Vercel Blob for image uploads
-- **Resend** REST API for the inquiry form (server-side via Next Route Handler)
-- Deployed on **Vercel** (auto-builds from `main`)
+- **Next.js 16** (App Router, React Server Components) + **React 19**, **TypeScript** (strict)
+- **Tailwind CSS v4**, shadcn/ui on **Base UI** primitives, **lucide-react** icons
+- **Payload CMS v3** embedded in the same app — admin at `/admin`, **Postgres (Neon)** for
+  content, **Vercel Blob** for images (private store, served through `/api/media/file/*`)
+- **Resend** for the inquiry form (server-side Route Handler)
+- Deployed on **Vercel**; SEO/AEO/GEO audited with **OmniRank**
 
 ---
 
@@ -28,134 +25,115 @@ Live: [abodesourcingbd.com](https://abodesourcingbd.com)
 
 ```bash
 npm install
-# fill .env.local (see .env.example): PAYLOAD_SECRET, DATABASE_URL, RESEND_API_KEY
-npm run seed       # one-time: import the existing content into the CMS
-npm run dev        # http://localhost:3000 — admin at /admin
+cp .env.example .env.local     # fill DATABASE_URL, PAYLOAD_SECRET, BLOB_READ_WRITE_TOKEN, RESEND_API_KEY
+npm run migrate                # create/upgrade the database schema
+npm run seed                   # base content, 71 products (needs Website_images/), SEO copy
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='a long random password' npm run admin:create
+npm run dev
 ```
 
-To test inquiry-form delivery locally, add your Resend key to `.env.local`
-(gitignored). Without a key the form gracefully falls back to a prefilled
-`mailto:` link — never dead-ends.
+| Script | What it does |
+|---|---|
+| `npm run dev` / `build` / `start` | Next.js. `build` = fix migration imports → `payload migrate` → content guard → `next build` |
+| `npm run migrate` · `migrate:create -- <name>` · `migrate:status` | Database migrations (committed in `migrations/`) |
+| `npm run generate:types` | Regenerate `src/payload/payload-types.ts` after any schema change |
+| `npm run seed [-- base\|products\|imagery\|seo]` | Idempotent content import (`scripts/seed.mts`, data in `scripts/data/`) |
+| `npm run admin:create` | Create or reset the CMS admin (`ADMIN_EMAIL` / `ADMIN_PASSWORD` from the environment) |
+| `npm run check:content` | Fails if any published content contains buyer names, personal names, phone numbers or extra emails |
+| `npm run media:repair [-- <substr>]` | Re-upload any Media file that is missing from Blob storage and verify it |
 
-### Other scripts
+---
 
-```bash
-npm run build    # production build
-npm start        # serve the production build locally
-npm run lint     # ESLint
-```
+## Hard content rules
+
+Enforced by `npm run check:content`, which runs in every build (a violation blocks the deploy):
+
+1. **No client / buyer brand names** anywhere — copy, alt text, filenames, structured data.
+2. **No owner or staff personal names, personal emails or phone numbers.** The one public
+   contact is `info@abodesourcingbd.com`.
+3. **No invented facts.** Statistics are computed from CMS counts; certifications are worded
+   as "held across our partner factories".
 
 ---
 
 ## Project layout
 
 ```
-src/
-  app/
-    layout.tsx                  Root layout (chrome, fonts, metadata)
-    page.tsx                    /
-    about/, services/, products/, factories/, buyers/, compliance/, contact/
-    services/[slug]/            Dynamic service pages
-    products/[slug]/            Dynamic product-category pages
-    factories/[slug]/           Dynamic factory pages
-    api/inquiry/route.ts        Form mailer → Resend REST
-    (payload)/                  Payload CMS admin (/admin) + REST API (/api)
-    sitemap.ts, robots.ts, manifest.ts
-    icon.svg, apple-icon.png, opengraph-image.png, twitter-image.png
-  payload/
-    payload.config.ts           Payload config (collections, globals, db, storage)
-    collections/                Users, Media, Services, ProductCategories,
-                                ProductShots, Factories, Buyers
-    globals/                    SiteSettings, SiteContent
-    payload-types.ts            Generated — run `npm run generate:types`
-  lib/
-    payload.ts                  Data-access layer — all pages read content here
-    routes.ts, utils.ts
-  components/
-    ui/                         shadcn primitives
-    site-header, site-footer, cta-band, breadcrumbs, page-header
-    inquiry-form, logo, logo-mark, export-markets
-    stats-strip, why-choose-us, reveal, nav-progress, icon, jsonld
-  content/                      LEGACY — original data, kept only as the
-                              seed source; delete after seeding is verified
-scripts/
-  seed.ts                       One-time import of src/content into Payload
-public/
-  products/, logos/, factories/, office/     Original assets (office photos
-                                             are still served from here)
-docs/
-  DEPLOYMENT.md, JOURNEY.md
+src/app/            routes (home, about, services, products, factories, compliance, contact),
+                    /og share cards, llms.txt / llms-full.txt / facts.json, robots, sitemap
+src/components/     UI (header, footer, product card/gallery/explorer, inquiry list, marquee, FAQ …)
+src/lib/payload.ts  the only bridge to the CMS — async view-model helpers
+src/lib/page-meta.ts  title / description / heading / answer for every page (single source)
+src/lib/seo.ts · schema.ts · answers.ts · default-faqs.ts   metadata, JSON-LD, fallbacks
+src/payload/        collections, globals, hooks, storage adapter, generated types
+migrations/         committed Payload migrations
+scripts/            seed, admin bootstrap, content guard, media repair, seed data
 ```
 
 ---
 
 ## Editing content (admin panel)
 
-All site content is edited in the Payload CMS admin panel at **`/admin`**
-(no code changes needed): services, product categories, product photos,
-factories, buyers, company details, mission/vision, certifications, export
-markets, and the QC process. Images are uploaded to Vercel Blob via the
-**Media** collection.
+Sign in at `/admin`. Saved changes go live immediately (every save revalidates the site).
 
-Pages are statically generated with a 60-second revalidation window, so an
-edit in the admin goes live within about a minute — no redeploy.
+- **Products** — name, style number, composition/GSM/construction, photos, featured, order,
+  per-product SEO. Each product gets its own page at `/products/<category>/<slug>/`.
+- **Product categories · Services · Factories** — copy, quick answer (40–60 words), FAQs, SEO
+  title/description/heading.
+- **Page SEO & FAQs** (global) — title, description, H1, answer and FAQs for every main page.
+- **Site Settings** — identity, the public email, address, showroom photo, content licence for
+  AI engines (`none` or `CC BY 4.0`), profile links.
+- **Site Content** — certifications (add a logo per certification and it replaces the text
+  badge in the scrolling band), QC steps, production flow, export markets.
+- **Media** — every image needs alt text; never include client or brand names.
 
-The first admin user is created on first visit to `/admin`
-(email + password). Slugs are stored explicitly on every item; changing a
-slug changes that page's URL.
+## Inquiry list
+
+Visitors tap **Add to inquiry** on any style; the list persists in the browser, shows in the
+header drawer, and is attached to the contact form. Selected styles (name, style ref and link)
+are included in the email sent to `INQUIRY_TO_EMAILS`.
 
 ---
 
-## Inquiry form
+## SEO · AEO · GEO
 
-`/contact/` posts JSON to **`/api/inquiry`** (Next Route Handler). The
-handler validates, then calls Resend's REST API with `RESEND_API_KEY`
-read from the server environment — the key never reaches the browser.
-Designed states: success, validation error, network/server error, and a
-no-key `mailto:` fallback.
+Implemented to the [OmniRank](https://github.com/bemoshiur/OmniRank) spec: keyword-led titles
+and descriptions, a 40–60 word `AnswerBlock` on every URL, FAQ blocks mirrored as `FAQPage`
+JSON-LD, one `@graph` per page with stable `@id`s (no phone, ratings or offers), `speakable`,
+`llms.txt` / `llms-full.txt` / `facts.json`, an explicit AI-crawler allowlist in `robots.txt`,
+a sitemap with honest `lastmod`, and per-page share images.
 
-### Env vars
+```bash
+# local build audit
+npm run build && npm start &
+python3.14 -m venv .venv-omnirank && .venv-omnirank/bin/pip install \
+  "omnirank @ git+https://github.com/bemoshiur/OmniRank.git@v0.4.0#subdirectory=scripts/py"
+.venv-omnirank/bin/omnirank audit --config omnirank.config.json      # audits the production origin
+```
 
-| Var | Purpose | Required |
-|---|---|---|
-| `PAYLOAD_SECRET` | Random secret for Payload sessions | yes |
-| `DATABASE_URL` | Postgres connection string (Neon) | yes |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token for Media uploads | yes on Vercel (optional locally — falls back to disk) |
-| `RESEND_API_KEY` | Public Pulse Agency Resend key | yes (else mailto fallback) |
-| `INQUIRY_FROM_EMAIL` | `From` address (must be a Resend-verified domain) | optional |
-| `INQUIRY_TO_EMAILS` | Comma-separated recipients | optional (defaults to `shakhawat@abodesourcingbd.com`) |
-
-See [`.env.example`](.env.example).
+A weekly GitHub Action (`.github/workflows/omnirank.yml`) audits production.
 
 ---
 
 ## Deployment
 
-GitHub-driven Vercel deploys: any push to `main` triggers a production
-build; PRs get preview URLs. Full step-by-step (Vercel import, env vars,
-custom domain) is in [**docs/DEPLOYMENT.md**](docs/DEPLOYMENT.md).
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — environment variables, domains, first deploy,
+admin creation, verification and troubleshooting.
 
 ---
 
 ## Design system
 
-- One palette: forest green (`--primary`), warm-paper neutral, restrained
-  sand/gold accent. OKLCH semantic tokens, light + `.dark`.
-- One radius scale derived from a single `--radius`.
-- One type family: **Hanken Grotesk** (body) + **Fraunces** (display, hero
-  only) via `next/font`.
-- Gradient + glassmorphism vocabulary as reusable utilities (`.glass`,
-  `.ring-gradient`, `.text-gradient`, `.bg-brand-gradient`, ambient
-  backdrop).
-- Every animation paired with a `prefers-reduced-motion` guard in the same
-  edit, plus a global reduced-motion safety reset.
+One palette (forest green + warm paper + restrained sand/gold, OKLCH tokens), one radius scale,
+**Hanken Grotesk** + **Fraunces** via `next/font`. Gradient / glass / mesh utilities
+(`.glass`, `.mesh-dark`, `.mesh-light`, `.text-gradient`, `.ring-gradient`, `.spotlight`,
+`.marquee-*`). Every animation has a `prefers-reduced-motion` fallback, and the marquee has a
+visible pause control.
 
-Last measured Lighthouse (mobile, production build):
-**Home 94/100/100/100 · Contact 91/100/100/100** (Perf/A11y/Best-Practices/SEO).
+Mobile Lighthouse (throttled): Accessibility 100 · SEO 100 · Best Practices 96 · Performance 87–91.
 
 ---
 
 ## Credits
 
-Built by [**Public Pulse Agency**](https://publicpulse.com.bd) for ABD
-Sourcing Bangladesh.
+Built by [**Public Pulse Agency**](https://publicpulse.com.bd) for ABD Sourcing Bangladesh.

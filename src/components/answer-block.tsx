@@ -10,7 +10,7 @@ export function AnswerBlock({ text, className }: { text: string; className?: str
   return (
     <div
       className={cn(
-        "answer-block relative max-w-3xl rounded-2xl border border-border/70 bg-card/70 py-4 pl-6 pr-5 text-base leading-relaxed text-foreground/85 backdrop-blur-sm sm:text-[1.0625rem]",
+        "answer-block relative max-w-3xl rounded-2xl border border-border/70 bg-card/85 py-4 pl-6 pr-5 text-base leading-relaxed text-foreground/85 sm:text-[1.0625rem]",
         "before:absolute before:inset-y-3 before:left-2.5 before:w-1 before:rounded-full before:bg-gradient-to-b before:from-primary before:to-accent",
         className,
       )}

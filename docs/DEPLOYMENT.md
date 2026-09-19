@@ -1,169 +1,69 @@
 # Deploying to Vercel
 
-This is a standard Next.js project (App Router, Next 16, React 19) with
-**Payload CMS v3** embedded in the same app (admin at `/admin`). Vercel
-auto-detects it — no `vercel.json`, no special config. The inquiry form
-delivers via the **Next Route Handler** at `src/app/api/inquiry/route.ts`,
-which calls Resend's REST API server-side so the API key never reaches the
-browser.
+Next.js 16 + **Payload CMS v3** in one app. Vercel auto-detects it; the only requirement is that
+the project's **Build Command is the package script** (`npm run build`), because that script
+applies database migrations and runs the content guard before `next build`.
 
----
+## 1. Services
 
-## 0. One-time services the CMS needs
-
-Payload stores content in **Postgres** and uploads in **Vercel Blob**.
-
-1. **Neon Postgres (free tier):** create an account at https://neon.tech →
-   new project → copy the pooled connection string
-   (`postgresql://…?sslmode=require`). This is `DATABASE_URL`.
-2. **Vercel Blob:** in the Vercel project → **Storage → Create Database →
-   Blob** → connect to the project. Vercel sets `BLOB_READ_WRITE_TOKEN`
-   automatically on deploy; for local dev copy the token from the store's
-   `.env.local` tab.
-3. **`PAYLOAD_SECRET`:** any random string — `openssl rand -base64 32`.
-
-## 1. Push to GitHub
-
-The remote is already set to:
-
-```
-https://github.com/The-Public-Pulse-Agency/abodesourcingbd.com.git
-```
-
-From the repo root:
-
-```bash
-git push -u origin main
-```
-
-(You'll be prompted for a GitHub personal access token if HTTPS is set up;
-or use SSH if your key is added to GitHub.)
-
----
-
-## 2. Import the repo into Vercel
-
-1. Go to **https://vercel.com/new** while signed in with the GitHub account
-   that owns `The-Public-Pulse-Agency/abodesourcingbd.com`.
-2. Pick **Import Git Repository** → select that repo.
-3. Vercel auto-detects:
-   - **Framework Preset:** Next.js
-   - **Build Command:** `next build`
-   - **Output Directory:** `.next` (handled by Vercel automatically)
-   - **Install Command:** `npm install`
-
-   Leave the defaults — they're correct.
-
----
-
-## 3. Add environment variables
-
-Before the first deploy, click **Environment Variables** and add these
-(scope to **Production** *and* **Preview** so PR previews also work):
-
-| Key | Value |
-|---|---|
-| `PAYLOAD_SECRET` | Random string (`openssl rand -base64 32`) |
-| `DATABASE_URL` | Neon Postgres connection string |
-| `BLOB_READ_WRITE_TOKEN` | Set automatically if you connected the Blob store |
-| `RESEND_API_KEY` | _Public Pulse Agency Resend key_ (`re_…`) |
-| `INQUIRY_FROM_EMAIL` _(optional)_ | `ABD Sourcing <noreply@your-verified-domain.com>` |
-| `INQUIRY_TO_EMAILS` _(optional)_ | `shakhawat@abodesourcingbd.com` |
-
-- Get the Resend key from https://resend.com/api-keys (use a key scoped to
-  this project; "Full access" is fine for sending).
-- `INQUIRY_FROM_EMAIL` **must be on a domain you've verified in Resend**.
-  Until you've verified one, leave it unset and Resend will use its shared
-  test sender (`onboarding@resend.dev`) — works, but Gmail may treat the
-  email as suspicious. Verify a real domain ASAP via
-  https://resend.com/domains.
-- `INQUIRY_TO_EMAILS` defaults to `shakhawat@abodesourcingbd.com` if
-  omitted; comma-separate to add more recipients.
-
-Click **Deploy**. First build takes ~2–3 minutes.
-
-## 3b. First run: seed the content + create the admin user
-
-After the first successful deploy:
-
-1. Run the seed **once** against the production database from your machine:
-
-   ```bash
-   # .env.local must contain the production DATABASE_URL (+ BLOB_READ_WRITE_TOKEN)
-   npm run seed
-   ```
-
-   This imports all existing content (services, categories, photos,
-   factories, buyers, settings) into the CMS. It is idempotent — safe to
-   re-run.
-2. Open `https://abodesourcingbd.com/admin` — Payload asks you to create
-   the first user. That email + password is the admin login.
-3. From then on, all content edits happen in `/admin`; changes go live
-   within ~60 seconds (ISR), no redeploy needed.
-
----
-
-## 4. Verify the form
-
-Open the live URL Vercel hands you (e.g.
-`abodesourcingbd-com.vercel.app`) → `/contact/` → fill the form → submit.
-
-| Response | What you see | Action |
+| Service | What for | Notes |
 |---|---|---|
-| `200 ok` | Green "Inquiry sent" panel | ✅ Email lands at shakhawat@ |
-| `fallback: true` | Amber "Open in your email app" | `RESEND_API_KEY` isn't set in Vercel env |
-| `502` | Red error + "Open in your email app" | Check Resend dashboard — usually unverified `from` address |
-| `400` | Red inline errors under fields | Form validation working as intended |
+| **Neon Postgres** | all CMS content | pooled connection string → `DATABASE_URL` |
+| **Vercel Blob** | image uploads | the store may be **private** (default here) or public — see `BLOB_ACCESS` |
+| **Resend** | inquiry emails | domain `mail.abodesourcingbd.com` is verified |
 
----
+## 2. Environment variables (Vercel → Settings → Environment Variables → Production)
 
-## 5. Custom domain (`abodesourcingbd.com`)
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Neon pooled connection string |
+| `PAYLOAD_SECRET` | long random string (`openssl rand -base64 32`) — changing it signs everyone out of `/admin` |
+| `BLOB_READ_WRITE_TOKEN` | added automatically when the Blob store is connected to the project |
+| `BLOB_ACCESS` | `private` (default) for a private store; `public` only for a public store |
+| `RESEND_API_KEY` · `INQUIRY_FROM_EMAIL` | inquiry delivery |
+| `INQUIRY_TO_EMAILS` | `info@abodesourcingbd.com` (defaults to this if empty) |
 
-In the Vercel project → **Settings → Domains** → add `abodesourcingbd.com`
-and `www.abodesourcingbd.com`. Vercel shows the exact A / CNAME records to
-point at your DNS provider. Once DNS propagates, Vercel auto-issues an SSL
-cert and the site goes live on the real domain.
+Environment variables are baked in at build time — redeploy after changing them.
 
-The site already canonicalises to `https://abodesourcingbd.com` via
-metadata + sitemap.
+## 3. Project settings
 
----
+- **Framework:** Next.js · **Build Command:** `npm run build` (do **not** override with `next build`)
+- **Production branch:** `main`
+- **Domains:** `www.abodesourcingbd.com` is the canonical origin (CMS *Site Settings → url*). If you
+  make the apex primary instead, update that CMS value and redirect `www` → apex with a **308**.
+  The origin in *Site Settings → url* must be the one that answers `200` with no redirect.
 
-## 6. Re-deploy
-
-Vercel watches the GitHub branch — any push to `main` triggers a new
-production build. Pull requests get auto-preview URLs. No manual steps
-needed.
-
-For an immediate deploy without pushing, run:
-
-```bash
-npx vercel --prod
-```
-
-(from the repo root, after `npx vercel link` once to associate the local
-repo with the Vercel project).
-
----
-
-## Local development
+## 4. First deploy
 
 ```bash
-npm install
-# .env.local needs PAYLOAD_SECRET + DATABASE_URL (+ BLOB_READ_WRITE_TOKEN
-# for real uploads; without it uploads stay on local disk)
-npm run seed     # first time only — imports the legacy content into the CMS
-npm run dev      # http://localhost:3000 — admin at /admin
+git push origin main            # Vercel builds: migrate → content guard → next build
 ```
 
-The inquiry form's Route Handler runs in dev too — set `RESEND_API_KEY`
-in `.env.local` (gitignored) to test real send locally:
+Create the admin login once (never commit real values):
 
 ```bash
-echo 'RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx' >> .env.local
-npm run dev
+ADMIN_EMAIL=… ADMIN_PASSWORD='…' npm run admin:create      # run locally against the production DATABASE_URL
 ```
 
-Without a key, the form gracefully shows the amber "Open in your email
-app" mailto fallback — same behaviour you'll see in Vercel previews
-where you haven't added the env var.
+Sign in at `/admin` and change the password.
+
+## 5. Verify
+
+```bash
+for p in / /products/ /contact/ /llms.txt /llms-full.txt /facts.json /robots.txt /sitemap.xml; do
+  curl -s -o /dev/null -w "$p %{http_code}\n" https://www.abodesourcingbd.com$p; done
+omnirank audit --config omnirank.config.json      # target: overall ≥ 98, every layer ≥ 93
+```
+
+Also submit `https://www.abodesourcingbd.com/sitemap.xml` in **Google Search Console** and **Bing
+Webmaster Tools** (owner action).
+
+## 6. Troubleshooting
+
+- **A change "isn't showing"**: check `gh api repos/<owner>/<repo>/deployments` for a recent
+  deployment — a repo move/rename can silently disconnect Vercel's Git integration.
+- **Images 404 / 400**: run `npm run media:repair` (re-uploads anything missing from Blob and verifies).
+- **Build fails at "Content guard"**: a buyer/brand name, personal name, phone number or extra
+  email is in published content — the message names the exact record.
+- **Rotate secrets** (Neon password, Blob token, `PAYLOAD_SECRET`) in the provider dashboards, then
+  update Vercel and redeploy.

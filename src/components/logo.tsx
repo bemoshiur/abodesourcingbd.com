@@ -27,7 +27,6 @@ export async function Logo({
   return (
     <Link
       href="/"
-      aria-label={`${site.name} — homepage`}
       className={cn(
         "group/logo inline-flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
@@ -41,7 +40,7 @@ export async function Logo({
       >
         <Image
           src="/logos/abd-mark.png"
-          alt={site.name}
+          alt=""
           width={400}
           height={345}
           priority

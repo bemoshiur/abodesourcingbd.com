@@ -1,0 +1,79 @@
+{
+  "$schema": "https://raw.githubusercontent.com/bemoshiur/OmniRank/main/schemas/omnirank.config.schema.json",
+  "site": {
+    "name": "ABD Sourcing Bangladesh",
+    "url": "https://www.abodesourcingbd.com",
+    "entityType": "ProfessionalService",
+    "locales": [
+      {
+        "code": "en",
+        "path": "/",
+        "default": true
+      }
+    ]
+  },
+  "nap": {
+    "street": "4th Floor (Lift-03), House-06, Road-10, Sector-04, Uttara",
+    "city": "Dhaka",
+    "region": "Dhaka",
+    "postalCode": "1230",
+    "country": "BD",
+    "email": "info@abodesourcingbd.com",
+    "geo": {
+      "lat": 23.8759,
+      "lng": 90.3795
+    }
+  },
+  "sameAs": {
+    "linkedin": null,
+    "facebook": null,
+    "instagram": null,
+    "youtube": null,
+    "x": null,
+    "wikidata": null,
+    "crunchbase": null
+  },
+  "stack": {
+    "framework": "next-app-router",
+    "srcDir": "src",
+    "publicDir": "public",
+    "builtHtml": ".next/server/app"
+  },
+  "crawlers": {
+    "allowAI": true,
+    "disallow": [
+      "/admin",
+      "/api/"
+    ]
+  },
+  "geo": {
+    "license": "none",
+    "attribution": "ABD Sourcing Bangladesh",
+    "answerBlockSelector": ".answer-block"
+  },
+  "audit": {
+    "sampleSize": 200,
+    "failOn": [
+      "h1",
+      "canonical",
+      "title-length",
+      "description-length",
+      "answer-block",
+      "speakable",
+      "llms-txt",
+      "llms-full",
+      "facts-json",
+      "ai-allowlist",
+      "schema",
+      "schema-fabrication",
+      "noindex-in-sitemap",
+      "sitemap-health",
+      "lang",
+      "mixed-content",
+      "https-redirect",
+      "robots-sitemap",
+      "canonical-target",
+      "hreflang-noindex"
+    ]
+  }
+}

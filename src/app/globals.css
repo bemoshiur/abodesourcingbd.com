@@ -394,8 +394,12 @@ body::before {
 .orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(56px);
   pointer-events: none;
+  /* Full-page blurred layers are costly on phones — decorative only, so hide them there. */
+  display: none;
+}
+@media (min-width: 640px) {
+  .orb { display: block; filter: blur(56px); }
 }
 @media (prefers-reduced-motion: no-preference) {
   .float-slow { animation: float-y 9s ease-in-out infinite alternate; }
@@ -495,7 +499,7 @@ body::before {
 }
 
 /* Gradient underline that grows on hover — inline links. */
-.link-grow { background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; }
+.link-grow { padding-block: 0.4rem; background: linear-gradient(currentColor, currentColor) left calc(100% - 0.3rem) / 0 1.5px no-repeat; }
 @media (prefers-reduced-motion: no-preference) {
   .link-grow { transition: background-size 0.35s var(--ease-out-soft); }
   .link-grow:hover { background-size: 100% 1.5px; }

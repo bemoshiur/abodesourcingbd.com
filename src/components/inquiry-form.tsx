@@ -227,7 +227,7 @@ export function InquiryForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Email" required error={err("email")}>
             <Input name="email" type="email" value={values.email} onChange={set("email")} autoComplete="email"
-              aria-invalid={!!err("email")} className="h-11 bg-card/60 px-3.5" placeholder="you@company.com" />
+              aria-invalid={!!err("email")} className="h-11 bg-card/60 px-3.5" placeholder="Your work email" />
           </Field>
           <Field label="Country" error={err("country")}>
             <select name="country" aria-label="Country" value={values.country} onChange={set("country")} className={fieldClass}>

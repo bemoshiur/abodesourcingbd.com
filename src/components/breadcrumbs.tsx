@@ -22,7 +22,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                     {c.label}
                   </span>
                 ) : (
-                  <Link href={c.href} className="text-muted-foreground transition-colors hover:text-foreground">
+                  <Link href={c.href} className="inline-flex items-center py-1.5 text-muted-foreground transition-colors hover:text-foreground">
                     {c.label}
                   </Link>
                 )}

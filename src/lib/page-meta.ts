@@ -157,7 +157,8 @@ export function factoryEntry(site: SiteInfo, f: FactoryView): Entry {
   return {
     kind: "factory",
     path: `/factories/${f.slug}/`,
-    title: pick(f.seo.metaTitle, `${f.specialty} Factory in Bangladesh`),
+    // The factory name keeps titles unique (two units can share a specialty).
+    title: pick(f.seo.metaTitle, `${f.name}: Partner Factory in Bangladesh`),
     description: pick(
       f.seo.metaDescription,
       `${f.name}: ${f.specialty.toLowerCase()} partner factory in Bangladesh, managed by ABD Sourcing with seven-step QC. Request a factory match.`,

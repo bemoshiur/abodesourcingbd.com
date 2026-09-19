@@ -1,0 +1,27 @@
+name: OmniRank audit
+
+# Audits the live site's server-rendered HTML for SEO / AEO / GEO gates (see omnirank.config.json).
+# Runs weekly and on demand. It audits PRODUCTION, so trigger it after a deploy has finished.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install OmniRank (pinned)
+        run: pip install "omnirank @ git+https://github.com/bemoshiur/OmniRank.git@v0.4.0#subdirectory=scripts/py"
+      - name: Audit production
+        run: omnirank audit --config omnirank.config.json --out omnirank-report.json
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omnirank-report
+          path: omnirank-report.json
