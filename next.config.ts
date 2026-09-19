@@ -2,6 +2,20 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // sharp loads libvips (a native shared library) via dlopen, which Next's file tracer cannot see —
+  // without this, Vercel's Linux functions fail with "libvips-cpp.so … cannot open shared object file"
+  // and every Payload route (admin, media, on-demand revalidation) returns 500. The macOS/arm64 globs
+  // exist only so the same rule can be verified in a local build.
+  outputFileTracingIncludes: {
+    "/**/*": [
+      "./node_modules/@img/sharp-libvips-linux-x64/**/*",
+      "./node_modules/@img/sharp-linux-x64/**/*",
+      "./node_modules/@img/sharp-libvips-linux-arm64/**/*",
+      "./node_modules/@img/sharp-linux-arm64/**/*",
+      "./node_modules/@img/sharp-libvips-darwin-arm64/**/*",
+      "./node_modules/@img/sharp-darwin-arm64/**/*",
+    ],
+  },
   // WordPress-style permalinks: every route ends in a trailing slash.
   trailingSlash: true,
   images: {
