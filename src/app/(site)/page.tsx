@@ -73,6 +73,13 @@ export default async function HomePage() {
     { value: content.certifications.length, label: "Certifications" },
   ];
 
+  // Trade-body badge in the hero kicker — CMS-driven: it appears only while the owner keeps a
+  // membership that carries an ID, and the short form comes from the name's own parenthetical.
+  const member = content.memberships.find((m) => m.relation === "member" && m.idValue);
+  const memberBadge = member?.idValue
+    ? { abbr: member.name.match(/\(([^()]+)\)\s*$/)?.[1] ?? member.name, id: member.idValue }
+    : null;
+
   const byCategory = new Map<string, typeof products>();
   for (const p of products) byCategory.set(p.categorySlug, [...(byCategory.get(p.categorySlug) ?? []), p]);
 
@@ -103,38 +110,59 @@ export default async function HomePage() {
 
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14 lg:px-8 lg:py-24">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-accent-ink backdrop-blur">
-              <span className="size-1.5 rounded-full bg-accent" />
-              Garments buying &amp; sourcing office · Dhaka
-            </p>
-            <h1 className="mt-5 max-w-[19ch] text-balance font-display text-[2.4rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl sm:leading-[1.06] lg:text-[3.5rem]">
+            <div data-hero-kicker="" className="flex flex-wrap items-center gap-2">
+              <p className="glass inline-flex items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[0.67rem] font-semibold uppercase tracking-[0.1em] text-accent-ink sm:text-xs sm:tracking-[0.16em]">
+                <span data-live-dot="" aria-hidden className="live-dot" />
+                Garments buying &amp; sourcing office · Dhaka
+              </p>
+              {memberBadge && (
+                <p
+                  data-bgba-badge=""
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-xs font-semibold text-primary"
+                >
+                  <Icon name="BadgeCheck" className="size-3.5" />
+                  <span>
+                    {memberBadge.abbr} member · ID <span className="tabular-nums">{memberBadge.id}</span>
+                  </span>
+                </p>
+              )}
+            </div>
+            <h1 className="headline-glow mt-5 max-w-[17ch] text-balance font-display text-[2.4rem] font-semibold leading-[1.06] tracking-[-0.032em] sm:mt-6 sm:max-w-[20ch] sm:text-[3.1rem] sm:leading-[1.04] lg:max-w-[24ch] lg:text-[3.6rem]">
               <Headline text={e.heading} />
             </h1>
-            <p className="mt-5 flex items-center gap-3 font-display text-lg font-medium text-foreground/75 sm:text-xl">
+            <p className="mt-4 flex items-center gap-3 font-display text-lg font-medium text-foreground/75 sm:mt-5 sm:text-xl">
               <span aria-hidden className="h-px w-8 shrink-0 bg-gradient-to-r from-primary to-accent" />
               {site.tagline}
             </p>
-            <AnswerBlock text={e.answer} className="mt-6" />
+            <AnswerBlock text={e.answer} className="mt-5 sm:mt-6" />
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "xl" }), "btn-shine ring-spin rounded-lg")}>
+            <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
+              <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "xl" }), "btn-shine btn-gradient rounded-xl")}>
                 Get a Quote
                 <Icon name="ArrowRight" className="size-4" />
               </Link>
-              <Link href="/products/" className={cn(buttonVariants({ variant: "outline", size: "xl" }), "bg-card/70 backdrop-blur")}>
+              <Link
+                href="/products/"
+                className={cn(buttonVariants({ variant: "outline", size: "xl" }), "rounded-xl border-primary/20 bg-card/70 backdrop-blur hover:bg-card")}
+              >
                 Browse all styles
               </Link>
             </div>
 
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <ul className="mt-6 grid gap-2.5 sm:mt-8 sm:grid-cols-3">
               {[
                 { icon: "Clock", text: "Reply within 24 hours" },
                 { icon: "ShieldCheck", text: `${content.qcSteps.length}-step quality control` },
-                { icon: "BadgeCheck", text: `${content.certifications.length} certifications across partners` },
+                { icon: "BadgeCheck", text: `${content.certifications.length} certifications across our partner factories` },
               ].map((t) => (
-                <li key={t.text} className="inline-flex items-center gap-2">
-                  <Icon name={t.icon} className="size-4 text-primary" />
-                  {t.text}
+                <li key={t.text} className="glass flex items-center gap-2.5 rounded-xl px-3 py-2.5">
+                  <span
+                    aria-hidden
+                    className="grid size-8 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-primary/20 via-primary/10 to-accent/35 text-primary"
+                  >
+                    <Icon name={t.icon} className="size-4" />
+                  </span>
+                  <span className="text-[0.8rem] font-medium leading-snug">{t.text}</span>
                 </li>
               ))}
             </ul>
