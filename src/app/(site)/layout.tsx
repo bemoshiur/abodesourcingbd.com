@@ -6,9 +6,11 @@ import { Logo } from "@/components/logo";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NavProgress } from "@/components/nav-progress";
+import { GoogleTag } from "@/components/google-tag";
 import { InquiryDrawer } from "@/components/inquiry/inquiry-drawer";
 import { MobileCtaBar } from "@/components/inquiry/mobile-cta-bar";
 import { withBrand } from "@/lib/seo";
+
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // One primary family — Hanken Grotesk — for everything. Self-hosted, no layout shift.
@@ -78,6 +80,9 @@ export default async function RootLayout({
       lang="en"
       className={`${hanken.variable} ${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        <GoogleTag />
+      </head>
       <body className="min-h-full flex flex-col">
         <a
           href="#main"

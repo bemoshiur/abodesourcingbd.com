@@ -17,6 +17,15 @@ All site content lives in Payload (Postgres), not in code. Conventions:
 - Never share one `context` object between Local API creates that upload media — the storage plugin flags `req.context` and every upload after the first silently becomes a no-op (see scripts/seed.mts).
 <!-- END:payload-agent-rules -->
 
+<!-- BEGIN:layout-rules -->
+# App structure
+
+- `src/app/(site)/` is the public site (its own root layout, header/footer, Google tag). `src/app/(payload)/` is the CMS admin with Payload's own root layout — the two must never share a layout, or the admin renders inside the marketing chrome.
+- Metadata routes (`robots.ts`, `sitemap.ts`, `manifest.ts`, icons), `llms.txt`, `llms-full.txt`, `facts.json`, `og` and `api/inquiry` live at `src/app/` root. Unmatched URLs use `src/app/global-not-found.tsx`.
+- The Google tag (`GoogleTag`) goes first in `<head>` of the site layout and the global 404 — exactly once per page, never in the admin.
+- sharp's native libvips is bundled through `outputFileTracingIncludes` in `next.config.ts`; without it every Payload route 500s on Vercel.
+<!-- END:layout-rules -->
+
 <!-- BEGIN:site-content-rules -->
 # Hard content rules (enforced by `npm run check:content` in every build)
 

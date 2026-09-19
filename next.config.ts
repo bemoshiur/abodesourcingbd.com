@@ -2,6 +2,8 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Site and CMS admin are separate root layouts, so unmatched URLs need a global 404.
+  experimental: { globalNotFound: true },
   // sharp loads libvips (a native shared library) via dlopen, which Next's file tracer cannot see —
   // without this, Vercel's Linux functions fail with "libvips-cpp.so … cannot open shared object file"
   // and every Payload route (admin, media, on-demand revalidation) returns 500. The macOS/arm64 globs
@@ -21,6 +23,7 @@ const nextConfig: NextConfig = {
   images: {
     // Media is served through Payload (private Blob store) or directly from a public Blob store.
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 7,
     remotePatterns: [
       { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
     ],
