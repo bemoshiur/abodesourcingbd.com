@@ -84,6 +84,20 @@ export const SiteSettings: GlobalConfig = {
               admin: { description: "Optional. Only fill in a year you can stand behind — it appears in structured data." },
             },
             {
+              name: "contentLicense",
+              type: "select",
+              defaultValue: "none",
+              label: "Content licence (for AI engines)",
+              options: [
+                { label: "None — do not reproduce without permission", value: "none" },
+                { label: "CC BY 4.0 — may be quoted with attribution", value: "CC-BY-4.0" },
+              ],
+              admin: {
+                description:
+                  "Published in llms.txt. CC BY 4.0 lets AI engines quote the site with attribution; it is a standing legal grant, so choose deliberately.",
+              },
+            },
+            {
               name: "sameAs",
               type: "array",
               label: "Official profile links",

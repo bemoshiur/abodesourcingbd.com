@@ -1,130 +1,117 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { permanentRedirect } from "next/navigation";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { PageHeader } from "@/components/page-header";
+import { FaqSection } from "@/components/faq-section";
 import { Icon } from "@/components/icon";
+import { JsonLd } from "@/components/jsonld";
+import { PageHeader } from "@/components/page-header";
+import { Reveal } from "@/components/reveal";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/lib/routes";
+import { factoryEntry } from "@/lib/page-meta";
 import {
+  getCategory,
   getFactories,
   getFactory,
-  getCategory,
-  servicesForFactory,
   getSiteSettings,
-  getSiteContent,
+  servicesForFactory,
+  type FaqView,
 } from "@/lib/payload";
+import { CONTACT_PATH } from "@/lib/routes";
+import { breadcrumbNode, faqNode, graph, webPageNode } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
-export const revalidate = 60;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const factories = await getFactories();
-  return factories.map((f) => ({ slug: f.slug }));
+  return (await getFactories()).map((f) => ({ slug: f.slug }));
 }
 
-export const dynamicParams = false;
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const f = await getFactory(slug);
+  const [{ site }, f] = await Promise.all([getSiteSettings(), getFactory(slug)]);
   if (!f) return {};
-  const { site } = await getSiteSettings();
-  return {
-    title: `${f.name} — Partner Factory`,
-    description: `${f.name}: ${f.specialty}. A compliant ABD Sourcing partner factory in Bangladesh.`,
-    keywords: [
-      f.name,
-      f.specialty,
-      "Bangladesh garment factory",
-      "compliant apparel manufacturer Bangladesh",
-      ...f.productTypes.map((t) => `${t} factory Bangladesh`),
-    ],
-    alternates: { canonical: `/factories/${f.slug}/` },
-    openGraph: {
-      title: `${f.name} — Partner Factory · ${site.name}`,
-      description: `${f.name}: ${f.specialty}.`,
-      url: `${site.url}/factories/${f.slug}/`,
-    },
-  };
+  const e = factoryEntry(site, f);
+  return buildMetadata({
+    site,
+    path: e.path,
+    title: e.title,
+    description: e.description,
+    image: f.seo.ogImage ?? site.ogImage,
+    ogEyebrow: "Partner factory · Bangladesh",
+  });
 }
 
-export default async function FactoryDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function FactoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const f = await getFactory(slug);
-  if (!f) notFound();
+  const factory = await getFactory(slug);
+  if (!factory) permanentRedirect("/factories/");
 
-  const [{ certifications }, relatedServices] = await Promise.all([
-    getSiteContent(),
-    servicesForFactory(f),
+  const [{ site }, services, categories] = await Promise.all([
+    getSiteSettings(),
+    servicesForFactory(factory),
+    Promise.all(factory.categories.map((c) => getCategory(c))),
   ]);
-  const cats = (
-    await Promise.all(f.categories.map((c) => getCategory(c)))
-  ).filter((c): c is NonNullable<typeof c> => Boolean(c));
-  const host = f.website ? new URL(f.website).host.replace(/^www\./, "") : "";
+  const cats = categories.filter((c): c is NonNullable<typeof c> => Boolean(c));
+  const e = factoryEntry(site, factory);
+  const crumbs = [
+    { label: "Factories", href: "/factories/" },
+    { label: factory.name, href: e.path },
+  ];
+  const faqs: FaqView[] = factory.faqs.length
+    ? factory.faqs
+    : [
+        {
+          question: `What does ${factory.name} produce?`,
+          answer: `${factory.name} is a partner factory specialising in ${factory.specialty.toLowerCase()}. It runs ${factory.productTypes.join(", ").toLowerCase()} for the programmes ${site.name} manages.`,
+        },
+        {
+          question: `How do I place an order with ${factory.name}?`,
+          answer: `Orders are placed through ${site.name}. Send your brief and the team matches your style to the right production unit, then manages sampling, quality control and shipment.`,
+        },
+        {
+          question: "Are the partner factories compliant?",
+          answer:
+            "We work only with compliant factories that maintain international social and technical standards. Certifications are held across our partner factories — see the compliance page for the full list.",
+        },
+      ];
+
+  const jsonLd = graph([
+    webPageNode(site, { path: e.path, name: e.title, description: e.description, dateModified: e.lastModified }),
+    breadcrumbNode(site, e.path, crumbs),
+    ...[faqNode(site, e.path, faqs)].filter((n): n is NonNullable<typeof n> => Boolean(n)),
+  ]);
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { label: "Factories", href: "/factories/" },
-          { label: f.name, href: `/factories/${f.slug}/` },
-        ]}
-      />
-      <PageHeader eyebrow="Partner factory" title={f.name} intro={f.intro}>
-        {f.logo && (
-          <div className="mt-6 inline-flex items-center rounded-lg border border-border bg-card px-5 py-3">
+      <JsonLd data={jsonLd} />
+      <Breadcrumbs items={crumbs} />
+      <PageHeader eyebrow="Partner factory" title={e.heading} intro={factory.intro} answer={e.answer}>
+        {factory.logo && (
+          <span className="mt-6 inline-flex h-16 items-center rounded-xl bg-white px-5 ring-1 ring-border">
             <Image
-              src={f.logo}
-              alt={`${f.name} logo`}
-              width={180}
-              height={56}
-              className="max-h-12 w-auto object-contain"
+              src={factory.logo.cardUrl}
+              alt={`${factory.name} logo`}
+              width={factory.logo.width}
+              height={factory.logo.height}
+              sizes="200px"
+              className="h-10 w-auto max-w-48 object-contain"
             />
-          </div>
+          </span>
         )}
       </PageHeader>
 
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.6fr_1fr] lg:px-8">
-        <div className="space-y-10">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr] lg:px-8 lg:py-20">
+        <div className="space-y-12">
           <section>
-            <h2 className="font-display text-xl font-semibold">Product types</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {f.productTypes.map((t) => (
+            <h2 className="font-display text-2xl font-semibold">What it runs</h2>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {factory.productTypes.map((t) => (
                 <li key={t}>
-                  <Badge variant="outline">{t}</Badge>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="font-display text-xl font-semibold">Certifications held</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              All ABD partner factories maintain international social and technical
-              standards.
-            </p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-              {certifications.map((c) => (
-                <li
-                  key={c.name}
-                  className="flex items-start gap-2.5 rounded-lg border border-border bg-card p-3 text-sm"
-                >
-                  <Icon name="ShieldCheck" className="mt-0.5 size-4 shrink-0 text-primary" />
-                  <span>
-                    <span className="font-medium text-foreground">{c.name}</span>
-                    <span className="block text-xs text-muted-foreground">{c.full}</span>
-                  </span>
+                  <Badge variant="secondary" className="px-3 py-1.5 text-sm">{t}</Badge>
                 </li>
               ))}
             </ul>
@@ -132,71 +119,60 @@ export default async function FactoryDetailPage({
 
           {cats.length > 0 && (
             <section>
-              <h2 className="font-display text-xl font-semibold">Related categories</h2>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {cats.map((c) => (
-                  <li key={c.slug}>
+              <h2 className="font-display text-2xl font-semibold">Categories it supports</h2>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {cats.map((c, i) => (
+                  <Reveal as="li" key={c.slug} delay={i * 60}>
                     <Link
                       href={`/products/${c.slug}/`}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                      className="glass group flex items-center gap-3 rounded-2xl p-4 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] motion-reduce:transform-none"
                     >
-                      {c.title}
-                      <Icon name="ChevronRight" className="size-3.5" />
+                      <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                        <Icon name={c.icon} className="size-5" />
+                      </span>
+                      <span className="text-sm font-semibold">{c.title}</span>
+                      <Icon name="ArrowRight" className="ml-auto size-4 text-primary transition-transform group-hover:translate-x-1" />
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {relatedServices.length > 0 && (
-            <section>
-              <h2 className="font-display text-xl font-semibold">How we support this factory</h2>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {relatedServices.map((s) => (
-                  <li key={s.slug}>
-                    <Link
-                      href={`/services/${s.slug}/`}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                    >
-                      <Icon name={s.icon} className="size-3.5 text-primary" />
-                      {s.title}
-                    </Link>
-                  </li>
+                  </Reveal>
                 ))}
               </ul>
             </section>
           )}
         </div>
 
-        <aside className="space-y-6">
-          <div className="rounded-xl border border-border bg-card p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-foreground">
-              Factory website
-            </h2>
-            <a
-              href={f.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-            >
-              <Icon name="ExternalLink" className="size-4" />
-              {host}
-            </a>
-          </div>
-
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-6">
-            <h2 className="font-display text-lg font-semibold">Run your order here</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We&apos;ll match your product to the right factory and manage it end to end.
+        <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="mesh-dark overflow-hidden rounded-2xl p-6">
+            <h2 className="font-display text-xl font-semibold">Match a style to this factory</h2>
+            <p className="mt-2 text-sm text-primary-foreground/75">
+              Send your brief and we recommend the right partner unit — reply within 24 hours.
             </p>
-            <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "lg" }), "mt-4 w-full")}>
-              Get a Quote
+            <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "lg" }), "btn-shine mt-5 w-full bg-accent text-accent-foreground")}>
+              Request a factory match
               <Icon name="ArrowRight" className="size-4" />
             </Link>
           </div>
+          {services.length > 0 && (
+            <div className="glass rounded-2xl p-6">
+              <h2 className="text-sm font-semibold uppercase tracking-[0.14em]">Related services</h2>
+              <ul className="mt-4 space-y-1.5">
+                {services.map((s) => (
+                  <li key={s.slug}>
+                    <Link
+                      href={`/services/${s.slug}/`}
+                      className="group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/5"
+                    >
+                      <Icon name={s.icon} className="size-4 text-primary" />
+                      {s.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </aside>
       </div>
+
+      <FaqSection faqs={faqs} className="border-t border-border" />
     </>
   );
 }

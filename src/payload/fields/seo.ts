@@ -11,6 +11,12 @@ export const seoField: Field = {
   },
   fields: [
     {
+      name: "heading",
+      type: "text",
+      label: "Page heading (H1)",
+      admin: { description: "Optional keyword-rich H1. Blank = the record's own title." },
+    },
+    {
       name: "metaTitle",
       type: "text",
       maxLength: 70,

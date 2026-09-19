@@ -6,7 +6,7 @@
  *   npm run seed              # everything
  *   npm run seed -- base      # categories, services, factories, site settings, certifications
  *   npm run seed -- products  # products + photos from Website_images/ (needs scripts/data/catalog.json)
- *   npm run seed -- seo       # page titles/descriptions/FAQs (needs .work/research/seo-content.json)
+ *   npm run seed -- seo       # page titles/descriptions/FAQs (needs scripts/data/seo-content.json)
  *
  * Requires DATABASE_URL, PAYLOAD_SECRET and BLOB_READ_WRITE_TOKEN in .env.local.
  */
@@ -48,7 +48,9 @@ const ROOT = process.cwd();
 const PUBLIC_DIR = path.join(ROOT, "public");
 const IMAGES_DIR = path.join(ROOT, "Website_images");
 const WORK_DIR = path.join(ROOT, ".work", "research");
-const CTX = { disableRevalidate: true };
+// NOTE: never share one context object between creates — the cloud-storage plugin sets a
+// skip flag on req.context, and a shared object makes every upload after the first a silent no-op.
+const ctx = () => ({ disableRevalidate: true });
 
 const MIME: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -77,7 +79,7 @@ async function ensureMedia(
     collection: "media",
     data: { alt },
     file: { data: buffer, mimetype, name: filename, size: buffer.length },
-    context: CTX,
+    context: ctx(),
   });
   console.log(`  uploaded ${filename} (${Math.round(buffer.length / 1024)} KB)`);
   return doc.id;
@@ -131,7 +133,7 @@ async function seedBase(payload: PayloadClient) {
           subItems: c.subItems.map((item) => ({ item })),
           order: (i + 1) * 10,
         },
-        context: CTX,
+        context: ctx(),
       });
       console.log(`  category ${c.slug}`);
     }
@@ -159,7 +161,7 @@ async function seedBase(payload: PayloadClient) {
         ...(logoId ? { logo: logoId } : {}),
         intro: f.intro,
       },
-      context: CTX,
+      context: ctx(),
     });
     console.log(`  factory ${f.slug}`);
   }
@@ -179,7 +181,7 @@ async function seedBase(payload: PayloadClient) {
         how: s.how.map((item) => ({ item })),
         relatedCategories: s.relatedCategories.map(catId),
       },
-      context: CTX,
+      context: ctx(),
     });
     console.log(`  service ${s.slug}`);
   }
@@ -205,7 +207,7 @@ async function seedBase(payload: PayloadClient) {
       mission,
       vision,
     },
-    context: CTX,
+    context: ctx(),
   });
   console.log("  global site-settings");
 
@@ -218,7 +220,7 @@ async function seedBase(payload: PayloadClient) {
       qcSteps: qcSteps.map((s) => ({ step: s.step, detail: s.detail })),
       productionFlow: productionFlow.map((stage) => ({ stage })),
     },
-    context: CTX,
+    context: ctx(),
   });
   console.log("  global site-content");
 }
@@ -312,7 +314,7 @@ async function seedProducts(payload: PayloadClient) {
         published: true,
         order,
       },
-      context: CTX,
+      context: ctx(),
     });
     console.log(`  product ${p.styleNumber ?? name}`);
   }
@@ -333,9 +335,9 @@ async function seedImagery(payload: PayloadClient) {
     "abd-sourcing-showroom-uttara-dhaka.webp",
     await optimiseImage(officeSrc),
     "image/webp",
-    "ABD Sourcing Bangladesh showroom in Uttara, Dhaka — garment samples on display racks",
+    "ABD Sourcing Bangladesh showroom — apparel samples on display racks",
   );
-  await payload.updateGlobal({ slug: "site-settings", data: { officeImage: id }, context: CTX });
+  await payload.updateGlobal({ slug: "site-settings", data: { officeImage: id }, context: ctx() });
   console.log("  linked to site-settings.officeImage");
 }
 
@@ -343,21 +345,21 @@ async function seedImagery(payload: PayloadClient) {
 // seo: page-level titles / descriptions / FAQs + per-document SEO/FAQs
 // ---------------------------------------------------------------------------
 async function seedSeo(payload: PayloadClient) {
-  const file = path.join(WORK_DIR, "seo-content.json");
+  const file = path.join(ROOT, "scripts", "data", "seo-content.json");
   if (!fs.existsSync(file)) {
-    console.log("\n[seo] seo-content.json not found — skipping");
+    console.log("\n[seo] scripts/data/seo-content.json not found — skipping");
     return;
   }
   const c = JSON.parse(fs.readFileSync(file, "utf8")) as {
     pages?: Record<string, unknown>;
-    categories?: Record<string, { seo?: unknown; faqs?: unknown }>;
-    services?: Record<string, { seo?: unknown; faqs?: unknown }>;
-    factories?: Record<string, { seo?: unknown; faqs?: unknown }>;
+    categories?: Record<string, { seo?: unknown; faqs?: unknown; answer?: string }>;
+    services?: Record<string, { seo?: unknown; faqs?: unknown; answer?: string }>;
+    factories?: Record<string, { seo?: unknown; faqs?: unknown; answer?: string }>;
     site?: { keywords?: string[]; sameAs?: string[]; foundingYear?: number };
   };
   console.log("\n[seo] applying");
   if (c.pages) {
-    await payload.updateGlobal({ slug: "page-content", data: c.pages as never, context: CTX });
+    await payload.updateGlobal({ slug: "page-content", data: c.pages as never, context: ctx() });
     console.log("  global page-content");
   }
   if (c.site) {
@@ -368,13 +370,13 @@ async function seedSeo(payload: PayloadClient) {
         ...(c.site.sameAs ? { sameAs: c.site.sameAs.map((url) => ({ url })) } : {}),
         ...(c.site.foundingYear ? { foundingYear: c.site.foundingYear } : {}),
       },
-      context: CTX,
+      context: ctx(),
     });
     console.log("  site-settings keywords/profiles");
   }
   const apply = async (
     collection: "product-categories" | "services" | "factories",
-    map: Record<string, { seo?: unknown; faqs?: unknown }> | undefined,
+    map: Record<string, { seo?: unknown; faqs?: unknown; answer?: string }> | undefined,
   ) => {
     for (const [slug, v] of Object.entries(map ?? {})) {
       const doc = await findBySlug(payload, collection, slug);
@@ -385,8 +387,12 @@ async function seedSeo(payload: PayloadClient) {
       await payload.update({
         collection,
         id: doc.id,
-        data: { ...(v.seo ? { seo: v.seo } : {}), ...(v.faqs ? { faqs: v.faqs } : {}) } as never,
-        context: CTX,
+        data: {
+          ...(v.seo ? { seo: v.seo } : {}),
+          ...(v.faqs ? { faqs: v.faqs } : {}),
+          ...(v.answer ? { answer: v.answer } : {}),
+        } as never,
+        context: ctx(),
       });
       console.log(`  ${collection}/${slug}`);
     }

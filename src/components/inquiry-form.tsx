@@ -1,11 +1,14 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { Icon } from "@/components/icon";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useInquiry } from "@/components/inquiry/inquiry-store";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
@@ -28,8 +31,6 @@ type SubmitState =
   | { status: "error"; message: string; fieldErrors?: Errors; mailto?: string }
   | { status: "fallback"; message: string; mailto: string };
 
-const initial: SubmitState = { status: "idle" };
-
 export function InquiryForm({
   markets,
   categories,
@@ -37,7 +38,8 @@ export function InquiryForm({
   markets: readonly { name: string; code: string }[];
   categories: readonly { slug: string; title: string }[];
 }) {
-  const [state, setState] = useState<SubmitState>(initial);
+  const inquiry = useInquiry();
+  const [state, setState] = useState<SubmitState>({ status: "idle" });
   const [values, setValues] = useState<Values>({
     name: "", company: "", email: "", country: "", category: "", quantity: "", message: "",
   });
@@ -54,7 +56,8 @@ export function InquiryForm({
     if (!values.company.trim()) e.company = "Please enter your company";
     if (!values.email.trim()) e.email = "Please enter your email";
     else if (!emailRe.test(values.email.trim())) e.email = "Enter a valid email address";
-    if (!values.message.trim()) e.message = "Please add a short message";
+    // With styles selected the message is optional — the list is the brief.
+    if (!values.message.trim() && inquiry.count === 0) e.message = "Please add a short message";
     setClientErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -63,11 +66,21 @@ export function InquiryForm({
     e.preventDefault();
     if (!validate()) return;
     setState({ status: "sending" });
+    const styles = inquiry.items.map((i) => ({
+      name: i.name,
+      styleNumber: i.styleNumber,
+      path: `/products/${i.categorySlug}/${i.slug}/`,
+    }));
     try {
       const res = await fetch("/api/inquiry/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, website: "" }),
+        body: JSON.stringify({
+          ...values,
+          message: values.message.trim() || `Please quote the ${styles.length} selected style${styles.length === 1 ? "" : "s"}.`,
+          website: "",
+          styles,
+        }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;
@@ -77,6 +90,7 @@ export function InquiryForm({
         fallback?: boolean;
       };
       if (data.ok) {
+        inquiry.clear();
         setState({ status: "success", message: data.message ?? "Thank you — your inquiry is on its way." });
         return;
       }
@@ -92,10 +106,7 @@ export function InquiryForm({
         mailto: data.mailto,
       });
     } catch {
-      setState({
-        status: "error",
-        message: "Network error. Please try again or email us directly.",
-      });
+      setState({ status: "error", message: "Network error. Please try again or email us directly." });
     }
   }
 
@@ -105,13 +116,16 @@ export function InquiryForm({
 
   if (state.status === "success") {
     return (
-      <div className="ring-gradient flex flex-col items-start gap-4 rounded-3xl p-8">
-        <span className="grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
-          <Icon name="CircleCheck" className="size-6" />
+      <div className="ring-gradient flex flex-col items-start gap-4 rounded-3xl p-8" role="status">
+        <span className="pop-in grid size-14 place-items-center rounded-full bg-primary/10 text-primary">
+          <Icon name="CircleCheck" className="size-7" />
         </span>
         <div>
-          <h2 className="font-display text-xl font-semibold">Inquiry sent</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">{state.message}</p>
+          <h2 className="font-display text-2xl font-semibold">Inquiry received</h2>
+          <p className="mt-2 text-muted-foreground">{state.message}</p>
+          <Link href="/products/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "mt-5")}>
+            Keep browsing styles
+          </Link>
         </div>
       </div>
     );
@@ -126,15 +140,47 @@ export function InquiryForm({
 
       <ul className="mt-4 flex flex-wrap gap-2">
         {trustCues.map((c) => (
-          <li
-            key={c.text}
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3 py-1.5 text-xs font-medium text-primary"
-          >
+          <li key={c.text} className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3 py-1.5 text-xs font-medium text-primary">
             <Icon name={c.icon} className="size-3.5" />
             {c.text}
           </li>
         ))}
       </ul>
+
+      {inquiry.count > 0 && (
+        <section aria-label="Styles you selected" className="mt-6 rounded-2xl border border-primary/25 bg-primary/5 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="flex items-center gap-2 text-sm font-semibold">
+              <Icon name="ClipboardList" className="size-4 text-primary" />
+              Styles you selected ({inquiry.count})
+            </h3>
+            <button type="button" onClick={inquiry.clear} className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+              Clear
+            </button>
+          </div>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {inquiry.items.map((i) => (
+              <li key={`${i.categorySlug}/${i.slug}`} className="flex items-center gap-2.5 rounded-xl border border-border bg-card p-2">
+                <Link href={`/products/${i.categorySlug}/${i.slug}/`} className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">
+                  {i.image && <Image src={i.image} alt={i.name} fill sizes="48px" className="object-contain p-1" />}
+                </Link>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-medium">{i.name}</span>
+                  {i.styleNumber && <span className="text-[0.7rem] tabular-nums text-primary">{i.styleNumber}</span>}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => inquiry.remove(i)}
+                  aria-label={`Remove ${i.name}`}
+                  className="grid size-8 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <Icon name="X" className="size-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {(state.status === "error" || state.status === "fallback") && (
         <div
@@ -146,17 +192,11 @@ export function InquiryForm({
               : "border-destructive/30 bg-destructive/5 text-destructive",
           )}
         >
-          <Icon
-            name={state.status === "fallback" ? "Mail" : "CircleAlert"}
-            className="mt-0.5 size-4 shrink-0"
-          />
+          <Icon name={state.status === "fallback" ? "Mail" : "CircleAlert"} className="mt-0.5 size-4 shrink-0" />
           <div className="space-y-2">
             <p>{state.message}</p>
             {"mailto" in state && state.mailto && (
-              <a
-                href={state.mailto}
-                className={cn(buttonVariants({ size: "sm" }), "bg-accent text-accent-foreground")}
-              >
+              <a href={state.mailto} className={cn(buttonVariants({ size: "sm" }), "bg-accent text-accent-foreground")}>
                 <Icon name="Mail" className="size-4" />
                 Open in your email app
               </a>
@@ -211,15 +251,17 @@ export function InquiryForm({
           </Field>
         </div>
 
-        <Field label="Message" required error={err("message")}>
+        <Field label={inquiry.count > 0 ? "Note (optional)" : "Message"} required={inquiry.count === 0} error={err("message")}>
           <Textarea name="message" value={values.message} onChange={set("message")} rows={5}
             aria-invalid={!!err("message")} className="bg-card/60"
-            placeholder="Tell us about your product, fabric, timeline, and target price." />
+            placeholder={inquiry.count > 0
+              ? "Anything we should know about the selected styles — colours, fabric changes, timing, target price."
+              : "Tell us about your product, fabric, timeline, and target price."} />
         </Field>
 
         <div className="flex flex-col-reverse items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">Goes straight to our merchandising team.</p>
-          <Button type="submit" size="xl" disabled={isPending} className="sm:min-w-44">
+          <Button type="submit" size="xl" disabled={isPending} className="btn-shine sm:min-w-44">
             {isPending ? (
               <>
                 <Icon name="LoaderCircle" className="size-4 animate-spin" />
@@ -227,7 +269,7 @@ export function InquiryForm({
               </>
             ) : (
               <>
-                Send inquiry
+                {inquiry.count > 0 ? `Send inquiry (${inquiry.count})` : "Send inquiry"}
                 <Icon name="Send" className="size-4" />
               </>
             )}
@@ -238,14 +280,7 @@ export function InquiryForm({
   );
 }
 
-function Field({
-  label, required, error, children,
-}: {
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
   return (
     <div className="group space-y-1.5">
       <Label>

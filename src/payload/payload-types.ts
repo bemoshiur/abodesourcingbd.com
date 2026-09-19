@@ -234,6 +234,10 @@ export interface Service {
   }[];
   relatedCategories?: (number | ProductCategory)[] | null;
   /**
+   * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+   */
+  answer?: string | null;
+  /**
    * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
    */
   faqs?:
@@ -247,6 +251,10 @@ export interface Service {
    * Search-result overrides. Leave blank to use the automatic title and description.
    */
   seo?: {
+    /**
+     * Optional keyword-rich H1. Blank = the record's own title.
+     */
+    heading?: string | null;
     /**
      * ≤ 60 characters is ideal. Put the main keyword first.
      */
@@ -287,6 +295,10 @@ export interface ProductCategory {
    */
   order?: number | null;
   /**
+   * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+   */
+  answer?: string | null;
+  /**
    * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
    */
   faqs?:
@@ -300,6 +312,10 @@ export interface ProductCategory {
    * Search-result overrides. Leave blank to use the automatic title and description.
    */
   seo?: {
+    /**
+     * Optional keyword-rich H1. Blank = the record's own title.
+     */
+    heading?: string | null;
     /**
      * ≤ 60 characters is ideal. Put the main keyword first.
      */
@@ -382,6 +398,10 @@ export interface Product {
    */
   seo?: {
     /**
+     * Optional keyword-rich H1. Blank = the record's own title.
+     */
+    heading?: string | null;
+    /**
      * ≤ 60 characters is ideal. Put the main keyword first.
      */
     metaTitle?: string | null;
@@ -415,6 +435,10 @@ export interface Factory {
   logo?: (number | null) | Media;
   intro: string;
   /**
+   * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+   */
+  answer?: string | null;
+  /**
    * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
    */
   faqs?:
@@ -428,6 +452,10 @@ export interface Factory {
    * Search-result overrides. Leave blank to use the automatic title and description.
    */
   seo?: {
+    /**
+     * Optional keyword-rich H1. Blank = the record's own title.
+     */
+    heading?: string | null;
     /**
      * ≤ 60 characters is ideal. Put the main keyword first.
      */
@@ -629,6 +657,7 @@ export interface ServicesSelect<T extends boolean = true> {
         id?: T;
       };
   relatedCategories?: T;
+  answer?: T;
   faqs?:
     | T
     | {
@@ -639,6 +668,7 @@ export interface ServicesSelect<T extends boolean = true> {
   seo?:
     | T
     | {
+        heading?: T;
         metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
@@ -664,6 +694,7 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
       };
   image?: T;
   order?: T;
+  answer?: T;
   faqs?:
     | T
     | {
@@ -674,6 +705,7 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
   seo?:
     | T
     | {
+        heading?: T;
         metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
@@ -715,6 +747,7 @@ export interface ProductsSelect<T extends boolean = true> {
   seo?:
     | T
     | {
+        heading?: T;
         metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
@@ -740,6 +773,7 @@ export interface FactoriesSelect<T extends boolean = true> {
   website?: T;
   logo?: T;
   intro?: T;
+  answer?: T;
   faqs?:
     | T
     | {
@@ -750,6 +784,7 @@ export interface FactoriesSelect<T extends boolean = true> {
   seo?:
     | T
     | {
+        heading?: T;
         metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
@@ -840,6 +875,10 @@ export interface SiteSetting {
    */
   foundingYear?: number | null;
   /**
+   * Published in llms.txt. CC BY 4.0 lets AI engines quote the site with attribution; it is a standing legal grant, so choose deliberately.
+   */
+  contentLicense?: ('none' | 'CC-BY-4.0') | null;
+  /**
    * LinkedIn, Facebook, etc. Used as entity signals for search and AI engines.
    */
   sameAs?:
@@ -922,6 +961,10 @@ export interface PageContent {
     heading?: string | null;
     intro?: string | null;
     /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
+    /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
     faqs?:
@@ -943,6 +986,10 @@ export interface PageContent {
     metaDescription?: string | null;
     heading?: string | null;
     intro?: string | null;
+    /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
     /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
@@ -966,6 +1013,10 @@ export interface PageContent {
     heading?: string | null;
     intro?: string | null;
     /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
+    /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
     faqs?:
@@ -987,6 +1038,10 @@ export interface PageContent {
     metaDescription?: string | null;
     heading?: string | null;
     intro?: string | null;
+    /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
     /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
@@ -1010,6 +1065,10 @@ export interface PageContent {
     heading?: string | null;
     intro?: string | null;
     /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
+    /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
     faqs?:
@@ -1032,6 +1091,10 @@ export interface PageContent {
     heading?: string | null;
     intro?: string | null;
     /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
+    /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
     faqs?:
@@ -1053,6 +1116,10 @@ export interface PageContent {
     metaDescription?: string | null;
     heading?: string | null;
     intro?: string | null;
+    /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
     /**
      * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
      */
@@ -1103,6 +1170,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   officeImage?: T;
   ogImage?: T;
   foundingYear?: T;
+  contentLicense?: T;
   sameAs?:
     | T
     | {
@@ -1175,6 +1243,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1190,6 +1259,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1205,6 +1275,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1220,6 +1291,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1235,6 +1307,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1250,6 +1323,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {
@@ -1265,6 +1339,7 @@ export interface PageContentSelect<T extends boolean = true> {
         metaDescription?: T;
         heading?: T;
         intro?: T;
+        answer?: T;
         faqs?:
           | T
           | {

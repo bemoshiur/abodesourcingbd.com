@@ -11,7 +11,7 @@ export const site = {
     "Bangladesh-based garments buying & sourcing office for global fashion brands — knitwear, woven, sportswear, outerwear, and customized apparel.",
   // Keep the "o" — abOdesourcingbd.com is the exact registered domain.
   domain: "abodesourcingbd.com",
-  url: "https://abodesourcingbd.com",
+  url: "https://www.abodesourcingbd.com",
   address: {
     line1: "4th Floor (Lift-03), House-06, Road-10",
     line2: "Sector-04, Uttara",

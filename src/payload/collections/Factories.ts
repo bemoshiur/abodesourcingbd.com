@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { revalidateHooks } from "../hooks/revalidate.ts";
 import { faqsField, seoField } from "../fields/seo.ts";
+import { answerField } from "../fields/answer.ts";
 
 export const Factories: CollectionConfig = {
   slug: "factories",
@@ -36,6 +37,7 @@ export const Factories: CollectionConfig = {
     { name: "website", type: "text" },
     { name: "logo", type: "upload", relationTo: "media" },
     { name: "intro", type: "textarea", required: true },
+    answerField,
     faqsField,
     seoField,
   ],

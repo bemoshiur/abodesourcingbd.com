@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { revalidateHooks } from "../hooks/revalidate.ts";
 import { faqsField, seoField } from "../fields/seo.ts";
+import { answerField } from "../fields/answer.ts";
 
 export const ProductCategories: CollectionConfig = {
   slug: "product-categories",
@@ -42,6 +43,7 @@ export const ProductCategories: CollectionConfig = {
       defaultValue: 100,
       admin: { position: "sidebar", description: "Lower numbers appear first." },
     },
+    answerField,
     faqsField,
     seoField,
   ],

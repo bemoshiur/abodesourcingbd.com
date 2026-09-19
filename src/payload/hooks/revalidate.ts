@@ -19,6 +19,10 @@ async function revalidateAll(context?: Record<string, unknown>) {
     // plain Node ESM, where a top-level "next/cache" import does not resolve.
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
+    // Generated files are route handlers — purge them explicitly too.
+    for (const path of ["/llms.txt", "/llms-full.txt", "/facts.json", "/sitemap.xml", "/robots.txt"]) {
+      revalidatePath(path);
+    }
   } catch {
     // not running inside Next.js (seed script, CLI) — nothing to revalidate
   }

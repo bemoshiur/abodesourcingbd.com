@@ -426,7 +426,8 @@ body::before {
   .marquee-track { animation: marquee-x var(--marquee-duration, 45s) linear infinite; }
   .marquee-reverse .marquee-track { animation-direction: reverse; }
   .marquee-mask:hover .marquee-track,
-  .marquee-mask:focus-within .marquee-track { animation-play-state: paused; }
+  .marquee-mask:focus-within .marquee-track,
+  [data-paused="true"] .marquee-track { animation-play-state: paused; }
 }
 @keyframes marquee-x { to { transform: translateX(-50%); } }
 /* Reduced motion: no ticker — a single swipeable row, duplicate set hidden. */
@@ -514,6 +515,15 @@ body::before {
   0% { transform: scale(0.8); opacity: 0; }
   60% { transform: scale(1.08); }
   100% { transform: scale(1); opacity: 1; }
+}
+
+/* FAQ open reveal. */
+@media (prefers-reduced-motion: no-preference) {
+  .faq-item[open] .faq-body { animation: faq-in 0.32s var(--ease-out-soft); }
+}
+@keyframes faq-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Room for the mobile action bar so it never covers page content. */

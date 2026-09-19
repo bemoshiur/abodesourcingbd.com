@@ -16,7 +16,9 @@ export function MobileCtaBar() {
   const pathname = usePathname();
   const { count } = useInquiry();
   const { setOpen } = useInquiryDrawer();
-  if (pathname.startsWith("/contact") || pathname.startsWith("/admin")) return null;
+  // /products/<category>/<style>/ has its own sticky "Add to inquiry" bar.
+  const onProductPage = /^\/products\/[^/]+\/[^/]+\/?$/.test(pathname);
+  if (pathname.startsWith("/contact") || pathname.startsWith("/admin") || onProductPage) return null;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/85 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_24px_-12px_rgb(0_0_0/0.18)] backdrop-blur-xl md:hidden">

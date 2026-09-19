@@ -1,6 +1,4 @@
-import { getServices, getCategories, getFactories } from "@/lib/payload";
-
-/** Primary navigation — order matters; reused by header and footer. */
+/** Primary navigation — order matters; reused by header, mobile menu and footer. */
 export const navItems = [
   { label: "About", href: "/about/" },
   { label: "Services", href: "/services/" },
@@ -18,24 +16,4 @@ export interface Crumb {
   href: string;
 }
 
-/** Every static + dynamic route, used by sitemap.ts. */
-export async function allRoutes(): Promise<string[]> {
-  const [services, products, factories] = await Promise.all([
-    getServices(),
-    getCategories(),
-    getFactories(),
-  ]);
-  const staticRoutes = [
-    "/",
-    "/about/",
-    "/services/",
-    "/products/",
-    "/factories/",
-    "/compliance/",
-    "/contact/",
-  ];
-  const serviceRoutes = services.map((s) => `/services/${s.slug}/`);
-  const productRoutes = products.map((p) => `/products/${p.slug}/`);
-  const factoryRoutes = factories.map((f) => `/factories/${f.slug}/`);
-  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...factoryRoutes];
-}
+export const productPath = (categorySlug: string, slug: string) => `/products/${categorySlug}/${slug}/`;

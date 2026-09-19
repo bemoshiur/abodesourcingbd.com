@@ -31,6 +31,7 @@ export interface FaqView {
 }
 
 export interface SeoView {
+  heading?: string;
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: ImageView;
@@ -56,6 +57,7 @@ export interface SiteInfo {
   foundingYear?: number;
   sameAs: string[];
   keywords: string[];
+  contentLicense: "none" | "CC-BY-4.0";
 }
 
 export interface ServiceView {
@@ -67,6 +69,8 @@ export interface ServiceView {
   covers: string[];
   how: string[];
   relatedCategories: string[];
+  answer?: string;
+  updatedAt: string;
   faqs: FaqView[];
   seo: SeoView;
 }
@@ -79,6 +83,8 @@ export interface CategoryView {
   intro: string;
   subItems: string[];
   image?: ImageView;
+  answer?: string;
+  updatedAt: string;
   faqs: FaqView[];
   seo: SeoView;
 }
@@ -97,6 +103,7 @@ export interface ProductView {
   specs: { label: string; value: string }[];
   images: (ImageView & { view: string })[];
   featured: boolean;
+  updatedAt: string;
   seo: SeoView;
 }
 
@@ -109,6 +116,8 @@ export interface FactoryView {
   website?: string;
   logo?: ImageView;
   intro: string;
+  answer?: string;
+  updatedAt: string;
   faqs: FaqView[];
   seo: SeoView;
 }
@@ -124,6 +133,7 @@ export interface PageMeta {
   metaDescription?: string;
   heading?: string;
   intro?: string;
+  answer?: string;
   faqs: FaqView[];
 }
 
@@ -167,11 +177,12 @@ function toFaqs(faqs: { question: string; answer: string }[] | null | undefined)
 
 function toSeo(
   seo:
-    | { metaTitle?: string | null; metaDescription?: string | null; ogImage?: number | Media | null }
+    | { heading?: string | null; metaTitle?: string | null; metaDescription?: string | null; ogImage?: number | Media | null }
     | null
     | undefined,
 ): SeoView {
   return {
+    heading: seo?.heading || undefined,
     metaTitle: seo?.metaTitle || undefined,
     metaDescription: seo?.metaDescription || undefined,
     ogImage: toImage(seo?.ogImage),
@@ -197,6 +208,7 @@ export const getSiteSettings = cache(async () => {
     foundingYear: g.foundingYear ?? undefined,
     sameAs: (g.sameAs ?? []).map((s) => s.url),
     keywords: (g.keywords ?? []).map((k) => k.keyword),
+    contentLicense: g.contentLicense === "CC-BY-4.0" ? "CC-BY-4.0" : "none",
   };
   return { site, mission: g.mission, vision: g.vision };
 });
@@ -227,6 +239,7 @@ export const getPageContent = cache(async () => {
           metaDescription?: string | null;
           heading?: string | null;
           intro?: string | null;
+          answer?: string | null;
           faqs?: { question: string; answer: string }[] | null;
         }
       | null
@@ -238,6 +251,7 @@ export const getPageContent = cache(async () => {
           metaDescription: p.metaDescription || undefined,
           heading: p.heading || undefined,
           intro: p.intro || undefined,
+          answer: p.answer || undefined,
           faqs: toFaqs(p.faqs),
         }
       : emptyPage;
@@ -267,6 +281,8 @@ function toServiceView(s: {
   covers: { item: string }[];
   how: { item: string }[];
   relatedCategories?: (number | ProductCategory)[] | null;
+  answer?: string | null;
+  updatedAt: string;
   faqs?: { question: string; answer: string }[] | null;
   seo?: Parameters<typeof toSeo>[0];
 }): ServiceView {
@@ -279,6 +295,8 @@ function toServiceView(s: {
     covers: s.covers.map((c) => c.item),
     how: s.how.map((h) => h.item),
     relatedCategories: relSlugs(s.relatedCategories),
+    answer: s.answer || undefined,
+    updatedAt: s.updatedAt,
     faqs: toFaqs(s.faqs),
     seo: toSeo(s.seo),
   };
@@ -310,6 +328,8 @@ function toCategoryView(c: {
   intro: string;
   subItems: { item: string }[];
   image?: number | Media | null;
+  answer?: string | null;
+  updatedAt: string;
   faqs?: { question: string; answer: string }[] | null;
   seo?: Parameters<typeof toSeo>[0];
 }): CategoryView {
@@ -321,6 +341,8 @@ function toCategoryView(c: {
     intro: c.intro,
     subItems: c.subItems.map((i) => i.item),
     image: toImage(c.image),
+    answer: c.answer || undefined,
+    updatedAt: c.updatedAt,
     faqs: toFaqs(c.faqs),
     seo: toSeo(c.seo),
   };
@@ -363,6 +385,7 @@ function toProductView(p: Product): ProductView {
       return img ? [{ ...img, view: i.view ?? "front" }] : [];
     }),
     featured: Boolean(p.featured),
+    updatedAt: p.updatedAt,
     seo: toSeo(p.seo),
   };
 }
@@ -419,6 +442,8 @@ function toFactoryView(f: {
   website?: string | null;
   logo?: (number | null) | Media;
   intro: string;
+  answer?: string | null;
+  updatedAt: string;
   faqs?: { question: string; answer: string }[] | null;
   seo?: Parameters<typeof toSeo>[0];
 }): FactoryView {
@@ -431,6 +456,8 @@ function toFactoryView(f: {
     website: f.website ?? undefined,
     logo: toImage(f.logo),
     intro: f.intro,
+    answer: f.answer || undefined,
+    updatedAt: f.updatedAt,
     faqs: toFaqs(f.faqs),
     seo: toSeo(f.seo),
   };

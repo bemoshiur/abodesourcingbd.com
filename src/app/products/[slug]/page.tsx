@@ -1,240 +1,212 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { PageHeader } from "@/components/page-header";
+import { permanentRedirect } from "next/navigation";
+import type { Metadata } from "next";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { FaqSection } from "@/components/faq-section";
+import { PageHeader } from "@/components/page-header";
+import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
+import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/lib/routes";
+import { categoryFaqs } from "@/lib/default-faqs";
+import { categoryEntry } from "@/lib/page-meta";
 import {
+  factoriesForCategory,
   getCategories,
   getCategory,
-  shotsForCategory,
-  buyersForCategory,
-  servicesForCategory,
-  factoriesForCategory,
   getSiteSettings,
-  type ShotView,
+  productsForCategory,
+  servicesForCategory,
 } from "@/lib/payload";
+import { CONTACT_PATH, productPath } from "@/lib/routes";
+import { breadcrumbNode, faqNode, graph, itemListNode, webPageNode } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
-export const revalidate = 60;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const products = await getCategories();
-  return products.map((p) => ({ slug: p.slug }));
+  return (await getCategories()).map((c) => ({ slug: c.slug }));
 }
 
-export const dynamicParams = false;
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const cat = await getCategory(slug);
+  const [{ site }, cat] = await Promise.all([getSiteSettings(), getCategory(slug)]);
   if (!cat) return {};
-  const { site } = await getSiteSettings();
-  return {
-    title: `${cat.title} Sourcing`,
-    description: cat.summary,
-    keywords: [
-      `${cat.title} sourcing Bangladesh`,
-      `${cat.title} manufacturer Bangladesh`,
-      `${cat.title} buying office`,
-      "apparel sourcing Bangladesh",
-      ...cat.subItems.map((s) => `${s} sourcing`),
-    ],
-    alternates: { canonical: `/products/${cat.slug}/` },
-    openGraph: {
-      title: `${cat.title} Sourcing — ${site.name}`,
-      description: cat.summary,
-      url: `${site.url}/products/${cat.slug}/`,
-    },
-  };
+  const e = categoryEntry(site, cat);
+  return buildMetadata({
+    site,
+    path: e.path,
+    title: e.title,
+    description: e.description,
+    image: cat.seo.ogImage ?? site.ogImage,
+    ogEyebrow: "Sourced in Bangladesh",
+  });
 }
 
-export default async function ProductCategoryPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ProductCategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const cat = await getCategory(slug);
-  if (!cat) notFound();
+  if (!cat) permanentRedirect("/products/");
 
-  const [{ site }, shots, buyers, relatedServices, relatedFactories] =
-    await Promise.all([
-      getSiteSettings(),
-      shotsForCategory(cat.slug),
-      buyersForCategory(cat.slug),
-      servicesForCategory(cat.slug),
-      factoriesForCategory(cat.slug),
-    ]);
+  const [{ site }, products, relatedServices, relatedFactories, allCategories] = await Promise.all([
+    getSiteSettings(),
+    productsForCategory(cat.slug),
+    servicesForCategory(cat.slug),
+    factoriesForCategory(cat.slug),
+    getCategories(),
+  ]);
+  const e = categoryEntry(site, cat);
+  const crumbs = [
+    { label: "Products", href: "/products/" },
+    { label: cat.title, href: e.path },
+  ];
+  const faqs = cat.faqs.length
+    ? cat.faqs
+    : categoryFaqs({
+        title: cat.title,
+        subItems: cat.subItems,
+        productNames: products.map((p) => p.name),
+        compositions: products.map((p) => p.composition ?? ""),
+        total: products.length,
+      });
 
-  // Group the running-product gallery by brand.
-  const byBrand = new Map<string, ShotView[]>();
-  for (const s of shots) {
-    const arr = byBrand.get(s.brandName) ?? [];
-    arr.push(s);
-    byBrand.set(s.brandName, arr);
-  }
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: cat.title,
-    description: cat.summary,
-    category: cat.title,
-    brand: { "@type": "Organization", name: site.name },
-    url: `${site.url}/products/${cat.slug}/`,
-  };
+  const jsonLd = graph([
+    webPageNode(site, {
+      path: e.path,
+      name: e.title,
+      description: e.description,
+      type: "CollectionPage",
+      dateModified: e.lastModified,
+      mainEntity: { "@id": `${site.url.replace(/\/$/, "")}${e.path}#itemlist` },
+    }),
+    breadcrumbNode(site, e.path, crumbs),
+    itemListNode(site, {
+      path: e.path,
+      name: `${cat.title} styles`,
+      items: products.map((p) => ({ name: p.name, url: productPath(p.categorySlug, p.slug) })),
+    }),
+    ...[faqNode(site, e.path, faqs)].filter((n): n is NonNullable<typeof n> => Boolean(n)),
+  ]);
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Breadcrumbs
-        items={[
-          { label: "Products", href: "/products/" },
-          { label: cat.title, href: `/products/${cat.slug}/` },
-        ]}
-      />
-      <PageHeader eyebrow="Product category" title={cat.title} intro={cat.intro}>
+      <Breadcrumbs items={crumbs} />
+      <PageHeader eyebrow="Product category" title={e.heading} intro={cat.intro} answer={e.answer}>
         <ul className="mt-6 flex flex-wrap gap-2">
           {cat.subItems.map((item) => (
             <li key={item}>
-              <Badge variant="outline">{item}</Badge>
+              <Badge variant="outline" className="bg-card/70 backdrop-blur">{item}</Badge>
             </li>
           ))}
         </ul>
       </PageHeader>
 
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        {/* Brand-grouped gallery */}
-        <section>
-          <h2 className="font-display text-2xl font-semibold">Running products</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            <span className="tabular-nums">{shots.length}</span> styles currently or
-            recently in production for this category.
-          </p>
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <SectionHeading
+          eyebrow="Running styles"
+          title={`${products.length} ${cat.title.toLowerCase()} ${products.length === 1 ? "style" : "styles"}`}
+          intro="Tap a style for its full specification, or add it to your inquiry list."
+        />
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+          {products.map((p, i) => (
+            <Reveal key={p.slug} delay={(i % 4) * 60}>
+              <ProductCard product={p} priority={i < 4} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
-          <Reveal as="div" className="mt-8 space-y-12">
-            {[...byBrand.entries()].map(([brand, brandShots]) => (
-              <div key={brand}>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-foreground">
-                  {brand}
-                </h3>
-                <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                  {brandShots.map((shot) => (
-                    <figure
-                      key={shot.src}
-                      className="group overflow-hidden rounded-xl glass"
-                    >
-                      <div className="relative aspect-square overflow-hidden">
-                        <Image
-                          src={shot.src}
-                          alt={shot.alt}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-cover img-zoom"
-                        />
-                      </div>
-                    </figure>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </Reveal>
-        </section>
-
-        {/* Relevant buyers */}
-        {buyers.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="font-display text-xl font-semibold">Buyers in this category</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {buyers.map((b) => (
-                <li key={b.slug}>
-                  <Link
-                    href="/buyers/"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                  >
-                    {b.name}
-                    {b.country && (
-                      <span className="text-xs text-muted-foreground">· {b.country}</span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {/* Sourced through these factories */}
-        {relatedFactories.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="font-display text-xl font-semibold">Sourced through these factories</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Compliant partner units that run {cat.title.toLowerCase()} for us.
-            </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {relatedFactories.length > 0 && (
+        <section className="border-t border-border bg-muted/40 py-14 lg:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionHeading
+              eyebrow="Where it is made"
+              title="Sourced through these factories"
+              intro={`Compliant partner units that run ${cat.title.toLowerCase()} for us.`}
+              href="/factories/"
+              cta="All factories"
+            />
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {relatedFactories.map((f) => (
                 <Link
                   key={f.slug}
                   href={`/factories/${f.slug}/`}
-                  className="group flex items-center justify-between gap-3 rounded-lg glass p-4 interact"
+                  className="glass group flex items-center justify-between gap-3 rounded-2xl p-4 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] motion-reduce:transform-none"
                 >
                   <span>
-                    <span className="block text-sm font-semibold text-foreground">{f.name}</span>
+                    <span className="block text-sm font-semibold">{f.name}</span>
                     <span className="block text-xs text-muted-foreground">{f.specialty}</span>
                   </span>
                   <Icon name="ChevronRight" className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
+      )}
 
-        {/* Related services */}
-        {relatedServices.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="font-display text-xl font-semibold">Related services</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {relatedServices.map((s) => (
-                <li key={s.slug}>
-                  <Link
-                    href={`/services/${s.slug}/`}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                  >
-                    <Icon name={s.icon} className="size-3.5 text-primary" />
-                    {s.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {/* CTA */}
-        <section className="mt-14 flex flex-col items-start gap-4 rounded-xl border border-primary/20 bg-primary/5 p-8 sm:flex-row sm:items-center sm:justify-between">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="grid gap-10 lg:grid-cols-2">
+          {relatedServices.length > 0 && (
+            <div>
+              <h2 className="font-display text-xl font-semibold">Related services</h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {relatedServices.map((s) => (
+                  <li key={s.slug}>
+                    <Link
+                      href={`/services/${s.slug}/`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-primary/40 hover:text-primary"
+                    >
+                      <Icon name={s.icon} className="size-3.5 text-primary" />
+                      {s.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div>
-            <h2 className="font-display text-xl font-semibold">
-              Source {cat.title.toLowerCase()} with ABD
-            </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              Share your styles, target price, and quantity — we&apos;ll come back within 24 hours.
+            <h2 className="font-display text-xl font-semibold">More categories</h2>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {allCategories
+                .filter((c) => c.slug !== cat.slug)
+                .map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={`/products/${c.slug}/`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-primary/40 hover:text-primary"
+                    >
+                      <Icon name={c.icon} className="size-3.5 text-primary" />
+                      {c.title}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <FaqSection faqs={faqs} className="border-t border-border" />
+
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="mesh-dark flex flex-col items-start gap-4 overflow-hidden rounded-3xl p-8 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="font-display text-xl font-semibold sm:text-2xl">Source {cat.title.toLowerCase()} with ABD</h2>
+            <p className="mt-1.5 text-sm text-primary-foreground/75">
+              Share your styles, target price and quantity — we&apos;ll come back within 24 hours.
             </p>
           </div>
-          <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "lg" }))}>
+          <Link href={CONTACT_PATH} className={cn(buttonVariants({ size: "xl" }), "btn-shine bg-accent text-accent-foreground")}>
             Get a Quote
             <Icon name="ArrowRight" className="size-4" />
           </Link>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   );
 }

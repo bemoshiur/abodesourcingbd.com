@@ -1,6 +1,7 @@
 import type { Field, GlobalConfig } from "payload";
 import { globalAfterChangeRevalidate } from "../hooks/revalidate.ts";
 import { faqsField } from "../fields/seo.ts";
+import { answerField } from "../fields/answer.ts";
 
 /** One tab per page: the search title/description, the H1, an intro line and its FAQs. */
 function pageTab(label: string, name: string, extra: Field[] = []) {
@@ -22,6 +23,7 @@ function pageTab(label: string, name: string, extra: Field[] = []) {
       },
       { name: "heading", type: "text", label: "Page heading (H1)" },
       { name: "intro", type: "textarea", label: "Intro paragraph" },
+      answerField,
       ...extra,
       faqsField,
     ] as Field[],
