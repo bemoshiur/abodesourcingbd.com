@@ -22,7 +22,8 @@ const { default: config } = await import("../src/payload/payload.config.ts");
 interface Change {
   page: string;
   field: string;
-  from: string;
+  /** The value this change replaces; a list when a database may hold any one of several earlier wordings. */
+  from: string | string[];
   to: string;
 }
 
@@ -64,17 +65,14 @@ const CHANGES: Change[] = [
     to: "ABD Sourcing: Garment Buying & Sourcing Office in Bangladesh & India",
   },
   {
+    // A database holds one of two earlier wordings: the original, or an intermediate draft that read
+    // "Multiple Certified ... Bangladesh & India". The owner's exact text wins over both.
     page: "compliance",
     field: "heading",
-    from: "BSCI-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
-    to: "Multiple-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
-  },
-  {
-    // The same change for a database that already took the earlier wording of it (an intermediate
-    // draft that read "Multiple Certified ... Bangladesh & India"). The owner's exact text wins.
-    page: "compliance",
-    field: "heading",
-    from: "Multiple Certified Garment Factories in Bangladesh & India: 7-Step Quality Control",
+    from: [
+      "BSCI-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
+      "Multiple Certified Garment Factories in Bangladesh & India: 7-Step Quality Control",
+    ],
     to: "Multiple-Certified Garment Factories in Bangladesh: 7-Step Quality Control",
   },
   {
@@ -132,11 +130,12 @@ const patch: Record<string, unknown> = {};
 let skipped = 0;
 for (const c of CHANGES) {
   const now = current[c.page]?.[c.field];
+  const froms = Array.isArray(c.from) ? c.from : [c.from];
   if (now === c.to) {
     console.log(`= ${c.page}.${c.field} already set`);
     continue;
   }
-  if (now !== c.from) {
+  if (!froms.includes(now as string)) {
     skipped++;
     console.log(`! ${c.page}.${c.field} was edited since this change was written — left alone`);
     console.log(`    now: ${String(now).slice(0, 160)}`);

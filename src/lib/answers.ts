@@ -119,7 +119,7 @@ function productsPageAnswer(n: string, categories: string[] | undefined): string
   const build = (across: string) =>
     fit(
       [
-        `${n} sources apparel from partner factories across ${across}.`,
+        `${n} sources products from partner factories across ${across}.`,
         "Each style lists its style reference, fibre composition and fabric weight.",
       ],
       [
@@ -129,7 +129,7 @@ function productsPageAnswer(n: string, categories: string[] | undefined): string
     );
   const named = (categories ?? []).map((c) => c.trim()).filter(Boolean);
   const withList = named.length ? build(joinList(named)) : "";
-  return withList && wc(withList) <= 60 ? withList : build("its apparel categories");
+  return withList && wc(withList) <= 60 ? withList : build("its product categories");
 }
 
 export function pageAnswer(

@@ -14,7 +14,7 @@ export function CtaBand() {
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">Start a conversation</p>
           <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-            Ready to source your next apparel program in Bangladesh?
+            Ready to source your next apparel program in Bangladesh &amp; India?
           </h2>
           <p className="mt-2 text-sm text-primary-foreground/80 sm:text-base">
             Send us your tech pack or reference — we reply within 24 hours with a clear next step.

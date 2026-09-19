@@ -13,6 +13,7 @@ import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { originPhrase } from "@/lib/answers";
 import { categoryFaqs } from "@/lib/default-faqs";
 import { categoryEntry } from "@/lib/page-meta";
 import {
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: e.title,
     description: e.description,
     image: cat.seo.ogImage ?? site.ogImage,
-    ogEyebrow: "Sourced in Bangladesh",
+    ogEyebrow: `Sourced${originPhrase(cat.origins)}`,
   });
 }
 

@@ -345,8 +345,7 @@ body::before {
   color: transparent;
 }
 
-/* "Bangladesh" in the Home H1: animated colour sweep + a drawn underline. Stops stay dark enough on cream. */
-.word-bd-wrap { position: relative; display: inline-block; }
+/* "Bangladesh" in the Home H1: an animated colour sweep. Stops stay dark enough on cream. */
 .word-bd {
   background-image: linear-gradient(100deg, oklch(0.42 0.1 165) 0%, oklch(0.52 0.13 155) 22%, oklch(0.5 0.11 195) 44%, oklch(0.55 0.14 85) 66%, oklch(0.5 0.13 150) 88%, oklch(0.42 0.1 165) 100%);
   background-size: 250% 100%;
@@ -361,8 +360,8 @@ body::before {
 }
 @keyframes word-pan { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
-/* The brand name in the H1 — held in the forest green with a gold full stop, so it reads as a name
-   rather than as another coloured keyword. */
+/* The brand name in the H1 — a gradient that shades from forest green to olive green, so it reads
+   as a name rather than as another coloured keyword. */
 .word-brand {
   background-image: linear-gradient(120deg, oklch(0.36 0.07 167) 0%, oklch(0.45 0.09 160) 60%, oklch(0.55 0.13 120) 100%);
   -webkit-background-clip: text;
@@ -658,7 +657,9 @@ body::before {
     border: 1px solid #ddd !important;
   }
   .ring-gradient::after { display: none !important; }
-  .text-gradient {
+  .text-gradient,
+  .word-brand,
+  .word-bd {
     background: none !important;
     -webkit-text-fill-color: #111 !important;
     color: #111 !important;

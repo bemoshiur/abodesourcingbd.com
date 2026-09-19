@@ -73,6 +73,7 @@ test("products answer is count-free, lists the given categories and stays 40-60 
   });
   assert.ok(!COUNT_WORD.test(a), `count word in: ${a}`);
   assert.ok(a.includes("fair trade bags and towels"));
+  assert.ok(a.includes("sources products from partner factories across"), `bags and towels are not apparel: ${a}`);
   const n = wc(a);
   assert.ok(n >= 40 && n <= 60, `${n} words`);
 });
@@ -81,7 +82,7 @@ test("products answer without categories falls back to count-free wording in 40-
   for (const opts of [undefined, {}, { categories: [] }]) {
     const a = pageAnswer("products", { name: "ABD Sourcing Bangladesh" }, opts);
     assert.ok(!COUNT_WORD.test(a), `count word in: ${a}`);
-    assert.ok(a.includes("its apparel categories"), a);
+    assert.ok(a.includes("its product categories"), a);
     const n = wc(a);
     assert.ok(n >= 40 && n <= 60, `${n} words`);
   }

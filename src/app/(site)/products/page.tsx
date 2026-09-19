@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: e.title,
     description: e.description,
     image: site.ogImage,
-    ogEyebrow: "Products · Sourced in Bangladesh",
+    ogEyebrow: "Products · Partner factories",
   });
 }
 
