@@ -73,13 +73,6 @@ export default async function HomePage() {
     { value: content.certifications.length, label: "Certifications" },
   ];
 
-  // Trade-body badge in the hero kicker — CMS-driven: it appears only while the owner keeps a
-  // membership that carries an ID, and the short form comes from the name's own parenthetical.
-  const member = content.memberships.find((m) => m.relation === "member" && m.idValue);
-  const memberBadge = member?.idValue
-    ? { abbr: member.name.match(/\(([^()]+)\)\s*$/)?.[1] ?? member.name, id: member.idValue }
-    : null;
-
   const byCategory = new Map<string, typeof products>();
   for (const p of products) byCategory.set(p.categorySlug, [...(byCategory.get(p.categorySlug) ?? []), p]);
 
@@ -115,19 +108,8 @@ export default async function HomePage() {
                 <span data-live-dot="" aria-hidden className="live-dot" />
                 Garments buying &amp; sourcing office · Dhaka
               </p>
-              {memberBadge && (
-                <p
-                  data-bgba-badge=""
-                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-xs font-semibold text-primary"
-                >
-                  <Icon name="BadgeCheck" className="size-3.5" />
-                  <span>
-                    {memberBadge.abbr} member · ID <span className="tabular-nums">{memberBadge.id}</span>
-                  </span>
-                </p>
-              )}
             </div>
-            <h1 className="headline-glow mt-5 max-w-[17ch] text-balance font-display text-[2.4rem] font-semibold leading-[1.06] tracking-[-0.032em] sm:mt-6 sm:max-w-[20ch] sm:text-[3.1rem] sm:leading-[1.04] lg:max-w-[24ch] lg:text-[3.6rem]">
+            <h1 className="headline-glow mt-5 max-w-[17ch] text-balance font-display text-[2.4rem] max-[360px]:text-[2.1rem] font-semibold leading-[1.06] tracking-[-0.032em] sm:mt-6 sm:max-w-[20ch] sm:text-[3.1rem] sm:leading-[1.04] lg:max-w-[24ch] lg:text-[3.6rem]">
               <Headline text={e.heading} />
             </h1>
             <p className="mt-4 flex items-center gap-3 font-display text-lg font-medium text-foreground/75 sm:mt-5 sm:text-xl">

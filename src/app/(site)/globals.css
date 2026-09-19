@@ -373,6 +373,11 @@ body::before {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  /* Capitals like the logo lockup. Presentation only: the heading text in the CMS, the HTML and the
+     structured data stays "ABD Sourcing". The headline's tight negative tracking is too cramped for
+     capitals, so this word gets a touch of positive tracking instead. */
+  text-transform: uppercase;
+  letter-spacing: 0.012em;
 }
 @media (prefers-reduced-motion: no-preference) {
   .word-brand { animation: brand-sheen 2.1s var(--ease-out-soft) 0.45s 1 both; }
