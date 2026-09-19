@@ -74,6 +74,37 @@ export const SiteContent: GlobalConfig = {
           ],
         },
         {
+          label: "Memberships",
+          fields: [
+            {
+              name: "memberships",
+              type: "array",
+              labels: { singular: "Membership / registration", plural: "Memberships & registrations" },
+              admin: { description: "Trade bodies and authorities shown with their logo, e.g. BGBA and the Department of Textiles." },
+              fields: [
+                { name: "name", type: "text", required: true, admin: { description: "Short name, e.g. BGBA" } },
+                { name: "fullName", type: "text", required: true },
+                {
+                  name: "relation",
+                  type: "select",
+                  defaultValue: "member",
+                  options: [
+                    { label: "Member of", value: "member" },
+                    { label: "Registered with", value: "registered" },
+                    { label: "No lead-in (name only)", value: "none" },
+                  ],
+                },
+                { type: "row", fields: [
+                  { name: "idLabel", type: "text", admin: { description: "e.g. BGBA ID" } },
+                  { name: "idValue", type: "text", admin: { description: "e.g. 02257" } },
+                ] },
+                { name: "url", type: "text", admin: { description: "Official website." } },
+                { name: "logo", type: "upload", relationTo: "media" },
+              ],
+            },
+          ],
+        },
+        {
           label: "QC Process",
           fields: [
             {

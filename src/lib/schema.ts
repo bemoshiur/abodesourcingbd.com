@@ -29,7 +29,12 @@ const postalCode = (city: string) => city.match(/\d{4,}/)?.[0];
 
 export function organizationNode(
   site: SiteInfo,
-  opts: { areaServed: string[]; knowsAbout?: string[] },
+  opts: {
+    areaServed: string[];
+    knowsAbout?: string[];
+    /** Trade bodies the business is a member of (ProgramMembership with the member number). */
+    memberOf?: { name: string; url?: string; membershipNumber?: string }[];
+  },
 ): Node {
   const code = postalCode(site.address.city);
   return {
@@ -56,6 +61,19 @@ export function organizationNode(
     },
     areaServed: opts.areaServed.map((name) => ({ "@type": "Country", name })),
     ...(opts.knowsAbout?.length ? { knowsAbout: opts.knowsAbout } : {}),
+    ...(opts.memberOf?.length
+      ? {
+          memberOf: opts.memberOf.map((m) => ({
+            "@type": "ProgramMembership",
+            hostingOrganization: {
+              "@type": "Organization",
+              name: m.name,
+              ...(m.url ? { url: m.url } : {}),
+            },
+            ...(m.membershipNumber ? { membershipNumber: m.membershipNumber } : {}),
+          })),
+        }
+      : {}),
     ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
     ...(site.foundingYear ? { foundingDate: String(site.foundingYear) } : {}),
   };
@@ -156,7 +174,6 @@ export function itemListNode(
     "@type": "ItemList",
     "@id": pageId(site, o.path, "itemlist"),
     name: o.name,
-    numberOfItems: o.items.length,
     itemListElement: o.items.map((it, i) => ({
       "@type": "ListItem",
       position: i + 1,

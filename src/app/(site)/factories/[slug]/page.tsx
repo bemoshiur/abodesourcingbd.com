@@ -1,11 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { CountryBadge } from "@/components/country-badge";
 import { FaqSection } from "@/components/faq-section";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
+import { LogoPlate } from "@/components/logo-plate";
 import { PageHeader } from "@/components/page-header";
 import { Reveal } from "@/components/reveal";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: e.title,
     description: e.description,
     image: f.seo.ogImage ?? site.ogImage,
-    ogEyebrow: "Partner factory · Bangladesh",
+    ogEyebrow: `Partner factory · ${f.country === "india" ? "India" : "Bangladesh"}`,
   });
 }
 
@@ -90,17 +91,18 @@ export default async function FactoryDetailPage({ params }: { params: Promise<{ 
       <JsonLd data={jsonLd} />
       <Breadcrumbs items={crumbs} />
       <PageHeader eyebrow="Partner factory" title={e.heading} intro={factory.intro} answer={e.answer}>
+        <CountryBadge country={factory.country} location={factory.location} className="mt-6" />
         {factory.logo && (
-          <span className="mt-6 inline-flex h-16 items-center rounded-xl bg-white px-5 ring-1 ring-border">
-            <Image
-              src={factory.logo.cardUrl}
-              alt={`${factory.name} logo`}
-              width={factory.logo.width}
-              height={factory.logo.height}
-              sizes="200px"
-              className="h-10 w-auto max-w-48 object-contain"
-            />
-          </span>
+          <LogoPlate
+            image={factory.logo}
+            alt={`${factory.name} logo`}
+            sizes="256px"
+            height={72}
+            minWidth={112}
+            maxWidth={256}
+            priority
+            className="mt-4"
+          />
         )}
       </PageHeader>
 

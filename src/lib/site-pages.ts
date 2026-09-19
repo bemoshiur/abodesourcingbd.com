@@ -53,19 +53,18 @@ export const getSitePages = cache(async (): Promise<Entry[]> => {
 
 /** Facts the site states about itself, computed from CMS counts (never hard-coded). */
 export const getSiteFacts = cache(async () => {
-  const [factories, categories, products, content] = await Promise.all([
+  const [factories, categories, content] = await Promise.all([
     getFactories(),
     getCategories(),
-    getProducts(),
     getSiteContent(),
   ]);
   return {
     partnerFactories: factories.length,
     productCategories: categories.length,
-    productStyles: products.length,
     exportMarkets: content.exportMarkets.length,
     certifications: content.certifications.length,
     qcSteps: content.qcSteps.length,
+    memberships: content.memberships,
   };
 });
 

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Icon } from "@/components/icon";
+import { LogoPlate } from "@/components/logo-plate";
 import { JsonLd } from "@/components/jsonld";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { CountryBadge } from "@/components/country-badge";
 import { FaqSection } from "@/components/faq-section";
 import { PageHeader } from "@/components/page-header";
 import { ProductCard } from "@/components/product-card";
@@ -71,7 +73,6 @@ export default async function ProductCategoryPage({ params }: { params: Promise<
         subItems: cat.subItems,
         productNames: products.map((p) => p.name),
         compositions: products.map((p) => p.composition ?? ""),
-        total: products.length,
       });
 
   const jsonLd = graph([
@@ -109,7 +110,7 @@ export default async function ProductCategoryPage({ params }: { params: Promise<
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <SectionHeading
           eyebrow="Running styles"
-          title={`${products.length} ${cat.title.toLowerCase()} ${products.length === 1 ? "style" : "styles"}`}
+          title={`Running ${cat.title.toLowerCase()} styles`}
           intro="Tap a style for its full specification, or add it to your inquiry list."
         />
         <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
@@ -138,9 +139,15 @@ export default async function ProductCategoryPage({ params }: { params: Promise<
                   href={`/factories/${f.slug}/`}
                   className="glass group flex items-center justify-between gap-3 rounded-2xl p-4 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] motion-reduce:transform-none"
                 >
-                  <span>
-                    <span className="block text-sm font-semibold">{f.name}</span>
-                    <span className="block text-xs text-muted-foreground">{f.specialty}</span>
+                  <span className="flex min-w-0 items-center gap-3">
+                    {f.logo && (
+                      <LogoPlate image={f.logo} alt={`${f.name} logo`} sizes="96px" className="rounded-lg" height={48} pad={6} minWidth={56} maxWidth={96} />
+                    )}
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold">{f.name}</span>
+                      <span className="block text-xs text-muted-foreground">{f.specialty}</span>
+                      <CountryBadge country={f.country} location={f.location} className="mt-1.5" />
+                    </span>
                   </span>
                   <Icon name="ChevronRight" className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                 </Link>

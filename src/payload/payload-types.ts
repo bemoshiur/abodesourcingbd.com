@@ -425,6 +425,18 @@ export interface Factory {
    */
   slug: string;
   name: string;
+  /**
+   * Where the factory is. Drives the “Factory in Bangladesh / Factory in India” grouping.
+   */
+  country: 'bangladesh' | 'india';
+  /**
+   * City / state, only if the factory states it publicly.
+   */
+  location?: string | null;
+  /**
+   * Lower numbers appear first within a country.
+   */
+  order?: number | null;
   specialty: string;
   productTypes: {
     item: string;
@@ -762,6 +774,9 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface FactoriesSelect<T extends boolean = true> {
   slug?: T;
   name?: T;
+  country?: T;
+  location?: T;
+  order?: T;
   specialty?: T;
   productTypes?:
     | T
@@ -929,6 +944,33 @@ export interface SiteContent {
     logo?: (number | null) | Media;
     id?: string | null;
   }[];
+  /**
+   * Trade bodies and authorities shown with their logo, e.g. BGBA and the Department of Textiles.
+   */
+  memberships?:
+    | {
+        /**
+         * Short name, e.g. BGBA
+         */
+        name: string;
+        fullName: string;
+        relation?: ('member' | 'registered' | 'none') | null;
+        /**
+         * e.g. BGBA ID
+         */
+        idLabel?: string | null;
+        /**
+         * e.g. 02257
+         */
+        idValue?: string | null;
+        /**
+         * Official website.
+         */
+        url?: string | null;
+        logo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   qcSteps: {
     step: string;
     detail: string;
@@ -1211,6 +1253,18 @@ export interface SiteContentSelect<T extends boolean = true> {
     | {
         name?: T;
         full?: T;
+        logo?: T;
+        id?: T;
+      };
+  memberships?:
+    | T
+    | {
+        name?: T;
+        fullName?: T;
+        relation?: T;
+        idLabel?: T;
+        idValue?: T;
+        url?: T;
         logo?: T;
         id?: T;
       };

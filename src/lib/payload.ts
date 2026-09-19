@@ -107,9 +107,13 @@ export interface ProductView {
   seo: SeoView;
 }
 
+export type FactoryCountry = "bangladesh" | "india";
+
 export interface FactoryView {
   slug: string;
   name: string;
+  country: FactoryCountry;
+  location?: string;
   specialty: string;
   productTypes: string[];
   categories: string[];
@@ -125,6 +129,16 @@ export interface FactoryView {
 export interface CertificationView {
   name: string;
   full: string;
+  logo?: ImageView;
+}
+
+export interface MembershipView {
+  name: string;
+  fullName: string;
+  relation: "member" | "registered" | "none";
+  idLabel?: string;
+  idValue?: string;
+  url?: string;
   logo?: ImageView;
 }
 
@@ -221,6 +235,17 @@ export const getSiteContent = cache(async () => {
     exportMarkets: g.exportMarkets.map((m) => ({ name: m.name, code: m.code })),
     certifications: g.certifications.map(
       (c): CertificationView => ({ name: c.name, full: c.full, logo: toImage(c.logo) }),
+    ),
+    memberships: (g.memberships ?? []).map(
+      (m): MembershipView => ({
+        name: m.name,
+        fullName: m.fullName,
+        relation: m.relation === "registered" || m.relation === "none" ? m.relation : "member",
+        idLabel: m.idLabel || undefined,
+        idValue: m.idValue || undefined,
+        url: m.url || undefined,
+        logo: toImage(m.logo),
+      }),
     ),
     qcSteps: g.qcSteps.map((s) => ({ step: s.step, detail: s.detail })),
     productionFlow: g.productionFlow.map((s) => s.stage),
@@ -436,6 +461,8 @@ export async function adjacentProducts(product: ProductView) {
 function toFactoryView(f: {
   slug: string;
   name: string;
+  country?: "bangladesh" | "india" | null;
+  location?: string | null;
   specialty: string;
   productTypes: { item: string }[];
   categories?: (number | ProductCategory)[] | null;
@@ -450,6 +477,8 @@ function toFactoryView(f: {
   return {
     slug: f.slug,
     name: f.name,
+    country: f.country === "india" ? "india" : "bangladesh",
+    location: f.location || undefined,
     specialty: f.specialty,
     productTypes: f.productTypes.map((t) => t.item),
     categories: relSlugs(f.categories),
@@ -468,10 +497,11 @@ export const getFactories = cache(async (): Promise<FactoryView[]> => {
   const { docs } = await payload.find({
     collection: "factories",
     limit: 100,
-    sort: "createdAt",
+    sort: ["order", "createdAt"],
     depth: 1,
   });
-  return docs.map(toFactoryView);
+  // Bangladesh first, then India; the CMS `order` decides within a country.
+  return docs.map(toFactoryView).sort((a, b) => Number(a.country === "india") - Number(b.country === "india"));
 });
 
 export async function getFactory(slug: string): Promise<FactoryView | undefined> {
@@ -498,3 +528,8 @@ export async function servicesForFactory(factory: FactoryView): Promise<ServiceV
   const all = await getServices();
   return all.filter((s) => s.relatedCategories.some((c) => factory.categories.includes(c)));
 }
+
+export const COUNTRY_LABEL: Record<FactoryCountry, string> = {
+  bangladesh: "Factory in Bangladesh",
+  india: "Factory in India",
+};

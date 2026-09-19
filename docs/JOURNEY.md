@@ -36,7 +36,7 @@ A running log of structural decisions. One line per working chunk.
 
 ## 2026-09 — CMS rebuild
 - Payload CMS on Neon + private Vercel Blob (custom storage adapter). Buyers, partners/leadership and phone numbers removed; single public inbox.
-- 71 products (style refs, composition, GSM) from the owner's spec sheets, each with its own page; "Add to inquiry" list wired into the contact form.
+- Product catalogue (style refs, composition, GSM) from the owner's spec sheets, each with its own page; "Add to inquiry" list wired into the contact form.
 - Certifications: 14 marks in a two-row scrolling band with pause control and reduced-motion fallback.
 - UI/UX pass: mesh gradients, glass, spotlight cards, staggered reveals, mega-menu, mobile action bars.
 - SEO/AEO/GEO to the OmniRank spec: answer blocks, FAQs, JSON-LD graph, llms.txt/facts.json, AI-crawler allowlist, honest sitemap; keyword map (no volume data was available — Semrush/Ahrefs had no credits).

@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { LogoPlate } from "@/components/logo-plate";
 import { Icon } from "@/components/icon";
 import { CtaBand } from "@/components/cta-band";
 import { navItems } from "@/lib/routes";
-import { getSiteSettings, getServices, getCategories } from "@/lib/payload";
+import { getSiteSettings, getServices, getCategories, getSiteContent } from "@/lib/payload";
 
 export async function SiteFooter() {
-  const [{ site }, services, products] = await Promise.all([
+  const [{ site }, services, products, { memberships }] = await Promise.all([
     getSiteSettings(),
     getServices(),
     getCategories(),
+    getSiteContent(),
   ]);
   const year = new Date().getFullYear();
 
@@ -49,6 +51,31 @@ export async function SiteFooter() {
               ))}
             </FooterCol>
           </div>
+
+          {memberships.length > 0 && (
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-border pt-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground">Memberships</p>
+              <ul className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                {memberships.map((m) => (
+                  <li key={m.name}>
+                    <a
+                      href={m.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {m.logo ? <LogoPlate image={m.logo} alt={`${m.name} logo`} sizes="80px" className="h-12 w-[4.5rem] rounded-md" /> : null}
+                      <span>
+                        {m.relation === "member" ? "Member of " : ""}
+                        {m.name}
+                        {m.idValue ? <span className="tabular-nums"> · {m.idLabel ?? "ID"} {m.idValue}</span> : null}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="mt-10 grid gap-4 border-t border-border pt-8 text-sm text-muted-foreground sm:grid-cols-[1fr_auto] sm:items-end">
             <div className="space-y-1.5">

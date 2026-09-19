@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CertificationsBand } from "@/components/certifications-band";
 import { FaqSection } from "@/components/faq-section";
+import { MembershipsBand } from "@/components/memberships-band";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
+import { LogoPlate } from "@/components/logo-plate";
 import { PageHeader } from "@/components/page-header";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
@@ -73,11 +74,9 @@ export default async function CompliancePage() {
                 <Spotlight className="glass h-full rounded-2xl">
                   <div className="flex h-full items-start gap-4 p-5">
                     {c.logo ? (
-                      <span className="relative h-12 w-16 shrink-0 rounded-lg bg-white p-1 ring-1 ring-border">
-                        <Image src={c.logo.cardUrl} alt="" width={c.logo.width} height={c.logo.height} sizes="64px" className="h-full w-full object-contain" />
-                      </span>
+                      <LogoPlate image={c.logo} alt={`${c.name} logo`} sizes="112px" className="h-20 w-28" />
                     ) : (
-                      <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/15 to-accent/25 text-primary">
+                      <span className="grid size-16 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/15 to-accent/25 text-primary">
                         <Icon name="BadgeCheck" className="size-6" />
                       </span>
                     )}
@@ -91,6 +90,8 @@ export default async function CompliancePage() {
             ))}
           </ul>
         </section>
+
+        <MembershipsBand className="mt-20 border-t border-border pt-14 [&>div]:px-0 sm:[&>div]:px-0 lg:[&>div]:px-0" />
 
         <section className="mt-20 border-t border-border pt-14">
           <SectionHeading

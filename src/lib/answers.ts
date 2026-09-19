@@ -10,6 +10,9 @@ import type { CategoryView, FactoryView, ProductView, ServiceView, SiteInfo } fr
 
 export const wc = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
+/** Lower-case ordinary capitalised words for mid-sentence use, leaving acronyms (PPE, OEKO-TEX) intact. */
+export const softLower = (s: string) => s.replace(/\b[A-Z][a-z]+\b/g, (w) => w.toLowerCase());
+
 /** Join sentences, dropping optional trailing ones until the count fits 40–60 words. */
 function fit(required: string[], optional: string[]): string {
   let text = required.join(" ");
@@ -67,10 +70,11 @@ export function serviceAnswer(s: ServiceView, site: Pick<SiteInfo, "name">): str
 }
 
 export function factoryAnswer(f: FactoryView, site: Pick<SiteInfo, "name">): string {
+  const where = f.country === "india" ? "India" : "Bangladesh";
   return fit(
     [
-      `${f.name} is a partner factory in the ${site.name} network, specialising in ${f.specialty.toLowerCase()}.`,
-      `It runs ${f.productTypes.slice(0, 4).join(", ").toLowerCase()} for the programmes we manage.`,
+      `${f.name} is a partner factory in ${where} within the ${site.name} network, specialising in ${softLower(f.specialty)}.`,
+      `It runs ${softLower(f.productTypes.slice(0, 4).join(", "))} for the programmes we manage.`,
     ],
     [
       "Every partner factory is vetted for social and technical compliance before it receives an order.",
@@ -86,8 +90,8 @@ export function pageAnswer(kind: "home" | "about" | "services" | "products" | "f
     about: `${n} is a Dhaka-based buying office that acts as the on-the-ground partner for global fashion and workwear brands. The team manages product development, sourcing, quality control and shipment across a network of compliant partner factories, serving buyers in Europe and North America from its Uttara office.`,
     services: `${n} offers six sourcing services: product development, materials and trims sourcing, merchandising support, quality assurance, production monitoring and logistics support. Together they cover an order from tech pack to shipment, delivered through compliant partner factories in Bangladesh for brands in Europe and North America.`,
     products: `${n} sources five apparel categories from Bangladesh: knitwear, woven wear, activewear and performance wear, outerwear and workwear. Each style lists its style reference, fibre composition and fabric weight. Add styles to an inquiry list and the team quotes them together within 24 hours.`,
-    factories: `${n} works with six compliant partner factories in Bangladesh, covering knitwear, sportswear, activewear, jackets and lingerie. Each unit is vetted for social and technical compliance, and holds certifications such as BSCI, SEDEX and WRAP, so brands in Europe and North America can place orders with confidence.`,
-    compliance: `${n} works only with partner factories that hold recognised social and environmental certifications, including BSCI, SEDEX, WRAP, ISO, OEKO-TEX, GOTS and GRS. Every order also passes a seven-step quality control process, from fabric inspection to final shipment approval, before goods leave Bangladesh.`,
+    factories: `${n} works with compliant partner factories in Bangladesh and India, covering knitwear, sportswear, activewear, jackets, lingerie and woven wear. Each unit is vetted for social and technical compliance, so brands in Europe and North America can place orders through one accountable team in Dhaka.`,
+    compliance: `${n} works only with partner factories that hold recognised social and environmental certifications, including BSCI, SEDEX, WRAP, ISO, OEKO-TEX, GOTS and GRS. Every order also passes a seven-step quality control process, from fabric inspection to final shipment approval, before goods ship.`,
     contact: `${n} welcomes quotation requests from apparel brands and retailers. Send a tech pack or reference garment with your target quantity and market through the form or to the team by email, and expect a reply within 24 hours. The office is located in Uttara, Sector 4, Dhaka.`,
   };
   return t[kind];

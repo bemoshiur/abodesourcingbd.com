@@ -8,6 +8,7 @@ import { CertificationsBand } from "@/components/certifications-band";
 import { CountUp } from "@/components/count-up";
 import { ExportMarkets } from "@/components/export-markets";
 import { FaqSection } from "@/components/faq-section";
+import { MembershipsBand } from "@/components/memberships-band";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
@@ -70,7 +71,7 @@ export default async function HomePage() {
   const stats = [
     { value: factories.length, label: "Partner factories" },
     { value: content.exportMarkets.length, label: "Export markets" },
-    { value: products.length, label: "Styles listed" },
+    { value: categories.length, label: "Product categories" },
     { value: content.certifications.length, label: "Certifications" },
   ];
 
@@ -81,6 +82,9 @@ export default async function HomePage() {
     organizationNode(site, {
       areaServed: content.exportMarkets.map((m) => m.name),
       knowsAbout: categories.map((c) => c.title),
+      memberOf: content.memberships
+        .filter((m) => m.relation === "member")
+        .map((m) => ({ name: m.fullName, url: m.url, membershipNumber: m.idValue })),
     }),
     websiteNode(site),
     webPageNode(site, { path: e.path, name: e.title, description: e.description, breadcrumb: false }),
@@ -116,7 +120,7 @@ export default async function HomePage() {
                 <Icon name="ArrowRight" className="size-4" />
               </Link>
               <Link href="/products/" className={cn(buttonVariants({ variant: "outline", size: "xl" }), "bg-card/70 backdrop-blur")}>
-                Browse {products.length} styles
+                Browse all styles
               </Link>
             </div>
 
@@ -256,7 +260,7 @@ export default async function HomePage() {
         <SectionHeading
           eyebrow="What we make"
           title="Product categories"
-          intro={`${products.length} running styles across ${categories.length} categories — each with its style reference, fibre composition and fabric weight.`}
+          intro={`Running styles across ${categories.length} categories — each with its style reference, fibre composition and fabric weight.`}
           href="/products/"
           cta="All products"
         />
@@ -288,9 +292,7 @@ export default async function HomePage() {
                       </span>
                       <span>
                         <h3 className="text-lg font-semibold leading-tight">{c.title}</h3>
-                        <span className="text-xs font-medium tabular-nums text-accent-ink">
-                          {items.length} {items.length === 1 ? "style" : "styles"}
-                        </span>
+                        <span className="text-xs font-medium text-accent-ink">Running styles</span>
                       </span>
                     </span>
                     <span className="mt-3 flex-1 text-sm text-muted-foreground">{c.summary}</span>
@@ -335,7 +337,7 @@ export default async function HomePage() {
               eyebrow="In production"
               title="A few of the styles we run"
               href="/products/"
-              cta={`View all ${products.length} styles`}
+              cta="View all styles"
             />
             <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
               {featured.slice(0, 8).map((p, i) => (
@@ -375,6 +377,8 @@ export default async function HomePage() {
       <WhyChooseUs className="border-t border-border bg-muted/40 py-16 lg:py-24" />
 
       <ExportMarkets className="py-16 lg:py-24" />
+
+      <MembershipsBand className="border-t border-border py-14 lg:py-20" />
 
       <FaqSection faqs={faqs} className="border-t border-border" />
 

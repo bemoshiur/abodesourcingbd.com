@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CountUp } from "@/components/count-up";
 import { ExportMarkets } from "@/components/export-markets";
 import { FaqSection } from "@/components/faq-section";
+import { MembershipsBand } from "@/components/memberships-band";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
 import { PageHeader } from "@/components/page-header";
@@ -17,7 +18,6 @@ import {
   getCategories,
   getFactories,
   getPageMeta,
-  getProducts,
   getSiteContent,
   getSiteSettings,
 } from "@/lib/payload";
@@ -40,20 +40,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const [{ site, mission, vision }, pc, content, factories, categories, products] = await Promise.all([
+  const [{ site, mission, vision }, pc, content, factories, categories] = await Promise.all([
     getSiteSettings(),
     getPageMeta("about"),
     getSiteContent(),
     getFactories(),
     getCategories(),
-    getProducts(),
   ]);
   const e = aboutEntry(site, pc);
   const crumbs = [{ label: "About", href: e.path }];
   const stats = [
     { value: factories.length, label: "Partner factories" },
     { value: categories.length, label: "Product categories" },
-    { value: products.length, label: "Styles listed" },
     { value: content.exportMarkets.length, label: "Export markets" },
     { value: content.certifications.length, label: "Certifications" },
   ];
@@ -117,7 +115,7 @@ export default async function AboutPage() {
           ))}
         </section>
 
-        <dl className="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <dl className="mt-16 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 60} className="glass rounded-2xl px-5 py-6 text-center">
               <dd className="font-display text-4xl font-semibold tabular-nums text-gradient">
@@ -148,7 +146,8 @@ export default async function AboutPage() {
       </div>
 
       <ExportMarkets className="border-t border-border py-14 lg:py-20" />
-      <WhyChooseUs className="border-t border-border bg-muted/40 py-14 lg:py-20" />
+      <MembershipsBand className="border-t border-border bg-muted/40 py-14 lg:py-20" />
+      <WhyChooseUs className="border-t border-border py-14 lg:py-20" />
       {pc.faqs.length > 0 && <FaqSection faqs={pc.faqs} />}
 
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">

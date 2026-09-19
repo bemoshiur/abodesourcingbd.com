@@ -27,7 +27,7 @@ export function ProductsExplorer({
   categories,
 }: {
   products: ExplorerProduct[];
-  categories: { slug: string; title: string; count: number }[];
+  categories: { slug: string; title: string }[];
 }) {
   const [category, setCategory] = useState<string>("all");
   const [fibre, setFibre] = useState<string>("all");
@@ -83,11 +83,11 @@ export function ProductsExplorer({
 
           <div className="-mx-1 flex flex-1 gap-2 overflow-x-auto px-1 pb-1 lg:pb-0" role="group" aria-label="Filter by category">
             <Chip active={category === "all"} onClick={() => pick(setCategory)("all")}>
-              All <Count active={category === "all"}>{products.length}</Count>
+              All styles
             </Chip>
             {categories.map((c) => (
               <Chip key={c.slug} active={category === c.slug} onClick={() => pick(setCategory)(c.slug)}>
-                {c.title} <Count active={category === c.slug}>{c.count}</Count>
+                {c.title}
               </Chip>
             ))}
           </div>
@@ -116,8 +116,7 @@ export function ProductsExplorer({
       </div>
 
       <p className="mt-5 text-sm text-muted-foreground" role="status" aria-live="polite">
-        Showing <span className="font-medium tabular-nums text-foreground">{visible.length}</span> of{" "}
-        <span className="tabular-nums">{filtered.length}</span> {filtered.length === 1 ? "style" : "styles"}
+        {active ? "Showing styles that match your filters" : "Showing our running styles"}
         {active && (
           <button type="button" onClick={reset} className="ml-3 font-medium text-primary underline-offset-4 hover:underline">
             Clear filters
@@ -146,17 +145,12 @@ export function ProductsExplorer({
       {filtered.length > shown && (
         <div className="mt-10 text-center">
           <Button type="button" size="xl" variant="outline" onClick={() => setShown((n) => n + PAGE)}>
-            Show more styles ({filtered.length - shown} left)
+            Show more styles
           </Button>
         </div>
       )}
     </div>
   );
-}
-
-function Count({ active, children }: { active: boolean; children: React.ReactNode }) {
-  // Solid colours (not opacity) so the count keeps AA contrast on both chip states.
-  return <span className={cn("tabular-nums", active ? "text-primary-foreground/90" : "text-muted-foreground")}>{children}</span>;
 }
 
 function Chip({

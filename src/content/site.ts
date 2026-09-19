@@ -70,6 +70,27 @@ export const certifications = [
   { name: "Higg Index", full: "Sustainable Apparel Coalition impact assessment suite" },
   { name: "Friends of ZDHC", full: "Zero Discharge of Hazardous Chemicals programme" },
   { name: "BCI Chain of Custody", full: "Better Cotton Initiative chain of custody" },
+  { name: "SA 8000:2014", full: "Social Accountability International workplace standard" },
+  { name: "Fairtrade", full: "Fairtrade International sustainability standard" },
+  { name: "RCS", full: "Recycled Claim Standard" },
+] as const;
+
+/** Trade-body memberships and registrations, shown with their official logos. */
+export const memberships = [
+  {
+    name: "BGBA",
+    fullName: "Bangladesh Garment Buying House Association (BGBA)",
+    relation: "member",
+    idLabel: "BGBA ID",
+    idValue: "02257",
+    url: "https://www.bgba.org.bd",
+  },
+  {
+    name: "DoT",
+    fullName: "Department of Textiles, Government of Bangladesh",
+    relation: "none",
+    url: "https://dot.gov.bd",
+  },
 ] as const;
 
 // 7-step QC process.

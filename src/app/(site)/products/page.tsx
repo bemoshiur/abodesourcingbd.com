@@ -41,8 +41,6 @@ export default async function ProductsPage() {
   const e = productsEntry(site, pc);
   const crumbs = [{ label: "Products", href: e.path }];
   const faqs = pc.faqs.length ? pc.faqs : productsFaqs(faqCtx);
-  const counts = new Map<string, number>();
-  for (const p of products) counts.set(p.categorySlug, (counts.get(p.categorySlug) ?? 0) + 1);
 
   const jsonLd = graph([
     webPageNode(site, {
@@ -85,7 +83,7 @@ export default async function ProductsPage() {
                 </span>
                 <span className="min-w-0">
                   <span className="block text-sm font-semibold leading-tight">{c.title}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">{counts.get(c.slug) ?? 0} styles</span>
+                  <span className="text-xs text-muted-foreground">Explore styles</span>
                 </span>
                 <Icon name="ArrowRight" className="ml-auto size-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" />
               </Link>
@@ -95,7 +93,7 @@ export default async function ProductsPage() {
 
         <h2 className="mb-6 mt-14 font-display text-2xl font-semibold sm:text-3xl">All styles</h2>
         <ProductsExplorer
-          categories={categories.map((c) => ({ slug: c.slug, title: c.title, count: counts.get(c.slug) ?? 0 }))}
+          categories={categories.map((c) => ({ slug: c.slug, title: c.title }))}
           products={products.map((p) => ({
             slug: p.slug,
             name: p.name,

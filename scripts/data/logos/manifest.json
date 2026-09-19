@@ -1,0 +1,222 @@
+{
+ "about": "Provenance of every third-party logo shown on the site. All were sourced from the owning organisation's own website or brand pages; none were redrawn. Certification, membership and standards marks belong to their owners — see licenceNote before relying on any of them. To stop showing a logo, remove it from the row in the CMS (Site Content > Certifications / Memberships, or the factory) — the site falls back to a text badge.",
+ "collectedOn": "2026-09-19",
+ "logos": [
+  {
+   "kind": "certification",
+   "name": "BSCI",
+   "file": "scripts/data/logos/cert-bsci.png",
+   "sourceUrl": "https://www.amfori.org/uploads/2025/06/boilerplate-member-amfori-products.zip (Boilerplate Member - amfori Products/amfori BSCI/Boilerplate Member amfori BSCI - transparent - portrait.png); same logo as og:image https://www.amfori.org/uploads/2025/07/amfori-logo-small-def.png",
+   "confidence": "medium",
+   "licenceNote": "amfori Supplier Toolkit Guidelines Oct 2024 (amfori.org): 'The amfori boilerplate must be used as provided and should not be altered. The amfori logo should not be used on its own.' Users 'should not use the boilerplate nor the logo to indicate any kind of certification or endorsement (by amfori or otherwise) of any product or service'; amfori 'is not a certification body'; not for product info, packaging, labels or e-commerce footers. Logos and guidelines are distributed through the amfori member brand kit (members and suppliers of members). This PNG is the amfori logo alone (boilerplate copy line removed), so it falls outside 'use as provided': confirm permission with info@amfori.org before publishing.",
+   "notes": "amfori has no standalone 'amfori BSCI' logo: BSCI is an amfori product and amfori's own BSCI boilerplates carry the amfori logo (wordmark, ring symbol, 'Trade with purpose'). This PNG is that logo, cropped (above the colour bar) from the 6634 px transparent portrait boilerplate in amfori's public zip; it matches the og:image logo. The boilerplate copy line ('We are a member of amfori. We act for a more sustainable supply chain with amfori BSCI') was left out on purpose so no membership claim is implied. icon-amfori-bsci.png on the BSCI page is an illustration, not a logo, and was rejected. Blue on transparent, no white parts: use on light backgrounds."
+  },
+  {
+   "kind": "certification",
+   "name": "SEDEX",
+   "file": "scripts/data/logos/cert-sedex.png",
+   "sourceUrl": "https://irp.cdn-website.com/8ae5fbff/dms3rep/multi/opt/Sedex-SMETA-audits-07f7d01f-640w.png (supplied by the site owner)",
+   "confidence": "high",
+   "licenceNote": "Could not read Sedex brand pages directly (Cloudflare block). Per web-search excerpts of sedex.com pages: Sedex and SMETA are registered trademarks of Sedex Information Exchange Limited and may not be used without approval; the Sedex Member logo is issued through the Sedex Ambassador Toolkit (sedex.com/ambassador-toolkit) to Sedex members and Affiliate Audit Companies who agree to follow its guidelines. Confirm the ABD site is entitled to display it.",
+   "notes": "Owner-supplied logo, trimmed. Sedex's own site blocks automated downloads; the wordmark matches the official vector."
+  },
+  {
+   "kind": "certification",
+   "name": "WRAP",
+   "file": "scripts/data/logos/cert-wrap.png",
+   "sourceUrl": "https://wrapcompliance.org/wp-content/themes/wrapcompliance/images/logo.svg",
+   "confidence": "high",
+   "licenceNote": "WRAP Logo Use Terms, Feb 2021 (wrapcompliance.org/wp-content/uploads/2021/02/2021-02-WRAP-Logo-Use-Terms.pdf): the Logos 'are the exclusive property of Worldwide Responsible Accredited Production'; they 'are available for use by parties who make, buy, or sell products made in a facility that is WRAP-certified at the gold or platinum level' and by Monitors and WRAP partners; 'Where used, the Logos must be reproduced as shown'; must not be used to make a product quality claim. Buyers may use the WRAP Logo on websites only if the facilities producing the goods hold and keep gold or platinum certification.",
+   "notes": "Full-colour vector logo from the WRAP site header (navy #2d3d81/#303b81, gold #cfa86b, with (R) mark), transparent background. The 'WRAP' lettering and the ocean are transparent knock-outs, so the mark is designed for a white or light surface. WRAP also offers a downloadable Main-logo.svg (uploads/2023/02), but it is a raster-wrapped SVG with an opaque white background and 1.3 MB, so the cleaner header vector was used; same design. WRAP also has 'Certified Facility' and 'Made in a WRAP Certified Facility' logos (gold/platinum only), not used here."
+  },
+  {
+   "kind": "certification",
+   "name": "ISO",
+   "file": "scripts/data/logos/cert-iso.png",
+   "sourceUrl": "https://www.iso.org/modules/isoorg-template/img/iso/iso-logo.svg (white artwork) plus site CSS https://www.iso.org/modules/isoorg-template/css/wood.jahia.min.css (.logo.isologo background-color:#e3000f)",
+   "confidence": "high",
+   "licenceNote": "STRONG RESTRICTION. iso.org/iso-name-and-logo.html: 'Only ISO, ISO members, and ISO technical committees (TCs) are allowed to use the ISO logo and ISO short name in accordance with ISO Policies.' 'All others are generally not allowed to use ISO's trademarks.' 'Don't use or copy the ISO logo. Don't modify or change the ISO logo.' 'Don't say that you, your products or your services are endorsed, approved or certified by ISO. (Remember, ISO doesn't perform certifications.)' ISO says it takes legal action (DMCA takedowns, trademark claims) over misuse. RECOMMENDATION: do not publish this logo on the ABD site; name standards in text with their full reference (e.g. 'ISO 9001:2015') as ISO advises.",
+   "notes": "Sourced and verified as the genuine current ISO logo (white globe plus 'ISO' lettering on a red square), but see licenceNote before any use. iso-logo.svg as served has white artwork only; the site's CSS paints the red (#e3000f) square behind it (the SVG carries that fill commented out). Reproduced by enabling that fill: raw/iso-red.svg (raw/iso.svg is the file exactly as served). Checked against iso-logo-og.png and the print gif from iso.org. iso.org needed Playwright (Cloudflare challenge). Solid red square, only edge anti-aliasing is non-opaque; works on any background."
+  },
+  {
+   "kind": "certification",
+   "name": "OEKO-TEX",
+   "file": "scripts/data/logos/cert-oeko-tex.png",
+   "sourceUrl": "https://www.oeko-tex.com/_assets/c38551c5cb447e4feb4f56bf7e7da8cc/Icons/Colors/Svg/standard100.svg",
+   "confidence": "high",
+   "licenceNote": "OEKO-TEX Labelling Guide (oeko-tex.com/en/labelling-guide): the rules for use of the OEKO-TEX trademark and labels are 'an integrated and binding part of the standards'. OEKO-TEX Trademark Regulation (oeko-tex.com Downloads): 'The right to use the certification mark depends on the validity of a certificate issued according to one of the OEKO-TEX standards.' oeko-tex.com Image rights page: 'Unless pictures used on our website are not explicitly provided for download their use is not allowed' [sic]. No public logo-download package exists; label artwork is issued to certificate holders. Only show this label where a valid certificate exists and is permitted to be referenced; verify via oeko-tex.com Label Check.",
+   "notes": "Official 'STANDARD 100 by OEKO-TEX' label, vector, from oeko-tex.com's own asset folder; identical to the homepage teaser image 'OEKO-TEX STANDARD 100 certification'. Monochrome black (#050505) drop with white 'OEKO TEX (R)' lettering and black 'STANDARD 100' text beneath, so light backgrounds only (the text under the drop would vanish on dark). The website shows this label in black; OEKO-TEX factsheets show a green version, not used. Portrait artwork, so the PNG is 255x360 (the 360 px height cap); raw/oeko-tex.svg gives any larger size."
+  },
+  {
+   "kind": "certification",
+   "name": "Recycled OEKO-TEX",
+   "file": "scripts/data/logos/cert-recycled-oeko-tex.png",
+   "sourceUrl": "https://www.oeko-tex.com/fileadmin/_processed_/f/5/csm_OEKO-TEX_Logo_2022_rgb_c1aaeb5ceb.jpg (site og:image, OEKO-TEX_Logo_2022_rgb); evidence: https://www.oeko-tex.com/fileadmin/user_upload/Marketing_Materialien/STANDARD_100/Factsheet/STANDARD_100_Recyled/OEKO_TEX_STANDARD100_Recycled_Factsheet_EN.pdf",
+   "confidence": "medium",
+   "licenceNote": "OEKO-TEX Labelling Guide (oeko-tex.com/en/labelling-guide): the rules for use of the OEKO-TEX trademark and labels are 'an integrated and binding part of the standards'. OEKO-TEX Trademark Regulation (oeko-tex.com Downloads): 'The right to use the certification mark depends on the validity of a certificate issued according to one of the OEKO-TEX standards.' oeko-tex.com Image rights page: 'Unless pictures used on our website are not explicitly provided for download their use is not allowed' [sic]. No public logo-download package exists; label artwork is issued to certificate holders. Only show this label where a valid certificate exists and is permitted to be referenced; verify via oeko-tex.com Label Check. This umbrella logo is not a certification label on its own.",
+   "notes": "REUSE, NOT A DEDICATED LABEL. oeko-tex.com has no separate 'Recycled' label: its standards page lists STANDARD 100, MADE IN GREEN, ORGANIC COTTON, LEATHER STANDARD, STeP, ECO PASSPORT and RESPONSIBLE BUSINESS, with no 'recycl' text. Recycled materials are certified inside STANDARD 100 (factsheet 'Recycled materials in OEKO-TEX STANDARD 100', edition 01.2026: articles with over 20% recycled material or 'recycled' in the article scope get special conditions and a separate certificate from virgin material). As instructed, the primary OEKO-TEX umbrella logo (green #01A687 drop, white 'OEKO TEX (R)') is reused. Source is a 885x886 JPG on white; the white background was keyed to transparent by edge flood-fill with anti-aliasing unmix, interior white lettering kept, verified over magenta. Alternative: reuse oeko-tex.png (the STANDARD 100 label, which is what recycled-material certificates carry). The owner may have meant Textile Exchange RCS or GRS, which are separate bodies."
+  },
+  {
+   "kind": "certification",
+   "name": "Organic OEKO-TEX",
+   "file": "scripts/data/logos/cert-organic-oeko-tex.png",
+   "sourceUrl": "https://www.oeko-tex.com/_assets/c38551c5cb447e4feb4f56bf7e7da8cc/Icons/Colors/Svg/organic-cotton.svg",
+   "confidence": "high",
+   "licenceNote": "OEKO-TEX Labelling Guide (oeko-tex.com/en/labelling-guide): the rules for use of the OEKO-TEX trademark and labels are 'an integrated and binding part of the standards'. OEKO-TEX Trademark Regulation (oeko-tex.com Downloads): 'The right to use the certification mark depends on the validity of a certificate issued according to one of the OEKO-TEX standards.' oeko-tex.com Image rights page: 'Unless pictures used on our website are not explicitly provided for download their use is not allowed' [sic]. No public logo-download package exists; label artwork is issued to certificate holders. Only show this label where a valid certificate exists and is permitted to be referenced; verify via oeko-tex.com Label Check.",
+   "notes": "Official 'ORGANIC COTTON by OEKO-TEX' label, vector, from oeko-tex.com's asset folder; identical to the homepage teaser image 'OEKO-TEX ORGANIC COTTON certification'. Monochrome black (#050505). In this file the 'OEKO TEX (R)' lettering inside the drop is a transparent knock-out (single fill), so place it on a white or light surface; on tinted or dark surfaces the lettering takes the surface colour. PNG is 240x360 (360 px height cap); raw/organic-oeko-tex.svg gives any larger size."
+  },
+  {
+   "kind": "certification",
+   "name": "OEKO-TEX STeP",
+   "file": "scripts/data/logos/cert-oeko-tex-step.png",
+   "sourceUrl": "https://www.oeko-tex.com/_assets/c38551c5cb447e4feb4f56bf7e7da8cc/Icons/Colors/Svg/step.svg",
+   "confidence": "high",
+   "licenceNote": "OEKO-TEX Labelling Guide (oeko-tex.com/en/labelling-guide): the rules for use of the OEKO-TEX trademark and labels are 'an integrated and binding part of the standards'. OEKO-TEX Trademark Regulation (oeko-tex.com Downloads): 'The right to use the certification mark depends on the validity of a certificate issued according to one of the OEKO-TEX standards.' oeko-tex.com Image rights page: 'Unless pictures used on our website are not explicitly provided for download their use is not allowed' [sic]. No public logo-download package exists; label artwork is issued to certificate holders. Only show this label where a valid certificate exists and is permitted to be referenced; verify via oeko-tex.com Label Check.",
+   "notes": "Official 'STeP by OEKO-TEX' label (certification of production facilities), vector, from oeko-tex.com's asset folder; identical to the homepage teaser image 'OEKO-TEX STeP certification'. Monochrome black (#050505) drop with white lettering and black 'STeP' beneath, so light backgrounds only. PNG is 276x360 (360 px height cap); raw/oeko-tex-step.svg gives any larger size."
+  },
+  {
+   "kind": "certification",
+   "name": "GOTS",
+   "file": "scripts/data/logos/cert-gots.png",
+   "sourceUrl": "https://global-standards.org/images/logos/gots-logo_rgb_2018_transp.png",
+   "confidence": "high",
+   "licenceNote": "Global Standards (global-standards.org/our-standards/gots/labelling): GOTS labelling may only be applied to GOTS Goods and their packaging by a Certified Entity; every label must be approved by the Certification Body before use; the site cites trademark protection and enforcement.",
+   "notes": "Official GOTS logo (RGB 2018, transparent) from the Global Standards gGmbH site. global-standard.org and www.global-standard.org 301-redirect to global-standards.org, the site of Global Standards gGmbH (Stuttgart), which states it develops and operates GOTS. Black ring text is transparent-backed: use on white/light backgrounds."
+  },
+  {
+   "kind": "certification",
+   "name": "OCS",
+   "file": "scripts/data/logos/cert-ocs.png",
+   "sourceUrl": "https://textileexchange.org/app/uploads/2021/02/OCS-100_Color.png",
+   "confidence": "high",
+   "licenceNote": "Textile Exchange (textileexchange.org/labeling-standards-claims/): only certification bodies may approve use of its standard claims/labels; 'Logos have to be obtained through the certification body that you (or your supplier) are working with for certification. We'll only issue logos for specific uses by media or others who want to promote our standards.' Mark carries the (c)TextileExchange line and must not be altered.",
+   "notes": "Official 'ORGANIC 100 content standard' mark from Textile Exchange's own media library (500x500 source, downscaled). An OCS Blended variant also exists (https://textileexchange.org/app/uploads/2026/06/OCS100-and-Blended.png) but was not used. Textile Exchange states that all claims and labels must move to its Materials Matter Standard by 30 June 2029 (claims policy effective 31 Dec 2026). Use on white/light backgrounds."
+  },
+  {
+   "kind": "certification",
+   "name": "GRS",
+   "file": "scripts/data/logos/cert-grs.png",
+   "sourceUrl": "https://textileexchange.org/app/uploads/2021/02/GRS_Color-1024x583-1.png",
+   "confidence": "high",
+   "licenceNote": "Textile Exchange (textileexchange.org/labeling-standards-claims/): only certification bodies may approve use of its standard claims/labels; 'Logos have to be obtained through the certification body that you (or your supplier) are working with for certification. We'll only issue logos for specific uses by media or others who want to promote our standards.' Mark carries the (c)TextileExchange line and must not be altered.",
+   "notes": "Official colour 'Global Recycled Standard' globe-and-arrows mark, version including the (c)TextileExchange line, from Textile Exchange's media library. A larger 1717x978 copy without the copyright line exists at https://textileexchange.org/app/uploads/2026/06/5e927fa7da25bd2eee5e2ba55c8f5bcac2224e20.png (not used). Textile Exchange states that all claims and labels must move to its Materials Matter Standard by 30 June 2029 (claims policy effective 31 Dec 2026). Black wordmark: use on white/light backgrounds."
+  },
+  {
+   "kind": "certification",
+   "name": "Higg Index",
+   "file": "scripts/data/logos/cert-higg-index.png",
+   "sourceUrl": "https://cascale.org/wp-content/uploads/2023/11/Higg-Index_Logo_BLK_Transparent.png",
+   "confidence": "high",
+   "licenceNote": "Cascale owns the Higg Index marks (cascale.org/higg-index-user-trademark-licensing-agreement/): users of Higg Index modules get a non-exclusive, revocable licence to use the Higg Index logo to communicate use of the Higg Index or verified scores, and may not modify, redesign or alter it. Higg Index Logo Guidelines v04: black or white only, no other colours, minimum 0.5 in / 38 px wide, clear space required, do not crop or recreate.",
+   "notes": "Official black Higg Index logo (2107x1034 transparent PNG) from Cascale's media library, the same file family linked to the Higg Index Brand Guidelines v04 on cascale.org. higg.org now redirects to app.worldly.io (Worldly platform); Cascale states it is the sole owner of the Higg Index tools and marks. Black artwork: use on white/light backgrounds; a white version exists at https://cascale.org/wp-content/uploads/2024/02/higg-index-logo-vector-white.svg."
+  },
+  {
+   "kind": "certification",
+   "name": "Friends of ZDHC",
+   "file": "scripts/data/logos/cert-friends-of-zdhc.png",
+   "sourceUrl": "https://cdn.prod.website-files.com/5c40537f30dc10be8f498c0e/6165da193cde2307a279c15d_ZDHC%201.svg",
+   "confidence": "high",
+   "licenceNote": "ZDHC IP Licensing page (roadmaptozero.com/ip-licensing, marked 'Currently Under Development'): public use of ZDHC intellectual property and ZDHC-related claims must be accurate, fair and capable of substantiation; ZDHC limits public alignment claims to legitimate, active Roadmap to Zero participants; 'References to ZDHC made outside the licensed ecosystem are not authorised and may be subject to legal action.'",
+   "notes": "Official dark 'O-slash ZDHC' wordmark (#1D1D1B, SVG) from ZDHC's Roadmap to Zero site (roadmaptozero.com), which zdhc.org links to in its header; zdhc.org itself serves only a white version (logo_zdhc_white.svg), same artwork. Rasterised from SVG at density 900 (not 300) so the 720px output is sharp. The site's IP page describes 'Friend brands' as a tier with defined permitted statements, so any 'Friends of ZDHC' wording should match ABD's real status. Dark artwork: use on white/light backgrounds."
+  },
+  {
+   "kind": "certification",
+   "name": "BCI Chain of Custody",
+   "file": "scripts/data/logos/cert-bci-chain-of-custody.png",
+   "sourceUrl": "https://bettercotton.org/wp-content/themes/bettercotton/images/bc_logo_2025.svg",
+   "confidence": "medium",
+   "licenceNote": "BCI B2C Label Design & Logo Use Guidelines v1.1 (31 Oct 2025): all uses of a BCI Trademark by a Retailer/Brand Member must be submitted to BCI for review and approval before use; the Certification Logo (cotton boll + 'BCI' wordmark, for Chain of Custody certified organisations) is obtained from the Certification Body after a successful audit, may never be recreated or copied from other sources, and is never for product-level use; permitted colours are Soil, black or white only.",
+   "notes": "This is the general Better Cotton 'bci better cotton initiative' logo (2025 revision, Soil brown #925c4a, with TM) from the bettercotton.org theme; identical artwork to the site's og:image BCI-New-Logo_Full-Wording_RGB_Soil. It is NOT the BCI Chain of Custody Certification Logo, which bettercotton.org does not publish (only certification bodies supply it to certified organisations). Rasterised from SVG."
+  },
+  {
+   "kind": "certification",
+   "name": "SA 8000:2014",
+   "file": "scripts/data/logos/cert-sa-8000-2014.png",
+   "sourceUrl": "https://sa-intl.org/wp-content/uploads/2020/03/SAI-SA-8000-Logo-Design-Sample-02.png",
+   "confidence": "high",
+   "licenceNote": "SAI: SA8000(R) is a registered trademark of Social Accountability International (sa-intl.org/sai-registered-trademark-information/). SA8000 Guidelines for Corporate Communication (April 2018): logo may be used by SAAS-accredited certification bodies, SA8000-certified organisations and SAI-approved course providers; retailers, brands and buyers may use it on promotional materials and websites with SAI's prescribed descriptive wording (other wording must be developed with SAI and copies filed with communications@sa-intl.org); entities not listed must contact SAI; must not imply a product or service is itself 'SA8000-certified'; use the (R) mark on first use of the name.",
+   "notes": "Navy 'SAI Social Accountability International / SA8000(R)' logo (3125x4196 transparent PNG) as displayed on SAI's own SA8000 Standard, 'Now Available: SA8000:2026' and SA8000 Resource Center pages. An older gold/red version (https://sa-intl.org/wp-content/uploads/2020/01/SA8000_Official-Logo.jpg, JPEG, opaque white background) exists and was not used. The white 'column' shapes are transparent, so on dark backgrounds they show the background colour; place on white/light."
+  },
+  {
+   "kind": "certification",
+   "name": "Fairtrade",
+   "file": "scripts/data/logos/cert-fairtrade.png",
+   "sourceUrl": "https://www.fairtrade.net/content/dam/fairtrade/thumbnails/ft-international/FM_RGB.png",
+   "confidence": "high",
+   "licenceNote": "Fairtrade International's Regulations Governing the Use of the EU Certification Mark 'FAIRTRADE' (owner: Fairtrade Labelling Organizations International e.V.): any organisation wanting to use the Certification Mark on Finished Products, including promotional materials, must be a Fairtrade Certified Operator or Verified Operator and obtain prior written approval of its artwork from Fairtrade International or a National Fairtrade Organization (plus a royalty-bearing agreement for use on Finished Products). Misuse is reported to trademark@fairtrade.net.",
+   "notes": "Primary FAIRTRADE Certification Mark (RGB, black panel with blue/green figure, white wordmark and R-in-circle) from fairtrade.net's DAM, used on its 'How does the label work' page. It is opaque by design (black rectangle), so it needs no background. fairtrade.net geo-redirects to a regional (NAPP) page; the international site is www.fairtrade.net/en.html. The separate organisation wordmark (https://www.fairtrade.net/content/dam/fairtrade/global/logo/fairtrade-international.svg) was not used."
+  },
+  {
+   "kind": "certification",
+   "name": "RCS",
+   "file": "scripts/data/logos/cert-rcs.png",
+   "sourceUrl": "https://textileexchange.org/app/uploads/2021/02/RCS-100_Color-1024x1024-1.png",
+   "confidence": "high",
+   "licenceNote": "Textile Exchange (textileexchange.org/labeling-standards-claims/): only certification bodies may approve use of its standard claims/labels; 'Logos have to be obtained through the certification body that you (or your supplier) are working with for certification. We'll only issue logos for specific uses by media or others who want to promote our standards.' Mark carries the (c)TextileExchange line and must not be altered.",
+   "notes": "Official 'RECYCLED 100 claim standard' mark from Textile Exchange's media library (1024x1024 source). A Recycled Blended variant exists (https://textileexchange.org/app/uploads/2026/06/RCS100-and-Blended.png) but was not used. Textile Exchange states that all claims and labels must move to its Materials Matter Standard by 30 June 2029 (claims policy effective 31 Dec 2026). Use on white/light backgrounds."
+  },
+  {
+   "kind": "membership",
+   "name": "BGBA",
+   "file": "scripts/data/logos/membership-bgba.png",
+   "sourceUrl": "https://www.bgba.org.bd/wp-content/uploads/2024/05/BGBA_.png",
+   "confidence": "high",
+   "licenceNote": "Site footer reads '© 2025 BGBA. All Rights Reserved.'; no logo-specific usage terms found.",
+   "notes": "Site header logo (also the og:image). Native 400x200 RGBA, trimmed to 234x134; not upscaled, so it is small. Domain verified: About page names 'Bangladesh Garment Buying House Association (BGBA)'."
+  },
+  {
+   "kind": "membership",
+   "name": "DoT",
+   "file": "scripts/data/logos/membership-dot.png",
+   "sourceUrl": "https://dot.gov.bd/site-assets/images/favicon.png",
+   "confidence": "medium",
+   "licenceNote": null,
+   "notes": "dot.gov.bd (site title 'বস্ত্র অধিদপ্তর') shows the Government of Bangladesh emblem (circular logo with map, 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার') as its 'Office Logo'; no separate DoT-specific mark is published. Largest official file is the 128x128 favicon.png (header logo.png is 77x78, kept in raw/ as dot-logo-77x78.png). The identical file is used on other .gov.bd portals (motj, cabinet, bangladesh.gov.bd), so no larger official copy was found; not upscaled. No usage terms seen; because it is the general government emblem, the owner may want to consider whether showing it could imply endorsement."
+  },
+  {
+   "kind": "factory",
+   "name": "Luna Apparels Private Limited",
+   "file": "public/factories/luna-apparels.png",
+   "sourceUrl": "https://lunaapparels.com/wp-content/uploads/2020/10/Luna-1.png",
+   "confidence": "high",
+   "licenceNote": "Site footer reads '© Copyright 2022 - 2023. Luna Apparels Pvt Ltd.'; no logo-specific usage terms found.",
+   "notes": "Header logo (678x241 RGBA). The source PNG carries a faint fragment of a cropped text line under the wordmark; that strip was cropped off before trimming. Dark blue wordmark, so it is meant for light backgrounds."
+  },
+  {
+   "kind": "factory",
+   "name": "Frontier Protectivewear Private Limited",
+   "file": "public/factories/frontier-protectivewear.png",
+   "sourceUrl": "https://www.frontierprotectivewear.com/coverPage.jpg",
+   "confidence": "medium",
+   "licenceNote": null,
+   "notes": "The official site is one cover image plus a catalogue PDF; no standalone logo file exists. The blue/orange F-T mark was cut from the cover image (2568x3288 JPEG) and its white background removed with a soft key. It leaves out the white frame and purple border box drawn around the mark on the cover, and the light-blue 'FRONTIER PROTECTIVEWEAR PVT. LTD.' wordmark (made for a dark ground). Raster/JPEG origin, so edges are slightly soft and a faint light fringe can show on dark backgrounds. The same F-T mark appears in the site's catalogue PDF (created 2015), which names the company 'Frontier Textiles Pvt Limited' at a Howrah address, whereas the homepage cover names 'Frontier Protectivewear Pvt. Ltd.' in Kolkata; the owner may wish to confirm the two are the same company."
+  },
+  {
+   "kind": "factory",
+   "name": "Dibella India",
+   "file": "public/factories/dibella-india.png",
+   "sourceUrl": "https://images.squarespace-cdn.com/content/v1/6100fadacb80ce39b1bdf2b6/a806ae27-b9cc-407f-a267-0a9e839438f6/Artboard.png",
+   "confidence": "high",
+   "licenceNote": "Site footer reads '© Dibella India'; no logo-specific usage terms found.",
+   "notes": "Header logo (2044x318 RGBA on the site's Squarespace CDN), trimmed and scaled down to 720x58. Very wide wordmark plus green leaf mark; black text, so it is meant for light backgrounds."
+  },
+  {
+   "kind": "factory",
+   "name": "Green Life Knit Composite Ltd",
+   "file": "public/factories/green-life-knit-composite.png",
+   "sourceUrl": "https://greenlifebd.com/assets/img/logo.png",
+   "confidence": "medium",
+   "licenceNote": "Site footer reads 'Copyright@2020 All Rights Reserved Green Life Group'; no logo-specific usage terms found.",
+   "notes": "The mark reads 'Green Life Group'. The site has no separate Knit Composite logo: it lists Green Life Knit Composite Limited as a group unit, and its official profile PDF (assets/img/greenLifeProfile.pdf) uses this same logo on the cover titled 'GREEN LIFE KNIT COMPOSITE'. Native size is only 93x120 (favicon is 32x32, apple-touch-icon returns 404), so it is small and not upscaled."
+  },
+  {
+   "kind": "factory",
+   "name": "Prachi Exports (Apparel & Garments)",
+   "file": null,
+   "sourceUrl": null,
+   "confidence": null,
+   "licenceNote": null,
+   "notes": "No logo: the supplied site https://www.prachiexports.in is a spice/grocery exporter, not an apparel unit. Add the correct logo in the CMS once the owner confirms the right company."
+  }
+ ]
+}

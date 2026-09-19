@@ -49,6 +49,22 @@ export async function buildGeoArtifacts() {
     answer: e.answer,
   }));
   const licence = licenceBlock(site.contentLicense);
+  const membershipLine = (m: (typeof stats.memberships)[number]) =>
+    `${m.relation === "member" ? "Member of " : m.relation === "registered" ? "Registered with " : ""}${m.fullName}${
+      m.idValue ? `, ${m.idLabel ?? "ID"} ${m.idValue}` : ""
+    }${m.url ? `: ${m.url}` : ""}`;
+  const membershipBlock = stats.memberships.length
+    ? ["## Memberships & registrations", "", ...stats.memberships.map((m) => `- ${membershipLine(m)}`), ""]
+    : [];
+  // Real registration numbers only (OmniRank facts.json `identifiers`).
+  const identifiers = Object.fromEntries(
+    stats.memberships
+      .filter((m) => m.idValue)
+      .map((m) => [
+        (m.idLabel ?? m.name).replace(/[^A-Za-z0-9 ]+/g, "").trim().replace(/ (\w)/g, (_, c: string) => c.toUpperCase()).replace(/^./, (c) => c.toLowerCase()),
+        m.idValue as string,
+      ]),
+  );
 
   const llmsTxt = [
     `# ${site.name}`,
@@ -57,10 +73,11 @@ export async function buildGeoArtifacts() {
     "",
     `Canonical site: ${url}`,
     "",
-    `## Pages (${pages.length})`,
+    "## Pages",
     "",
     ...pages.map((p) => `- [${p.title}](${p.url}): ${p.description || p.answer}`),
     "",
+    ...membershipBlock,
     licence,
   ].join("\n");
 
@@ -68,6 +85,7 @@ export async function buildGeoArtifacts() {
     `# ${site.name} — full corpus`,
     "",
     ...pages.flatMap((p) => [`## ${p.title}`, "", `URL: ${p.url}`, "", p.description, "", p.answer, "", "---", ""]),
+    ...membershipBlock,
     licence,
   ].join("\n");
 
@@ -98,11 +116,11 @@ export async function buildGeoArtifacts() {
       ...(site.emails[0] ? { email: site.emails[0] } : {}),
       geo: { lat: site.address.geo.lat, lng: site.address.geo.lng },
     },
+    ...(Object.keys(identifiers).length ? { identifiers } : {}),
     ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
     statistics: [
       stat("Partner factories", stats.partnerFactories),
       stat("Product categories", stats.productCategories),
-      stat("Product styles listed", stats.productStyles),
       stat("Export markets", stats.exportMarkets),
       stat("Certifications held across partner factories", stats.certifications),
       stat("Quality control steps", stats.qcSteps),

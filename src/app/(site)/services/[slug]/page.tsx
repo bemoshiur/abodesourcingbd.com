@@ -2,6 +2,7 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { CountryBadge } from "@/components/country-badge";
 import { FaqSection } from "@/components/faq-section";
 import { Icon } from "@/components/icon";
 import { JsonLd } from "@/components/jsonld";
@@ -181,8 +182,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                       href={`/factories/${f.slug}/`}
                       className="group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/5"
                     >
-                      {f.name}
-                      <Icon name="ChevronRight" className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                      <span>
+                        {f.name}
+                        <CountryBadge country={f.country} location={f.location} className="ml-2 align-middle" />
+                      </span>
+                      <Icon name="ChevronRight" className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   </li>
                 ))}

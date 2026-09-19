@@ -154,6 +154,9 @@ async function seedBase(payload: PayloadClient) {
       data: {
         slug: f.slug,
         name: f.name,
+        country: f.country,
+        ...(f.location ? { location: f.location } : {}),
+        order: f.order,
         specialty: f.specialty,
         productTypes: f.productTypes.map((item) => ({ item })),
         categories: f.categories.map(catId),

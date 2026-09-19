@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Icon } from "@/components/icon";
+import { LogoPlate } from "@/components/logo-plate";
 import { Marquee } from "@/components/marquee";
 import { MarqueePause } from "@/components/marquee-pause";
 import { SectionHeading } from "@/components/section-heading";
@@ -58,14 +58,12 @@ export async function CertificationsBand({ className }: { className?: string }) 
 
 function CertChip({ cert }: { cert: CertificationView }) {
   return (
-    <li className="flex shrink-0 items-center gap-3.5 rounded-2xl border border-white/12 bg-white/[0.07] px-5 py-3.5 backdrop-blur-sm transition-colors hover:bg-white/[0.12]">
+    <li className="flex shrink-0 items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.07] py-3 pl-3 pr-6 backdrop-blur-sm transition-colors hover:bg-white/[0.12]">
       {cert.logo ? (
-        <span className="relative h-10 w-16 shrink-0">
-          <Image src={cert.logo.cardUrl} alt="" fill sizes="64px" className="object-contain" />
-        </span>
+        <LogoPlate image={cert.logo} alt={`${cert.name} logo`} sizes="96px" className="h-[4.5rem] w-24 shadow-sm ring-0" />
       ) : (
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-accent to-[oklch(0.62_0.11_120)] text-accent-foreground shadow-[0_6px_16px_-6px_oklch(0.78_0.14_92/0.7)]">
-          <Icon name="BadgeCheck" className="size-5" />
+        <span className="grid size-[4.5rem] shrink-0 place-items-center rounded-full bg-gradient-to-br from-accent to-[oklch(0.62_0.11_120)] text-accent-foreground shadow-[0_6px_16px_-6px_oklch(0.78_0.14_92/0.7)]">
+          <Icon name="BadgeCheck" className="size-6" />
         </span>
       )}
       <span className="whitespace-nowrap">

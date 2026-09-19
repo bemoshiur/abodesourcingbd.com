@@ -118,6 +118,11 @@ export function servicesFaqs(c: Ctx): FaqView[] {
 export function factoriesFaqs(c: Ctx): FaqView[] {
   return [
     {
+      question: "Which countries are your partner factories in?",
+      answer:
+        "Our partner factories are in Bangladesh and India. The Bangladesh units are our core knit and woven base, close to the Dhaka office, and the Indian units add capacity for programmes that call for an Indian production base. Each style is matched to the right unit by product type.",
+    },
+    {
       question: "How do you choose partner factories?",
       answer: `We work only with compliant factories that maintain international social and technical standards. Our network of ${c.factoryCount} units is vetted before receiving orders and matched to each style by product type.`,
     },
@@ -138,7 +143,6 @@ interface CategoryFaqInput {
   subItems: string[];
   productNames: string[];
   compositions: string[];
-  total: number;
 }
 
 export function categoryFaqs(c: CategoryFaqInput): FaqView[] {
@@ -147,7 +151,7 @@ export function categoryFaqs(c: CategoryFaqInput): FaqView[] {
   return [
     {
       question: `Which ${c.title.toLowerCase()} styles do you source?`,
-      answer: `${c.total} ${c.title.toLowerCase()} styles are listed${sample ? `, including ${sample}` : ""}. The category covers ${c.subItems.join(", ").toLowerCase()}.`,
+      answer: `Running ${c.title.toLowerCase()} styles${sample ? ` include ${sample}` : ""}. The category covers ${c.subItems.join(", ").toLowerCase()}.`,
     },
     ...(fabrics
       ? [

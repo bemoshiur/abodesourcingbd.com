@@ -6,7 +6,7 @@
  *   npm run media:repair -- <substr>  # only media whose filename contains <substr>
  *
  * Product photos are rebuilt from Website_images/ via scripts/data/catalog.json;
- * factory logos from public/factories/.
+ * factory logos from public/factories/, certification and membership logos from scripts/data/logos/.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -54,9 +54,11 @@ function sourceFor(filename: string): { file: string; optimise: boolean; mime: s
   if (p) return { file: path.join(ROOT, "Website_images", p.images[0].file), optimise: true, mime: "image/webp" };
   if (stem === "abd-sourcing-showroom-uttara-dhaka")
     return { file: path.join(ROOT, "Website_images", "D2C1119D-E5A5-44FD-BDDD-9B20CA505683.jpg"), optimise: true, mime: "image/webp" };
-  for (const ext of [".png", ".jpg", ".jpeg", ".webp"]) {
-    const f = path.join(ROOT, "public", "factories", stem + ext);
-    if (fs.existsSync(f)) return { file: f, optimise: false, mime: ext === ".png" ? "image/png" : ext === ".webp" ? "image/webp" : "image/jpeg" };
+  for (const dir of [path.join(ROOT, "public", "factories"), path.join(ROOT, "scripts", "data", "logos")]) {
+    for (const ext of [".png", ".jpg", ".jpeg", ".webp"]) {
+      const f = path.join(dir, stem + ext);
+      if (fs.existsSync(f)) return { file: f, optimise: false, mime: ext === ".png" ? "image/png" : ext === ".webp" ? "image/webp" : "image/jpeg" };
+    }
   }
   return null;
 }

@@ -27,7 +27,7 @@ Live: [www.abodesourcingbd.com](https://www.abodesourcingbd.com) · Admin: `/adm
 npm install
 cp .env.example .env.local     # fill DATABASE_URL, PAYLOAD_SECRET, BLOB_READ_WRITE_TOKEN, RESEND_API_KEY
 npm run migrate                # create/upgrade the database schema
-npm run seed                   # base content, 71 products (needs Website_images/), SEO copy
+npm run seed                   # base content, the product catalogue (needs Website_images/), SEO copy
 ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='a long random password' npm run admin:create
 npm run dev
 ```
@@ -38,8 +38,9 @@ npm run dev
 | `npm run migrate` · `migrate:create -- <name>` · `migrate:status` | Database migrations (committed in `migrations/`) |
 | `npm run generate:types` | Regenerate `src/payload/payload-types.ts` after any schema change |
 | `npm run seed [-- base\|products\|imagery\|seo]` | Idempotent content import (`scripts/seed.mts`, data in `scripts/data/`) |
+| `npm run seed:network` | Applies the factory network (Bangladesh + India), 17 certifications with logos and the BGBA / DoT memberships to an existing database without overwriting CMS edits (`scripts/seed-network.mts`; logos and their provenance in `scripts/data/logos/`) |
 | `npm run admin:create` | Create or reset the CMS admin (`ADMIN_EMAIL` / `ADMIN_PASSWORD` from the environment) |
-| `npm run check:content` | Fails if any published content contains buyer names, personal names, phone numbers or extra emails |
+| `npm run check:content` | Fails if any published content contains buyer names, personal names, phone numbers, extra emails or a count of styles |
 | `npm run media:repair [-- <substr>]` | Re-upload any Media file that is missing from Blob storage and verify it |
 
 ---
