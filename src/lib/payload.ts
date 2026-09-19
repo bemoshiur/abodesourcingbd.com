@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import type { Media, Product, ProductCategory } from "@/payload/payload-types";
+import type { Guide, Media, Product, ProductCategory } from "@/payload/payload-types";
 
 /**
  * Data-access layer — the single bridge between Payload CMS and the site's
@@ -126,6 +126,30 @@ export interface FactoryView {
   seo: SeoView;
 }
 
+export interface GuideSection {
+  heading: string;
+  body: string[];
+  bullets: { label?: string; text: string }[];
+  table?: { caption?: string; columns: string[]; rows: string[][] };
+}
+
+export interface GuideView {
+  slug: string;
+  title: string;
+  icon: string;
+  summary: string;
+  readingMinutes?: number;
+  sections: GuideSection[];
+  takeaways: string[];
+  sources: { label: string; url: string }[];
+  relatedCategories: string[];
+  relatedServices: string[];
+  answer?: string;
+  updatedAt: string;
+  faqs: FaqView[];
+  seo: SeoView;
+}
+
 export interface CertificationView {
   name: string;
   full: string;
@@ -157,6 +181,7 @@ export type PageKey =
   | "services"
   | "products"
   | "factories"
+  | "guides"
   | "compliance"
   | "contact";
 
@@ -286,6 +311,7 @@ export const getPageContent = cache(async () => {
     services: pick(g.services),
     products: pick(g.products),
     factories: pick(g.factories),
+    guides: pick(g.guides),
     compliance: pick(g.compliance),
     contact: pick(g.contact),
   } satisfies Record<PageKey, PageMeta>;
@@ -507,6 +533,56 @@ export const getFactories = cache(async (): Promise<FactoryView[]> => {
 export async function getFactory(slug: string): Promise<FactoryView | undefined> {
   const all = await getFactories();
   return all.find((f) => f.slug === slug);
+}
+
+// --- Guides ---
+
+function toGuideView(g: Guide): GuideView {
+  return {
+    slug: g.slug,
+    title: g.title,
+    icon: g.icon,
+    summary: g.summary,
+    readingMinutes: g.readingMinutes ?? undefined,
+    sections: (g.sections ?? []).map((sec) => ({
+      heading: sec.heading,
+      body: (sec.body ?? []).map((b) => b.text),
+      bullets: (sec.bullets ?? []).map((b) => ({ label: b.label || undefined, text: b.text })),
+      table:
+        sec.table && (sec.table.columns ?? []).length > 0
+          ? {
+              caption: sec.table.caption || undefined,
+              columns: (sec.table.columns ?? []).map((c) => c.label),
+              rows: (sec.table.rows ?? []).map((r) => (r.cells ?? []).map((c) => c.text)),
+            }
+          : undefined,
+    })),
+    takeaways: (g.takeaways ?? []).map((t) => t.item),
+    sources: (g.sources ?? []).map((x) => ({ label: x.label, url: x.url })),
+    relatedCategories: relSlugs(g.relatedCategories),
+    relatedServices: (g.relatedServices ?? []).map(relSlug).filter((x): x is string => Boolean(x)),
+    answer: g.answer || undefined,
+    updatedAt: g.updatedAt,
+    faqs: toFaqs(g.faqs),
+    seo: toSeo(g.seo),
+  };
+}
+
+export const getGuides = cache(async (): Promise<GuideView[]> => {
+  const payload = await getPayloadClient();
+  const { docs } = await payload.find({
+    collection: "guides",
+    where: { published: { equals: true } },
+    limit: 100,
+    sort: ["order", "createdAt"],
+    depth: 1,
+  });
+  return docs.map(toGuideView);
+});
+
+export async function getGuide(slug: string): Promise<GuideView | undefined> {
+  const all = await getGuides();
+  return all.find((g) => g.slug === slug);
 }
 
 // --- Cross-links ---

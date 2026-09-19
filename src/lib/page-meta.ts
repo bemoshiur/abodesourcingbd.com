@@ -1,6 +1,7 @@
 import type {
   CategoryView,
   FactoryView,
+  GuideView,
   PageMeta,
   ProductView,
   ServiceView,
@@ -32,7 +33,7 @@ export interface Entry {
   lastModified?: string;
   kind:
     | "home" | "about" | "services" | "service" | "products" | "category"
-    | "product" | "factories" | "factory" | "compliance" | "contact";
+    | "product" | "factories" | "factory" | "guides" | "guide" | "compliance" | "contact";
 }
 
 const pick = (cms: string | undefined, fallback: string) => (cms && cms.trim() ? cms.trim() : fallback);
@@ -171,6 +172,32 @@ export function factoryEntry(site: SiteInfo, f: FactoryView): Entry {
     heading: pick(f.seo.heading, `${f.name} — Factory in ${where}`.length <= 70 ? `${f.name} — Factory in ${where}` : f.name),
     answer: pick(f.answer, factoryAnswer(f, site)),
     lastModified: f.updatedAt,
+  };
+}
+
+export function guidesEntry(site: SiteInfo, pc: PageMeta): Entry {
+  return {
+    kind: "guides",
+    path: "/guides/",
+    title: pick(pc.metaTitle, "Garment Sourcing Guides for Apparel Buyers"),
+    description: pick(
+      pc.metaDescription,
+      "Practical guides to sourcing apparel from Bangladesh and India: choosing an agent, buying house vs factory, the order timeline, certifications and QC.",
+    ),
+    heading: pick(pc.heading, "Garment sourcing guides for apparel buyers"),
+    answer: pick(pc.answer, pageAnswer("guides", site)),
+  };
+}
+
+export function guideEntry(site: SiteInfo, g: GuideView): Entry {
+  return {
+    kind: "guide",
+    path: `/guides/${g.slug}/`,
+    title: pick(g.seo.metaTitle, g.title),
+    description: pick(g.seo.metaDescription, g.summary),
+    heading: pick(g.seo.heading, g.title),
+    answer: g.answer ?? g.summary,
+    lastModified: g.updatedAt,
   };
 }
 

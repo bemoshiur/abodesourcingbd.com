@@ -34,6 +34,9 @@ export function organizationNode(
     knowsAbout?: string[];
     /** Trade bodies the business is a member of (ProgramMembership with the member number). */
     memberOf?: { name: string; url?: string; membershipNumber?: string }[];
+    /** Registrations and listings that are not memberships (e.g. a government department). */
+    credentials?: { name: string; url?: string }[];
+    alternateName?: string;
   },
 ): Node {
   const code = postalCode(site.address.city);
@@ -41,12 +44,26 @@ export function organizationNode(
     "@type": ["Organization", "ProfessionalService"],
     "@id": orgId(site),
     name: site.name,
+    ...(opts.alternateName ? { alternateName: opts.alternateName } : {}),
     url: root(site),
     logo: { "@type": "ImageObject", url: `${root(site)}/logos/abd-logo.png` },
     image: site.ogImage ? absoluteUrl(site, site.ogImage.url) : `${root(site)}/logos/abd-logo.png`,
     description: site.oneLiner,
     slogan: site.tagline,
     ...(site.emails[0] ? { email: site.emails[0] } : {}),
+    ...(site.emails[0]
+      ? {
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              contactType: "sales",
+              email: site.emails[0],
+              availableLanguage: ["en"],
+              areaServed: opts.areaServed.map((name) => ({ "@type": "Country", name })),
+            },
+          ],
+        }
+      : {}),
     address: {
       "@type": "PostalAddress",
       streetAddress: `${site.address.line1}, ${site.address.line2}`,
@@ -71,6 +88,16 @@ export function organizationNode(
               ...(m.url ? { url: m.url } : {}),
             },
             ...(m.membershipNumber ? { membershipNumber: m.membershipNumber } : {}),
+          })),
+        }
+      : {}),
+    ...(opts.credentials?.length
+      ? {
+          hasCredential: opts.credentials.map((c) => ({
+            "@type": "EducationalOccupationalCredential",
+            credentialCategory: "registration",
+            name: c.name,
+            ...(c.url ? { url: c.url } : {}),
           })),
         }
       : {}),
@@ -163,6 +190,32 @@ export function serviceNode(
     provider: { "@id": orgId(site) },
     areaServed: o.areaServed.map((name) => ({ "@type": "Country", name })),
     url: absoluteUrl(site, o.path),
+  };
+}
+
+/**
+ * An evergreen guide. `dateModified` is only ever a real CMS timestamp — never new Date() — and no
+ * author Person is emitted: the site publishes no personal names, so the organisation is the author.
+ */
+export function articleNode(
+  site: SiteInfo,
+  o: { path: string; headline: string; description: string; dateModified: string; image?: ImageView; wordCount?: number; about?: string[] },
+): Node {
+  return {
+    "@type": "Article",
+    "@id": pageId(site, o.path, "article"),
+    headline: o.headline,
+    description: o.description,
+    inLanguage: "en",
+    dateModified: o.dateModified,
+    author: { "@id": orgId(site) },
+    publisher: { "@id": orgId(site) },
+    isPartOf: { "@id": websiteId(site) },
+    mainEntityOfPage: { "@id": pageId(site, o.path, "webpage") },
+    url: absoluteUrl(site, o.path),
+    ...(o.image ? { image: absoluteUrl(site, o.image.url) } : {}),
+    ...(o.wordCount ? { wordCount: o.wordCount } : {}),
+    ...(o.about?.length ? { about: o.about.map((name) => ({ "@type": "Thing", name })) } : {}),
   };
 }
 

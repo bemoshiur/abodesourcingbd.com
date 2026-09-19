@@ -13,6 +13,7 @@ import { Services } from "./collections/Services.ts";
 import { ProductCategories } from "./collections/ProductCategories.ts";
 import { Products } from "./collections/Products.ts";
 import { Factories } from "./collections/Factories.ts";
+import { Guides } from "./collections/Guides.ts";
 import { SiteSettings } from "./globals/SiteSettings.ts";
 import { SiteContent } from "./globals/SiteContent.ts";
 import { PageContent } from "./globals/PageContent.ts";
@@ -30,7 +31,7 @@ export default buildConfig({
       titleSuffix: "— ABD Sourcing Bangladesh",
     },
   },
-  collections: [Users, Media, Services, ProductCategories, Products, Factories],
+  collections: [Users, Media, Services, ProductCategories, Products, Factories, Guides],
   globals: [SiteSettings, SiteContent, PageContent],
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

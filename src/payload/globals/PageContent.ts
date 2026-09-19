@@ -47,6 +47,7 @@ export const PageContent: GlobalConfig = {
         pageTab("Services", "services"),
         pageTab("Products", "products"),
         pageTab("Factories", "factories"),
+        pageTab("Guides", "guides"),
         pageTab("Compliance", "compliance"),
         pageTab("Contact", "contact"),
       ],

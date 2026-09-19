@@ -83,7 +83,7 @@ export function factoryAnswer(f: FactoryView, site: Pick<SiteInfo, "name">): str
   );
 }
 
-export function pageAnswer(kind: "home" | "about" | "services" | "products" | "factories" | "compliance" | "contact", site: Pick<SiteInfo, "name">): string {
+export function pageAnswer(kind: "home" | "about" | "services" | "products" | "factories" | "guides" | "compliance" | "contact", site: Pick<SiteInfo, "name">): string {
   const n = site.name;
   const t: Record<typeof kind, string> = {
     home: `${n} is a garments buying and sourcing office in Uttara, Dhaka. The team develops, sources and ships knitwear, woven wear, activewear, outerwear and workwear for brands in Europe and North America, working through a vetted network of compliant partner factories. Send a tech pack to receive a quotation within 24 hours.`,
@@ -91,6 +91,7 @@ export function pageAnswer(kind: "home" | "about" | "services" | "products" | "f
     services: `${n} offers six sourcing services: product development, materials and trims sourcing, merchandising support, quality assurance, production monitoring and logistics support. Together they cover an order from tech pack to shipment, delivered through compliant partner factories in Bangladesh for brands in Europe and North America.`,
     products: `${n} sources five apparel categories from Bangladesh: knitwear, woven wear, activewear and performance wear, outerwear and workwear. Each style lists its style reference, fibre composition and fabric weight. Add styles to an inquiry list and the team quotes them together within 24 hours.`,
     factories: `${n} works with compliant partner factories in Bangladesh and India, covering knitwear, sportswear, activewear, jackets, lingerie and woven wear. Each unit is vetted for social and technical compliance, so brands in Europe and North America can place orders through one accountable team in Dhaka.`,
+    guides: `${n} publishes practical guides for apparel buyers sourcing from Bangladesh and India. They explain how to choose a sourcing agent, how a buying house differs from a factory, what each stage of an order involves, what factory certifications actually cover and what quality control should include before goods ship.`,
     compliance: `${n} works only with partner factories that hold recognised social and environmental certifications, including BSCI, SEDEX, WRAP, ISO, OEKO-TEX, GOTS and GRS. Every order also passes a seven-step quality control process, from fabric inspection to final shipment approval, before goods ship.`,
     contact: `${n} welcomes quotation requests from apparel brands and retailers. Send a tech pack or reference garment with your target quantity and market through the form or to the team by email, and expect a reply within 24 hours. The office is located in Uttara, Sector 4, Dhaka.`,
   };

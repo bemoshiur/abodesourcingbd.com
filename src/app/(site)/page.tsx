@@ -26,6 +26,7 @@ import {
   getSiteContent,
   getSiteSettings,
   getFactories,
+  getGuides,
 } from "@/lib/payload";
 import { CONTACT_PATH } from "@/lib/routes";
 import { faqNode, graph, organizationNode, webPageNode, websiteNode } from "@/lib/schema";
@@ -48,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [{ site, mission }, pc, services, categories, products, featured, content, factories, faqCtx] =
+  const [{ site, mission }, pc, services, categories, products, featured, content, factories, guides, faqCtx] =
     await Promise.all([
       getSiteSettings(),
       getPageMeta("home"),
@@ -58,6 +59,7 @@ export default async function HomePage() {
       featuredProducts(),
       getSiteContent(),
       getFactories(),
+      getGuides(),
       getFaqContext(),
     ]);
 
@@ -79,9 +81,14 @@ export default async function HomePage() {
     organizationNode(site, {
       areaServed: content.exportMarkets.map((m) => m.name),
       knowsAbout: categories.map((c) => c.title),
+      alternateName: "ABD Sourcing",
       memberOf: content.memberships
         .filter((m) => m.relation === "member")
         .map((m) => ({ name: m.fullName, url: m.url, membershipNumber: m.idValue })),
+      // A government listing is a registration, not a membership — it belongs in hasCredential.
+      credentials: content.memberships
+        .filter((m) => m.relation !== "member")
+        .map((m) => ({ name: m.fullName, url: m.url })),
     }),
     websiteNode(site),
     webPageNode(site, { path: e.path, name: e.title, description: e.description, breadcrumb: false }),
@@ -370,6 +377,39 @@ export default async function HomePage() {
           ))}
         </ol>
       </section>
+
+      {guides.length > 0 && (
+        <section className="border-t border-border py-16 lg:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionHeading
+              eyebrow="Before you brief a supplier"
+              title="Sourcing guides for apparel buyers"
+              intro="Plain answers to the questions buyers ask before placing an order in Bangladesh or India."
+              href="/guides/"
+              cta="All guides"
+            />
+            <ul className="mt-10 grid gap-5 md:grid-cols-3">
+              {guides.slice(0, 3).map((g, i) => (
+                <Reveal as="li" key={g.slug} delay={i * 70}>
+                  <Spotlight className="glass group h-full rounded-2xl transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] motion-reduce:transform-none">
+                    <Link href={`/guides/${g.slug}/`} className="flex h-full flex-col p-6">
+                      <span className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.55_0.1_155)] text-primary-foreground shadow-md">
+                        <Icon name={g.icon} className="size-5" />
+                      </span>
+                      <h3 className="mt-4 text-lg font-semibold leading-snug">{g.title}</h3>
+                      <p className="mt-2 flex-1 text-sm text-muted-foreground">{g.summary}</p>
+                      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                        Read the guide
+                        <Icon name="ArrowRight" className="size-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </Link>
+                  </Spotlight>
+                </Reveal>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       <WhyChooseUs className="border-t border-border bg-muted/40 py-16 lg:py-24" />
 

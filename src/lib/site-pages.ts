@@ -2,6 +2,7 @@ import { cache } from "react";
 import {
   getCategories,
   getFactories,
+  getGuides,
   getPageContent,
   getProducts,
   getServices,
@@ -15,6 +16,8 @@ import {
   contactEntry,
   factoriesEntry,
   factoryEntry,
+  guideEntry,
+  guidesEntry,
   homeEntry,
   productEntry,
   productsEntry,
@@ -28,13 +31,14 @@ import {
  * sitemap.xml, llms.txt, llms-full.txt and facts.json.
  */
 export const getSitePages = cache(async (): Promise<Entry[]> => {
-  const [{ site }, pc, services, categories, products, factories] = await Promise.all([
+  const [{ site }, pc, services, categories, products, factories, guides] = await Promise.all([
     getSiteSettings(),
     getPageContent(),
     getServices(),
     getCategories(),
     getProducts(),
     getFactories(),
+    getGuides(),
   ]);
   return [
     homeEntry(site, pc.home),
@@ -46,6 +50,8 @@ export const getSitePages = cache(async (): Promise<Entry[]> => {
     ...products.map((p) => productEntry(site, p)),
     factoriesEntry(site, pc.factories),
     ...factories.map((f) => factoryEntry(site, f)),
+    ...(guides.length ? [guidesEntry(site, pc.guides)] : []),
+    ...guides.map((g) => guideEntry(site, g)),
     complianceEntry(site, pc.compliance),
     contactEntry(site, pc.contact),
   ];
@@ -53,14 +59,17 @@ export const getSitePages = cache(async (): Promise<Entry[]> => {
 
 /** Facts the site states about itself, computed from CMS counts (never hard-coded). */
 export const getSiteFacts = cache(async () => {
-  const [factories, categories, content] = await Promise.all([
+  const [factories, categories, services, content] = await Promise.all([
     getFactories(),
     getCategories(),
+    getServices(),
     getSiteContent(),
   ]);
   return {
     partnerFactories: factories.length,
     productCategories: categories.length,
+    categoryTitles: categories.map((c) => c.title),
+    serviceTitles: services.map((s) => s.title),
     exportMarkets: content.exportMarkets.length,
     certifications: content.certifications.length,
     qcSteps: content.qcSteps.length,

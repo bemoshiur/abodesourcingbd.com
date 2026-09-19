@@ -67,14 +67,18 @@ export function ProductCard({
         )}
       </div>
       <div className="flex flex-1 flex-col gap-1 border-t border-border/70 p-3.5 sm:p-4">
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug sm:text-[0.95rem]">
+        {/* A <p>, not a heading: a grid of styles is a list of links, and one heading per card put
+            dozens of same-level headings on a page with little prose between them. The link is still
+            the card's accessible name, so heading-free navigation is unaffected. */}
+        <p className="line-clamp-2 text-sm font-semibold leading-snug sm:text-[0.95rem]">
           <Link
             href={href}
             className="after:absolute after:inset-0 after:z-10 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
             {p.name}
+            {p.styleNumber ? <span className="sr-only"> — style {p.styleNumber}</span> : null}
           </Link>
-        </h3>
+        </p>
         {p.styleNumber && (
           <p className="text-xs font-medium tabular-nums text-primary">{p.styleNumber}</p>
         )}

@@ -73,6 +73,7 @@ export interface Config {
     'product-categories': ProductCategory;
     products: Product;
     factories: Factory;
+    guides: Guide;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     factories: FactoriesSelect<false> | FactoriesSelect<true>;
+    guides: GuidesSelect<false> | GuidesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -482,6 +484,144 @@ export interface Factory {
   createdAt: string;
 }
 /**
+ * Long-form buyer guides published under /guides/.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guides".
+ */
+export interface Guide {
+  id: number;
+  /**
+   * URL slug, e.g. how-to-choose-a-garment-sourcing-agent-in-bangladesh. Typed text is converted to lowercase-with-hyphens. Changing it changes the page URL.
+   */
+  slug: string;
+  /**
+   * Shown on the hub card and used as the <title> when no SEO override is set.
+   */
+  title: string;
+  /**
+   * lucide-react icon name, e.g. Lightbulb.
+   */
+  icon: string;
+  /**
+   * One or two sentences for the hub card.
+   */
+  summary: string;
+  /**
+   * Optional. Shown on the guide; leave blank to hide.
+   */
+  readingMinutes?: number | null;
+  /**
+   * Each section becomes an <h2> with its paragraphs, optional bullets and optional table.
+   */
+  sections: {
+    heading: string;
+    body?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    bullets?:
+      | {
+          /**
+           * Optional bold lead-in.
+           */
+          label?: string | null;
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Optional comparison table. Leave the columns empty to hide it.
+     */
+    table?: {
+      caption?: string | null;
+      columns?:
+        | {
+            label: string;
+            id?: string | null;
+          }[]
+        | null;
+      rows?:
+        | {
+            cells?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    id?: string | null;
+  }[];
+  /**
+   * Short factual lines shown in a summary box and reused in llms-full.txt.
+   */
+  takeaways?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Public sources for anything a reader could challenge. Shown at the foot of the guide.
+   */
+  sources?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Cross-links shown at the end of the guide.
+   */
+  relatedCategories?: (number | ProductCategory)[] | null;
+  relatedServices?: (number | Service)[] | null;
+  published?: boolean | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  /**
+   * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+   */
+  answer?: string | null;
+  /**
+   * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Search-result overrides. Leave blank to use the automatic title and description.
+   */
+  seo?: {
+    /**
+     * Optional keyword-rich H1. Blank = the record's own title.
+     */
+    heading?: string | null;
+    /**
+     * ≤ 60 characters is ideal. Put the main keyword first.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters is ideal. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -528,6 +668,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'factories';
         value: number | Factory;
+      } | null)
+    | ({
+        relationTo: 'guides';
+        value: number | Guide;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -788,6 +932,93 @@ export interface FactoriesSelect<T extends boolean = true> {
   website?: T;
   logo?: T;
   intro?: T;
+  answer?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        heading?: T;
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guides_select".
+ */
+export interface GuidesSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  icon?: T;
+  summary?: T;
+  readingMinutes?: T;
+  sections?:
+    | T
+    | {
+        heading?: T;
+        body?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        bullets?:
+          | T
+          | {
+              label?: T;
+              text?: T;
+              id?: T;
+            };
+        table?:
+          | T
+          | {
+              caption?: T;
+              columns?:
+                | T
+                | {
+                    label?: T;
+                    id?: T;
+                  };
+              rows?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        id?: T;
+      };
+  takeaways?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  relatedCategories?: T;
+  relatedServices?: T;
+  published?: T;
+  order?: T;
   answer?: T;
   faqs?:
     | T
@@ -1121,6 +1352,32 @@ export interface PageContent {
         }[]
       | null;
   };
+  guides?: {
+    /**
+     * ≤ 60 characters. Main keyword first, brand last.
+     */
+    metaTitle?: string | null;
+    /**
+     * ≤ 155 characters. Include the main keyword and a call to action.
+     */
+    metaDescription?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    /**
+     * 40–60 words of plain prose. Start with a subject–verb–object sentence that names the business once. Only facts already on the site — no superlatives, no invented numbers, no client names.
+     */
+    answer?: string | null;
+    /**
+     * Questions buyers really ask. Keep each answer factual and 40–60 words — search and AI answer engines quote these directly.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   compliance?: {
     /**
      * ≤ 60 characters. Main keyword first, brand last.
@@ -1355,6 +1612,22 @@ export interface PageContentSelect<T extends boolean = true> {
             };
       };
   factories?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        heading?: T;
+        intro?: T;
+        answer?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  guides?:
     | T
     | {
         metaTitle?: T;

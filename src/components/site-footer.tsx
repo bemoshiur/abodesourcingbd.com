@@ -124,12 +124,13 @@ export async function SiteFooter() {
   );
 }
 
+/** A link column. The label is a <p>, not a heading: these are navigation labels, not document sections. */
 function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div>
-      <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground">{title}</h3>
+    <nav aria-label={title}>
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground">{title}</p>
       <ul className="mt-4 space-y-2.5">{children}</ul>
-    </div>
+    </nav>
   );
 }
 

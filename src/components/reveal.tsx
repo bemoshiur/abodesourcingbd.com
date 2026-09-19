@@ -12,11 +12,14 @@ export function Reveal({
   as,
   className,
   delay = 0,
+  id,
   children,
 }: {
   as?: ElementType;
   className?: string;
   delay?: number;
+  /** Anchor target, e.g. for a table of contents. */
+  id?: string;
   children: React.ReactNode;
 }) {
   const Tag = (as ?? "div") as ElementType;
@@ -50,6 +53,7 @@ export function Reveal({
   return (
     <Tag
       ref={ref}
+      id={id}
       className={cn("reveal", className)}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
